@@ -1,6 +1,6 @@
 import { Component, OnChanges, Input } from '@angular/core';
 import { ImageService } from '../shared/image.service';
-import { ImageFilterPipe } from '../shared/filter.pipe';
+import { ImageFilterPipe } from '../shared/image-filter.pipe';
 
 @Component ({
     selector: 'app-gallery',
