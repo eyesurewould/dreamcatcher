@@ -13,7 +13,7 @@ import { ImageDetailComponent } from './image/image-detail.component';
 import { ImageFilterPipe } from './shared/filter.pipe';
 
 import { appRoutes } from '../routes';
-
+ 
 @NgModule({
   declarations: [
     AppComponent,
