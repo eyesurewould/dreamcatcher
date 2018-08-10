@@ -2,7 +2,10 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="header">
-                <a class="navbar-brand logo" href="#">{{title}}</a>
+                <a class="navbar-brand logo" [routerLink] = "['/projects']">{{projectsTitle}}</a>
+            </div>
+            <div class="header">
+                <a class="navbar-brand logo" [routerLink] = "['/clients']">{{clientsTitle}}</a>
             </div>
         </div>
     </nav>

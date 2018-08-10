@@ -8,10 +8,10 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 
-import { ImageService } from './shared/image.service';
-import { GalleryComponent } from './gallery/gallery.component';
-import { ImageDetailComponent } from './image/image-detail.component';
-import { ImageFilterPipe } from './shared/image-filter.pipe';
+import { ProjectService } from './shared/project.service';
+import { ProjectsComponent } from './projects/projects.component';
+import { ProjectDetailComponent } from './project/project-detail.component';
+import { ProjectFilterPipe } from './shared/project-filter.pipe';
 
 import { ClientService } from './shared/client.service';
 import { ClientsComponent } from './clients/clients.component';
@@ -25,9 +25,9 @@ import { appRoutes } from '../routes';
   declarations: [
     AppComponent,
     NavbarComponent,
-    GalleryComponent,
-    ImageDetailComponent,
-    ImageFilterPipe,
+    ProjectsComponent,
+    ProjectDetailComponent,
+    ProjectFilterPipe,
     ClientsComponent,
     ClientDetailComponent,
     ClientFilterPipe
@@ -39,7 +39,7 @@ import { appRoutes } from '../routes';
     AlertModule.forRoot(),
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [ ImageService, ImageFilterPipe, ClientService ],
+  providers: [ ProjectService, ProjectFilterPipe, ClientService, ClientFilterPipe ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }

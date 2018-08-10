@@ -1,3 +1,24 @@
-<p>
-  client-detail works!
-</p>
+<div class="row">
+    <div class="col-md-12 name-row">
+        <span id="name">
+            {{client.name}}
+        </span>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12 photo-row">
+        <img src={{client.photo}} id="photo" width="200" height="160">
+    </div>
+</div>
+
+<h3>Projects for {{client.name}}</h3>
+<div class="row">
+    <ul id="thumbnailsList">
+        <li *ngFor="let project of visibleProjects">
+            <!-- the routerLink bind results in a URL path like "/project/3" where 3 is the id value for the client of the *ngFor directive -->
+            <a [routerLink]="['/project', project.id]">
+                <img src="{{project.image[0]}}" class="tn" width="200" height="160">
+            </a>
+        </li>
+    </ul>
+</div>

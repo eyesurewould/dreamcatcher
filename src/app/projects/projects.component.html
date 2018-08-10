@@ -1,0 +1,14 @@
+<h3>{{title}}</h3>
+<div class="row">
+    <button class="btn btn-lg btn-info" [class.active]="filterBy=='all'" (click)="filterBy='all'">All</button>
+    <button class="btn btn-lg btn-info" [class.active]="filterBy=='japanese'" (click)="filterBy='japanese'">Japanese</button>
+    <button class="btn btn-lg btn-info" [class.active]="filterBy=='neo-traditional'" (click)="filterBy='neo-traditional'">Neo-Traditional</button>
+    <ul id="thumbnailsList">
+        <li *ngFor="let project of ( visibleProjects | projectFilter:filterBy )">
+            <a [routerLink] = "['/project', project.id]">
+                <!-- the routerLink bind results in a URL path like "/project/3" where 3 is the id value for the project of the *ngFor directive -->
+                <img src="{{project.image[0]}}" class="tn" width="200" height="160">
+            </a>
+        </li>
+    </ul>
+</div>

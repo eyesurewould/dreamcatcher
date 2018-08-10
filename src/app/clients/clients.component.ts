@@ -8,7 +8,7 @@ import { ClientFilterPipe } from '../shared/client-filter.pipe';
   styleUrls: ['./clients.component.css']
 })
 export class ClientsComponent implements OnChanges {
-
+  title = "Recent clients";
   @Input() filterBy?: string = 'all';
   visibleClients: any[] = [];
 
