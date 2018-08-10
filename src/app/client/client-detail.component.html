@@ -1,18 +1,26 @@
 <div class="row">
-    <div class="col-md-12 name-row">
-        <span id="name">
-            {{client.name}}
-        </span>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-12 photo-row">
-        <img src={{client.photo}} id="photo" width="200" height="160">
+    <div class="col-md-12">
+        <div class="media">
+            <img id="client-photo" class="mr-3" alt={{client.name}} src={{client.photo}} width="200" />
+            <div class="media-body">
+                <h5 class="mt-0">
+                    {{client.name}}
+                </h5>
+                <p>
+                    <a href="mailto:{{client.email}}">{{client.email}}</a>
+                </p>
+                <p>
+                    <a href="tel:{{client.phone}}">{{client.phone}}</a>
+                </p>
+                <p>{{client.handle}}</p>
+                <p>{{client.styles}}</p>
+            </div>
+        </div>
     </div>
 </div>
 
-<h3>Projects for {{client.name}}</h3>
 <div class="row">
+    <h3>Projects</h3>
     <ul id="thumbnailsList">
         <li *ngFor="let project of visibleProjects">
             <!-- the routerLink bind results in a URL path like "/project/3" where 3 is the id value for the client of the *ngFor directive -->

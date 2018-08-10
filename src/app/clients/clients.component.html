@@ -1,6 +1,5 @@
 <h3>{{title}}</h3>
 <div class="row">
-    <button class="btn btn-lg btn-info" [class.active]="filterBy=='all'" (click)="filterBy='all'">All</button>
     <ul id="thumbnailsList">
         <li *ngFor="let client of ( visibleClients | clientFilter:filterBy )">
             <a [routerLink] = "['/client', client.id]">

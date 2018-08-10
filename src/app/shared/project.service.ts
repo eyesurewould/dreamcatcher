@@ -63,7 +63,7 @@ const PROJECTS = [
         "style": "neo-traditional",
         "name": "Sleeve (cover up) - Sea Horse / Oar Fish / Coral",
         "date": "",
-        "image": ["assets/img/Sea Horse.jpg","assets/img/oar_fish.jpg","assets/img/gareth_cover.jpg","assets/img/gareth_sleeve_oarfish001.jpg","assets/img/gareth_sleeve_source003.jpg"],
+        "image": ["assets/img/Sea Horse.jpg","assets/img/gareth_cover.png","assets/img/gareth_sleeve_oarfish001.png","assets/img/gareth_sleeve_source003.png"],
         "artistId": 100,
         "clientId": 12
     },
@@ -72,7 +72,7 @@ const PROJECTS = [
         "style": "watercolor",
         "name": "Juniper Flower",
         "date": "",
-        "image": ["assets/img/Juniper.jpg"],
+        "image": [""],
         "artistId": 100,
         "clientId": 19
     },
@@ -82,15 +82,6 @@ const PROJECTS = [
         "name": "bats",
         "date": "",
         "image": ["assets/img/bats.jpg"],
-        "artistId": 100,
-        "clientId": 13
-    },
-    {
-        "id": 8,
-        "style": "goth",
-        "name": "Three Sisters - Hecate",
-        "date": "",
-        "image": ["assets/img/sisters.jpg"],
         "artistId": 100,
         "clientId": 13
     },
@@ -133,9 +124,9 @@ const PROJECTS = [
     {
         "id": 14,
         "style": "goth",
-        "name": "Thre Sisters",
+        "name": "Three Sisters (Hecate)",
         "date": "",
-        "image": ["assets/img/three_sisters.jpg","assets/img/three_sisters_starting.jpg"],
+        "image": ["assets/img/three_sisters_starting.png"],
         "artistId": 100,
         "clientId": 13
     },
@@ -153,7 +144,7 @@ const PROJECTS = [
         "style": "goth",
         "name": "Skelly Cat",
         "date": "",
-        "image": ["assets/img/skelly_cat.jpg"],
+        "image": ["assets/img/skelly_cat.png"],
         "artistId": 100,
         "clientId": 13
     },
@@ -162,7 +153,7 @@ const PROJECTS = [
         "style": "japanese",
         "name": "Dragon - foot cover up (welsh / japanese / norse)",
         "date": "",
-        "image": ["assets/img/emma_foot_cover.jpg","assets/img/emma_foot_source002.jpg","assets/img/emma_foot_source001.jpg"],
+        "image": ["assets/img/emma_foot_cover.png","assets/img/emma_foot_source002.png","assets/img/emma_foot_source001.png"],
         "artistId": 100,
         "clientId": 14
     },
@@ -171,7 +162,7 @@ const PROJECTS = [
         "style": "pop",
         "name": "Creepy cartoon guy with heart",
         "date": "",
-        "image": ["assets/img/creepy little guy.jpg"],
+        "image": ["assets/img/creepy little guy.jpeg"],
         "artistId": 100,
         "clientId": 15
     },
@@ -180,7 +171,7 @@ const PROJECTS = [
         "style": "pop",
         "name": "Three Brothers",
         "date": "",
-        "image": ["assets/img/three_brothers.jpg"],
+        "image": ["assets/img/three_brothers.png"],
         "artistId": 100,
         "clientId": 15
     },
@@ -189,7 +180,7 @@ const PROJECTS = [
         "style": "pop",
         "name": "Love My Life",
         "date": "",
-        "image": ["assets/img/sharon_source001.jpg","assets/img/sharon_source002.jpg","assets/img/sharon_source003.jpg"],
+        "image": ["assets/img/sharon_source001.png","assets/img/sharon_source002.png","assets/img/sharon_source003.png"],
         "artistId": 100,
         "clientId": 16
     }

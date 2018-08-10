@@ -19,3 +19,14 @@
     padding: 24px;
     text-align: center;
 }
+ul {
+    padding:0;
+    width: 1200px;
+    margin: 20px auto
+}
+li {
+    display: inline
+}
+.img-container {
+    background-size: contain
+}
