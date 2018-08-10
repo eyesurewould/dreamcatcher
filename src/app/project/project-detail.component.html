@@ -1,13 +1,22 @@
 <div class="row">
-    <div class="col-md-12">
-        <div [ngStyle]="{'background-image': 'url(\'' + project.image[0] + '\')' }" class="img-container">
-        </div>
-    </div>
-</div>
-<div class="row">
     <div class="col-md-12 caption-row">
         <span id="caption">
             {{iproject.name}}
         </span>
     </div>
 </div>
+<div class="row">
+    <ul id="thumbnailsList">
+        <li *ngFor="let image of project.image">
+            <div class="col-md-12">
+                <div [ngStyle]="{'background-image': 'url(\'' + image + '\')' }" class="img-container">
+                </div>
+            </div>
+            
+        </li>
+    </ul>
+</div>
+
+<h3>testing</h3>
+<!-- the routerLink bind results in a URL path like "/project/3" where 3 is the id value for the project of the *ngFor directive -->
+<img src="{{project.image[0]}}" class="tn" width="200" height="160">

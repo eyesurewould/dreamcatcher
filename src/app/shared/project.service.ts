@@ -61,18 +61,9 @@ const PROJECTS = [
     {
         "id": 4,
         "style": "neo-traditional",
-        "name": "Sea Horse",
+        "name": "Sleeve (cover up) - Sea Horse / Oar Fish / Coral",
         "date": "",
-        "image": ["assets/img/Sea Horse.jpg"],
-        "artistId": 100,
-        "clientId": 12
-    },
-    {
-        "id": 5,
-        "style": "neo-traditional",
-        "name": "Oar Fish (or paddle fish?)",
-        "date": "",
-        "image": ["assets/img/oar_fish.jpg"],
+        "image": ["assets/img/Sea Horse.jpg","assets/img/oar_fish.jpg","assets/img/gareth_cover.jpg","assets/img/gareth_sleeve_oarfish001.jpg","assets/img/gareth_sleeve_source003.jpg"],
         "artistId": 100,
         "clientId": 12
     },
@@ -120,5 +111,86 @@ const PROJECTS = [
         "image": ["assets/img/lil Cap.jpg"],
         "artistId": 101,
         "clientId": 0
+    },
+    {
+        "id": 12,
+        "style": "pop",
+        "name": "Rainbow Whale",
+        "date": "",
+        "image": ["assets/img/rainbow_whale.jpg"],
+        "artistId": 0,
+        "clientId": 0
+    },
+    {
+        "id": 13,
+        "style": "goth",
+        "name": "Witch",
+        "date": "",
+        "image": ["assets/img/witch_arm.jpg","assets/img/witch_arm_starting.jpg"],
+        "artistId": 100,
+        "clientId": 13
+    },
+    {
+        "id": 14,
+        "style": "goth",
+        "name": "Thre Sisters",
+        "date": "",
+        "image": ["assets/img/three_sisters.jpg","assets/img/three_sisters_starting.jpg"],
+        "artistId": 100,
+        "clientId": 13
+    },
+    {
+        "id": 15,
+        "style": "pop",
+        "name": "Gator / Bird / Panther",
+        "date": "",
+        "image": ["assets/img/gator 001.jpg","assets/img/gator 002.jpg","assets/img/gator 003.jpg"],
+        "artistId": 100,
+        "clientId": 20
+    },
+    {
+        "id": 16,
+        "style": "goth",
+        "name": "Skelly Cat",
+        "date": "",
+        "image": ["assets/img/skelly_cat.jpg"],
+        "artistId": 100,
+        "clientId": 13
+    },
+    {
+        "id": 17,
+        "style": "japanese",
+        "name": "Dragon - foot cover up (welsh / japanese / norse)",
+        "date": "",
+        "image": ["assets/img/emma_foot_cover.jpg","assets/img/emma_foot_source002.jpg","assets/img/emma_foot_source001.jpg"],
+        "artistId": 100,
+        "clientId": 14
+    },
+    {
+        "id": 18,
+        "style": "pop",
+        "name": "Creepy cartoon guy with heart",
+        "date": "",
+        "image": ["assets/img/creepy little guy.jpg"],
+        "artistId": 100,
+        "clientId": 15
+    },
+    {
+        "id": 19,
+        "style": "pop",
+        "name": "Three Brothers",
+        "date": "",
+        "image": ["assets/img/three_brothers.jpg"],
+        "artistId": 100,
+        "clientId": 15
+    },
+    {
+        "id": 20,
+        "style": "pop",
+        "name": "Love My Life",
+        "date": "",
+        "image": ["assets/img/sharon_source001.jpg","assets/img/sharon_source002.jpg","assets/img/sharon_source003.jpg"],
+        "artistId": 100,
+        "clientId": 16
     }
 ];
