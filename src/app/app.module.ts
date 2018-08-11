@@ -18,7 +18,10 @@ import { ClientsComponent } from './clients/clients.component';
 import { ClientDetailComponent } from './client/client-detail.component';
 import { ClientFilterPipe } from './shared/client-filter.pipe';
 
+import { ContentfulService } from './shared/contentful.service';
+
 import { appRoutes } from '../routes';
+import { TestListComponent } from './test-list/test-list.component';
 
 
 @NgModule({
@@ -30,7 +33,8 @@ import { appRoutes } from '../routes';
     ProjectFilterPipe,
     ClientsComponent,
     ClientDetailComponent,
-    ClientFilterPipe
+    ClientFilterPipe,
+    TestListComponent
   ],
   imports: [
     BrowserModule,
@@ -39,7 +43,13 @@ import { appRoutes } from '../routes';
     AlertModule.forRoot(),
     RouterModule.forRoot(appRoutes)
   ],
-  providers: [ ProjectService, ProjectFilterPipe, ClientService, ClientFilterPipe ],
+  providers: [ 
+    ProjectService, 
+    ProjectFilterPipe, 
+    ClientService, 
+    ClientFilterPipe,
+    ContentfulService
+  ],
   bootstrap: [ AppComponent ]
 })
 export class AppModule { }
