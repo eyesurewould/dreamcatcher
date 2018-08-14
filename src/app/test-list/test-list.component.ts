@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { ContentfulService } from '../shared/contentful.service';
+import { EntryCollection } from 'contentful';
 import { Entry } from 'contentful';
+
+import { ContentfulService } from 'angular-contentful-service'
 
 @Component({
   selector: 'app-test-list',
@@ -9,16 +11,28 @@ import { Entry } from 'contentful';
 })
 export class TestListComponent implements OnInit {
 
-  private products: Entry<any>[] = [];
+  private projects: EntryCollection<any>;
+  private clients: EntryCollection<any>;
 
-  constructor( private contentfulService: ContentfulService ) { }
+  constructor(private cs: ContentfulService) {}
+ 
+  getEntries(query?: any) {
+    this.cs.getEntries(query).then(res => console.log(res));
+  }
+ 
+  getEntry(id: string, query?: any) {
+    this.cs.getEntry(id, query).then(res => console.log(res));
+  }
 
   ngOnInit() {
-    this.contentfulService.getProducts()
-    .then(products => this.products = products)
+    this.cs.getEntries({content_type: 'ink', include: 2})
+    .then(projects => this.projects = projects)
 
-    console.log(this.products[0]);
-    console.log(this.products[1]);
+    this.cs.getEntries({content_type: 'client', include: 2})
+    .then(clients => this.clients = clients)
+
+    //this.cs.getEntry('56h3TgXKAUywamqwyiyIie', {include: 2})
+    //.then(clients => this.clients = clients)
   }
 
 }

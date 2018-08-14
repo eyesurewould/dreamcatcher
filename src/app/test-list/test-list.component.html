@@ -1,7 +1,21 @@
-xxxxxx
+<h3>Clients</h3>
 <ul class="u-listReset">
-  <li *ngFor="let product of products">
-    <h2>{{ product.fields.productName }}</h2>
-    <p>{{ product.fields.productName }}</p>
+  <li *ngFor="let client of clients.items">
+    <h2>{{ client.fields.name }}</h2>
+    <p>{{ client.fields.email }}</p>
+    <p>{{ client.fields.phone }}</p>
+    <p>{{ client.fields.socialHandle }}</p>
+    <p>{{ client.fields.socialType }}</p>
   </li>
 </ul>
+
+
+<h3>Projects</h3>
+<ul class="u-listReset">
+  <li *ngFor="let project of projects.items" >
+    <h2>{{ project.fields.title }}</h2>
+    <p>{{ project.fields.description }}</p>
+    </li>
+</ul>
+
+-->

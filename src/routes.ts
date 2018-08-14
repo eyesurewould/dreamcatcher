@@ -1,5 +1,5 @@
 import { Routes } from '@angular/router';
-import { ProjectsComponent } from './app/projects/projects.component';
+import { ProjectsComponent } from './app/Projects/Projects.component';
 import { ProjectDetailComponent } from './app/project/project-detail.component';
 import { ClientsComponent } from './app/clients/clients.component';
 import { ClientDetailComponent } from './app/client/client-detail.component';
