@@ -1,11 +1,15 @@
 <h3>{{title}}</h3>
 <div class="row">
     <ul id="thumbnailsList">
-        <li *ngFor="let client of ( visibleClients | clientFilter:filterBy )">
-            <a [routerLink] = "['/client', client.id]">
-                <!-- the routerLink bind results in a URL path like "/client/3" where 3 is the id value for the client of the *ngFor directive -->
-                <img src="{{client.photo}}" class="tn" width="200" height="160">
+        <!-- <li *ngFor="let client of ( visibleClients | clientFilter:filterBy )"> -->
+        <li *ngFor="let client of clients.items">
+            <a [routerLink]="['/client', client.sys.id]">
+                <h2>{{ client.fields.name }}</h2>
             </a>
+            <p *ngIf="client.fields.email">{{ client.fields.email }}</p>
+            <p *ngIf="client.fields.phone">{{ client.fields.phone }}</p>
+            <p *ngIf="client.fields.socialHandle">{{ client.fields.socialHandle }}</p>
+            <p *ngIf="client.fields.socialType">{{ client.fields.socialType }}</p>
         </li>
     </ul>
 </div>

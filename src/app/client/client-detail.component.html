@@ -1,21 +1,18 @@
 <div class="row client-row">
-    <div class="col-md-4 col-sm-12">
-        <img id="client-photo" class="mr-3" alt={{client.name}} src={{client.photo}} width="200" />
-    </div>
-    <div class="col-md-4 col-sm-12">
-        <h5 class="mt-0">
-            {{client.name}}
+    <div class="col-md-6 col-sm-12">
+        <h5 class="mt-0" *ngIf="client.fields.name">
+            {{client.fields.name}}
         </h5>
-        <p>
-            <a href="mailto:{{client.email}}">{{client.email}}</a>
+        <p *ngIf="client.fields.email">
+            <a href="mailto:{{client.fields.email}}">{{client.fields.email}}</a>
         </p>
-        <p>
-            <a href="tel:{{client.phone}}">{{client.phone}}</a>
+        <p *ngIf="client.fields.phone">
+            <a href="tel:{{client.fields.phone}}">{{client.fields.phone}}</a>
         </p>
-        <p>{{client.handle}}</p>
-        <p>{{client.styles}}</p>
+        <p *ngIf="client.fields.socialHandle">{{client.fields.socialHandle}}</p>
+        <p *ngIf="client.fields.socialType">{{client.fields.socialType}}</p>
     </div>
-    <div class="col-md-4 col-sm-12">
+    <div class="col-md-6 col-sm-12">
         <h5 class="mt-0">
             Actions
         </h5>
@@ -28,10 +25,17 @@
 <div class="row image-row">
     <div class="project-header">Projects</div>
     <ul id="thumbnailsList">
-        <li *ngFor="let project of visibleProjects">
+        <li *ngFor="let project of projects.items">
             <!-- the routerLink bind results in a URL path like "/project/3" where 3 is the id value for the client of the *ngFor directive -->
-            <a [routerLink]="['/project', project.id]">
-                <img src="{{project.image[0]}}" class="tn" width="200" height="160">
+            <a [routerLink]="['/project', project.sys.id]">
+                <span *ngIf="project.fields.finalImage; else inProgressBlock">
+                    <img src="{{project.fields.finalImage.fields.file.url}}" class="tn" width="200" height="160">
+                </span>
+                <ng-template #inProgressBlock>
+                    <span>
+                        <img src="{{project.fields.assets[0].fields.file.url}}" class="tn" width="200" height="160">
+                    </span>
+                </ng-template>
             </a>
         </li>
     </ul>

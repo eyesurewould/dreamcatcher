@@ -1,32 +1,30 @@
-import { Component, OnChanges, OnInit, Input } from '@angular/core';
-import { ProjectService } from '../shared/project.service';
-import { ProjectFilterPipe } from '../shared/project-filter.pipe';
-import { ActivatedRoute } from '@angular/router';
+import { Component, OnChanges } from '@angular/core';
 
-@Component ({
+import { EntryCollection } from 'contentful';
+import { ContentfulService } from 'angular-contentful-service';
+
+@Component({
     selector: 'app-projects',
     templateUrl: './projects.component.html',
     styleUrls: ['./projects.component.css']
 })
 export class ProjectsComponent implements OnChanges {
+    title = 'Recent Projects for all artists';
     
-    @Input() filterBy?: string = 'all';
-    visibleProjects: any[] = [];
+    private products: EntryCollection<any>;
 
-    constructor ( private projectService: ProjectService, private route: ActivatedRoute ) {
-        this.visibleProjects = this.projectService.getProjects();
+    constructor(private cs: ContentfulService) {
+        this.cs.getEntries({ content_type: 'ink', include: 2 })
+            .then(products => {
+                this.products = products;
+            })
+    }
+
+    getEntries(query?: any) {
+        this.cs.getEntries(query).then(res => console.log(res));
     }
 
     ngOnChanges() {
-        this.visibleProjects = this.projectService.getProjects();
-    }
-
-    ngOnInit() {
-        //if path includes a style param, we set it as the filter
-        if( this.route.snapshot.params['style'] === undefined ) {
-            this.filterBy = 'all';
-        } else {
-            this.filterBy = this.route.snapshot.params['style'];
-        }
+        //
     }
 }

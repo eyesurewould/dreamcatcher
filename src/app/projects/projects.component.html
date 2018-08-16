@@ -1,12 +1,18 @@
 <h3>{{filterBy | titlecase}} projects</h3>
 <div class="row">
-    <button class="btn btn-lg btn-info" [class.active]="filterBy=='all'" (click)="filterBy='all'">All</button>
     <ul id="thumbnailsList">
-        <li *ngFor="let project of ( visibleProjects | projectFilter:filterBy )">
-            <a [routerLink] = "['/project', project.id]">
-                <!-- the routerLink bind results in a URL path like "/project/3" where 3 is the id value for the project of the *ngFor directive -->
-                <img src="{{project.image[0]}}" class="tn" width="200" height="160">
-            </a>
-        </li>
+        <li *ngFor="let project of projects.items">
+                <!-- the routerLink bind results in a URL path like "/project/3" where 3 is the id value for the client of the *ngFor directive -->
+                <a [routerLink]="['/project', project.sys.id]">
+                    <span *ngIf="project.fields.finalImage; else inProgressBlock">
+                        <img src="{{project.fields.finalImage.fields.file.url}}" class="tn" width="200" height="160">
+                    </span>
+                    <ng-template #inProgressBlock>
+                        <span>
+                            <img src="{{project.fields.assets[0].fields.file.url}}" class="tn" width="200" height="160">
+                        </span>
+                    </ng-template>
+                </a>
+            </li>
     </ul>
 </div>

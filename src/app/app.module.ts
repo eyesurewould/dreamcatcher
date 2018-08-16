@@ -8,23 +8,14 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 
-import { ProjectService } from './shared/project.service';
-import { ProjectsComponent } from './Projects/Projects.component';
+import { ProjectsComponent } from './projects/projects.component';
 import { ProjectDetailComponent } from './project/project-detail.component';
-import { ProjectFilterPipe } from './shared/project-filter.pipe';
-
-import { ClientService } from './shared/client.service';
 import { ClientsComponent } from './clients/clients.component';
 import { ClientDetailComponent } from './client/client-detail.component';
-import { ClientFilterPipe } from './shared/client-filter.pipe';
 
 import { ContentfulModule } from 'angular-contentful-service';
 
-import { ContentfulProjectService } from './shared/contentful-project.service';
-import { ContentfulClientService } from './shared/contentful-client.service';
-
 import { appRoutes } from '../routes';
-import { TestListComponent } from './test-list/test-list.component';
 
 
 @NgModule({
@@ -33,11 +24,8 @@ import { TestListComponent } from './test-list/test-list.component';
     NavbarComponent,
     ProjectsComponent,
     ProjectDetailComponent,
-    ProjectFilterPipe,
     ClientsComponent,
-    ClientDetailComponent,
-    ClientFilterPipe,
-    TestListComponent
+    ClientDetailComponent
   ],
   imports: [
     BrowserModule,
@@ -51,12 +39,6 @@ import { TestListComponent } from './test-list/test-list.component';
     }),
   ],
   providers: [ 
-    ProjectService, 
-    ProjectFilterPipe, 
-    ClientService, 
-    ClientFilterPipe,
-    ContentfulProjectService,
-    ContentfulClientService
   ],
   bootstrap: [ AppComponent ]
 })

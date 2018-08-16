@@ -1,31 +1,44 @@
 <div class="row">
     <div class="col-md-12 caption-row">
         <span id="caption">
-            {{project.name}}
+            {{project.fields.title}}
         </span>
     </div>
     <div class="col-md-12 caption-row">
         <span>
-            <a [routerLink]="['/projects', project.style]">
-                {{project.style}}
+            <a [routerLink]="['/projects', project.fields.style]">
+                {{project.fields.style}}
             </a>
         </span>
         <span>
-            <a [routerLink]="['/client', project.clientId]">
-                Go to Client...
+            <a [routerLink]="['/client', project.fields.clientRef.sys.id]">
+                {{project.fields.clientRef.fields.name}}
             </a>
         </span>
     </div>
 </div>
 
+<p *ngIf="project.fields.description">{{project.fields.description}}</p>
+<p *ngIf="project.fields.location">{{project.fields.location}}</p>
+<p *ngIf="project.fields.size">{{project.fields.size}}</p>
+<p *ngIf="project.fields.timeEstimate">{{project.fields.timeEstimate}}</p>
+<p *ngIf="project.fields.status">{{project.fields.status}}</p>
 
-
+<!-- if we have a final image, show it-->
+<div class="row" *ngIf="project.fields.finalImage">
+    <h3>Final Work</h3>
+    <div class="col-md-12">
+        <div [ngStyle]="{'background-image': 'url(\'' + project.fields.finalImage.fields.file.url + '\')'}" class="img-container">
+        </div>
+    </div>
+</div>
 
 <div class="row">
+    <h3>Work In Progress</h3>
     <ul id="img-list">
-        <li *ngFor="let image of project.image">
+        <li *ngFor="let image of project.fields.assets">
             <div class="col-md-12">
-                <div [ngStyle]="{'background-image': 'url(\'' + image + '\')'}" class="img-container">
+                <div [ngStyle]="{'background-image': 'url(\'' + image.fields.file.url + '\')'}" class="img-container">
                 </div>
             </div>
 
