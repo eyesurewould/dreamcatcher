@@ -1,10 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
-import { EntryCollection } from 'contentful';
-import { Entry } from 'contentful';
-import { ContentfulService } from 'angular-contentful-service';
-
+import { ContentfulService } from '../shared/contentful.service';
+import { Client } from '../client/client';
 
 @Component({
     selector: 'client-detail',
@@ -14,8 +12,7 @@ import { ContentfulService } from 'angular-contentful-service';
 export class ClientDetailComponent implements OnInit {
 
     private id: string;
-    private client: Entry<any>;
-    private projects: EntryCollection<any>;
+    private client: Object;
 
     constructor(private cs: ContentfulService, private route: ActivatedRoute) {
         route.params.subscribe(params => {
@@ -35,16 +32,13 @@ export class ClientDetailComponent implements OnInit {
     }
 
     load(id: string) {
-        this.cs.getEntry(
-            id,
-            { include: 2 }
-        )
-            .then(clients => {
-                this.client = clients;                
-            });
+        this.cs.getClient( id ).subscribe((data: Client) => {
+            this.client = data;
+            console.log('constructor: client ', this.client);
+          });
 
  
-        this.cs.getEntries(
+        /*this.cs.getProjects(
             {
                 content_type: 'ink',
                 links_to_entry: id,
@@ -53,7 +47,7 @@ export class ClientDetailComponent implements OnInit {
         )
             .then(projects => {
                 this.projects = projects;
-            })
+            })*/
     }
 
 }

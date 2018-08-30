@@ -8,8 +8,8 @@
             </a>
             <p *ngIf="client.fields.email">{{ client.fields.email }}</p>
             <p *ngIf="client.fields.phone">{{ client.fields.phone }}</p>
-            <p *ngIf="client.fields.socialHandle">{{ client.fields.socialHandle }}</p>
-            <p *ngIf="client.fields.socialType">{{ client.fields.socialType }}</p>
+            <p *ngIf="client.fields.socialHandle">{{ client.fields.socialHandle }}<span *ngIf="client.fields.socialType"> on {{ client.fields.socialType }}</span></p>
+            
         </li>
     </ul>
 </div>

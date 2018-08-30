@@ -1,8 +1,8 @@
-//import { Component, OnChanges, Input } from '@angular/core';
 import { Component, OnChanges } from '@angular/core';
+import { Observable } from 'rxjs';
 
-import { EntryCollection } from 'contentful';
-import { ContentfulService } from 'angular-contentful-service';
+import { ContentfulService } from '../shared/contentful.service';
+import { Client } from '../client/client';
 
 @Component({
   selector: 'app-clients',
@@ -11,22 +11,21 @@ import { ContentfulService } from 'angular-contentful-service';
 })
 export class ClientsComponent implements OnChanges {
   title = "Clients";
-  //@Input() filterBy?: string = 'all';
 
-  private clients: EntryCollection<any>;
+  private clients: Object[];
 
-  constructor( private cs: ContentfulService ) { 
-    this.cs.getEntries({ content_type: 'client', include: 2 })
-      .then(clients => {
-        this.clients = clients;
-      })
-  }
+  constructor(private cs: ContentfulService) {
+    this.cs.getClients().subscribe((data: Array<object>) => {
+      this.clients = data;
+      console.log('constructor: clients ', this.clients);
+    });
 
-  getEntries(query?: any) {
-    this.cs.getEntries(query).then(res => console.log(res));
   }
 
   ngOnChanges() {
-    
+    this.cs.getClients().subscribe((data: Array<object>) => {
+      this.clients = data;
+      console.log('constructor: clients ', this.clients);
+    });
   }
 }

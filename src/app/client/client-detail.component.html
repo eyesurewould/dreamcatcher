@@ -9,8 +9,7 @@
         <p>
             <a href="tel:{{client.fields.phone}}">{{client.fields.phone}}</a>
         </p>
-        <p>{{client.fields.socialHandle}}</p>
-        <p>{{client.fields.socialType}}</p>
+        <p>{{client.fields.socialHandle}}<span *ngIf="client.fields.socialType"> on {{ client.fields.socialType }}</span></p>
     </div>
     <div class="col-md-6 col-sm-12">
         <h5 class="mt-0">
@@ -22,11 +21,11 @@
     </div>
 </div>
 
+<!-- 
 <div class="row image-row">
     <div class="project-header">Projects</div>
     <ul id="thumbnailsList">
         <li *ngFor="let project of projects.items">
-            <!-- the routerLink bind results in a URL path like "/project/3" where 3 is the id value for the client of the *ngFor directive -->
             <a [routerLink]="['/project', project.sys.id]">
                 <span *ngIf="project.fields.finalImage; else inProgressBlock">
                     <img src="{{project.fields.finalImage.fields.file.url}}" class="tn" width="200" height="160">
@@ -40,3 +39,4 @@
         </li>
     </ul>
 </div>
+-->

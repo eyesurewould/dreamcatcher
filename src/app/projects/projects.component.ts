@@ -1,5 +1,6 @@
 import { Component, OnChanges } from '@angular/core';
-import { EntryCollection } from 'contentful';
+import { EntryCollection } from 'contentful'; 
+
 import { ContentfulService } from 'angular-contentful-service';
 
 @Component({
@@ -24,7 +25,7 @@ export class ProjectsComponent implements OnChanges {
         this.cs.getEntries(query).then(res => console.log(res));
     }
 
-    ngOnChanges() {
+    ngOnChanges() { 
         //
     }
 }
