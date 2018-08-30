@@ -1,16 +1,16 @@
 <div class="row client-row">
     <div class="col-md-6 col-sm-12">
-        <h5 class="mt-0" *ngIf="client.fields.name">
+        <h5 class="mt-0">
             {{client.fields.name}}
         </h5>
-        <p *ngIf="client.fields.email">
+        <p>
             <a href="mailto:{{client.fields.email}}">{{client.fields.email}}</a>
         </p>
-        <p *ngIf="client.fields.phone">
+        <p>
             <a href="tel:{{client.fields.phone}}">{{client.fields.phone}}</a>
         </p>
-        <p *ngIf="client.fields.socialHandle">{{client.fields.socialHandle}}</p>
-        <p *ngIf="client.fields.socialType">{{client.fields.socialType}}</p>
+        <p>{{client.fields.socialHandle}}</p>
+        <p>{{client.fields.socialType}}</p>
     </div>
     <div class="col-md-6 col-sm-12">
         <h5 class="mt-0">

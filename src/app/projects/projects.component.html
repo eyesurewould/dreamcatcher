@@ -1,6 +1,6 @@
-<h3>{{filterBy | titlecase}} projects</h3>
+<h3>Projects</h3>
 <div class="row">
-    <ul id="thumbnailsList">
+    <ul  id="thumbnailsList">
         <li *ngFor="let project of projects.items">
                 <!-- the routerLink bind results in a URL path like "/project/3" where 3 is the id value for the client of the *ngFor directive -->
                 <a [routerLink]="['/project', project.sys.id]">

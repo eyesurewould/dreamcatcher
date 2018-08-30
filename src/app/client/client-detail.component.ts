@@ -18,36 +18,29 @@ export class ClientDetailComponent implements OnInit {
     private projects: EntryCollection<any>;
 
     constructor(private cs: ContentfulService, private route: ActivatedRoute) {
-        console.log('ClientDetailComponent starting');
         route.params.subscribe(params => {
-            console.log("ClientDetailComponent: params", params);
             this.id = params['id'];
         });
 
     }
 
     ngOnInit() {
-        console.log('ClientDetailComponent: ngOnInit: params ', this.id);
         this.load(this.id);
 
     }
 
     ngOnChanges() {
-        console.log('ClientDetailComponent: ngOnChanges: params ', this.id);
         this.load(this.id);
 
     }
 
     load(id: string) {
-        console.log('ClientDetailComponent: load client and projects: id ', id);
-
         this.cs.getEntry(
             id,
             { include: 2 }
         )
             .then(clients => {
-                this.client = clients;
-                console.log('ClientDetailComponent: client name ', this.client.fields.name);
+                this.client = clients;                
             });
 
  
@@ -60,7 +53,6 @@ export class ClientDetailComponent implements OnInit {
         )
             .then(projects => {
                 this.projects = projects;
-                console.log('ClientDetailComponent: projects title ', this.projects[0].fields.title);
             })
     }
 

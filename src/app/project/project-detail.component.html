@@ -1,47 +1,74 @@
-<div class="row">
-    <div class="col-md-12 caption-row">
-        <span id="caption">
+<div class="row" *ngIf="project?.fields">
+    <div class="col-md-3 col-sm-12 detail-row">
+        <h3 *ngIf="project.fields.title">
             {{project.fields.title}}
-        </span>
-    </div>
-    <div class="col-md-12 caption-row">
-        <span>
-            <a [routerLink]="['/projects', project.fields.style]">
-                {{project.fields.style}}
+        </h3>
+        <p>
+            <a *ngFor="let style of project.fields.style" [routerLink]="['/projects', style]">
+                {{style}}
             </a>
-        </span>
-        <span>
+        </p>
+        <p>
             <a [routerLink]="['/client', project.fields.clientRef.sys.id]">
                 {{project.fields.clientRef.fields.name}}
             </a>
-        </span>
+        </p>
+        <p *ngIf="project.fields.status">{{project.fields.status}}</p>
+    </div>
+    <div class="col-md-6 col-sm-12 detail-row">
+        <h5>Details</h5>
+        <p *ngIf="project.fields.description">{{project.fields.description}}</p>
+        <p *ngIf="project.fields.location">{{project.fields.location}} - {{project.fields.size}}</p>
+        <p *ngIf="project.fields.timeEstimate">{{project.fields.timeEstimate}} hours estimated</p>
+    </div>
+    <div class="col-md-3 col-sm-12 detail-row">
+        <h5 class="mt-0">
+            Actions
+        </h5>
+        <div>Edit</div>
+        <div>Add image</div>
+        <div><button (click)="confirmDelete(project.sys.id)">Delete</button></div>
     </div>
 </div>
 
-<p *ngIf="project.fields.description">{{project.fields.description}}</p>
-<p *ngIf="project.fields.location">{{project.fields.location}}</p>
-<p *ngIf="project.fields.size">{{project.fields.size}}</p>
-<p *ngIf="project.fields.timeEstimate">{{project.fields.timeEstimate}}</p>
-<p *ngIf="project.fields.status">{{project.fields.status}}</p>
-
-<!-- if we have a final image, show it-->
-<div class="row" *ngIf="project.fields.finalImage">
-    <h3>Final Work</h3>
-    <div class="col-md-12">
-        <div [ngStyle]="{'background-image': 'url(\'' + project.fields.finalImage.fields.file.url + '\')'}" class="img-container">
+<!-- if we have a final image, show it -->
+<div class="row" *ngIf="project?.fields.finalImage">
+    <div class="col img-row">
+        <h3>Final Work</h3>
+        <div [ngStyle]="{'background-image': 'url(\'' + project.fields.finalImage.fields.file.url + '?w=575\')', 'min-height': '237px'}"
+            class="img-container d-block d-sm-none">
+        </div>
+        <div [ngStyle]="{'background-image': 'url(\'' + project.fields.finalImage.fields.file.url + '?w=767\')', 'min-height': '384px'}"
+            class="img-container d-none d-sm-block d-md-none">
+        </div>
+        <div [ngStyle]="{'background-image': 'url(\'' + project.fields.finalImage.fields.file.url + '?w=991\')', 'min-height': '495px'}"
+            class="img-container d-none d-md-block d-lg-none">
+        </div>
+        <div [ngStyle]="{'background-image': 'url(\'' + project.fields.finalImage.fields.file.url + '?w=1199\')', 'min-height': '600px'}"
+            class="img-container d-none d-lg-block d-xl-none">
+        </div>
+        <div [ngStyle]="{'background-image': 'url(\'' + project.fields.finalImage.fields.file.url + '?w=1200\')', 'min-height': '600px'}"
+            class="img-container d-none d-xl-block">
         </div>
     </div>
 </div>
 
 <div class="row">
-    <h3>Work In Progress</h3>
-    <ul id="img-list">
-        <li *ngFor="let image of project.fields.assets">
-            <div class="col-md-12">
-                <div [ngStyle]="{'background-image': 'url(\'' + image.fields.file.url + '\')'}" class="img-container">
+    <div class="col img-row">
+        <h3>In Progress</h3>
+        <ul id="img-list">
+            <li *ngFor="let image of project.fields.assets">
+                <div [ngStyle]="{'background-image': 'url(\'' + image.fields.file.url + '?w=575\')', 'min-height': '237px'}" class="img-container d-block d-sm-none">
                 </div>
-            </div>
-
-        </li>
-    </ul>
+                <div [ngStyle]="{'background-image': 'url(\'' + image.fields.file.url + '?w=767\')', 'min-height': '384px'}" class="img-container d-none d-sm-block d-md-none">
+                </div>
+                <div [ngStyle]="{'background-image': 'url(\'' + image.fields.file.url + '?w=991\')', 'min-height': '495px'}" class="img-container d-none d-md-block d-lg-none">
+                </div>
+                <div [ngStyle]="{'background-image': 'url(\'' + image.fields.file.url + '?w=1199\')', 'min-height': '600px'}" class="img-container d-none d-lg-block d-xl-none">
+                </div>
+                <div [ngStyle]="{'background-image': 'url(\'' + image.fields.file.url + '?w=1200\')', 'min-height': '600px'}" class="img-container d-none d-xl-block">
+                </div>
+            </li>
+        </ul>
+    </div>
 </div>

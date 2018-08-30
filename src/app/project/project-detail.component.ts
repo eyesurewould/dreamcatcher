@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 
-import { Entry } from 'contentful';
+import { Entry, EntryCollection } from 'contentful';
 import { ContentfulService } from 'angular-contentful-service';
 
 @Component({
@@ -14,59 +14,58 @@ export class ProjectDetailComponent implements OnInit {
     private id: string;
     private client: Entry<any>;
     private project: Entry<any>;
+    //private project: EntryCollection<any>;
 
-    constructor(private cs: ContentfulService, private route: ActivatedRoute) {
-        console.log('ProjectDetailComponent starting');
-        route.params.subscribe(params => {
-            console.log("ProjectDetailComponent: params", params);
-            this.id = params['id'];
+    constructor( private cs: ContentfulService, private router: Router, private activeRoute: ActivatedRoute ) {
+        console.log('constructor: starting');
+        // force route reload whenever params change;
+        this.router.routeReuseStrategy.shouldReuseRoute = () => false;
+
+        this.router.events.subscribe((evt) => {
+            if (evt instanceof NavigationEnd) {
+                console.log(evt);
+               // trick the Router into believing it's last link wasn't previously loaded
+               this.router.navigated = false;
+               // if you need to scroll back to top, here is the right place
+               window.scrollTo(0, 0);
+            }
         });
     }
 
     ngOnInit() {
-        console.log('ProjectDetailComponent: ngOnInit: params ', this.id);
-        this.load(this.id);
+        this.activeRoute.params.subscribe(routeParams => {
+            this.load(routeParams.id);
+        });
+
     }
 
     load(id: string) {
-        console.log('ProjectDetailComponent: load project: id ', id);
+        console.log('load: starting load ');
+        console.log('load: project entry id ', id);
 
-        console.log('ProjectDetailComponent: retrieve project');
         this.cs.getEntry(
             id,
             { include: 2 }
         )
             .then(projects => {
                 this.project = projects;
-                console.log('ProjectDetailComponent: project title ', this.project.fields.title);
+                console.log('load: client entry id ', this.project.fields.clientRef.sys.id);
+                this.cs.getEntry(
+                    this.project.fields.clientRef.sys.id,
+                    { include: 2 }
+                )
+                    .then(client => {
+                        this.client = client;
+                        console.log('load: project ', this.project);
+                        console.log('load: client ', this.client);
+                    });
+
             })
 
-        console.log('ProjectDetailComponent: previous client name ', this.client.fields.name);
-        console.log('ProjectDetailComponent: previous client id ', this.client.sys.id);
-        console.log('ProjectDetailComponent: retrieve client from id ', this.project.fields.clientRef.sys.id);
-        this.cs.getEntry(
-            this.project.fields.clientRef.sys.id,
-            { include: 2 }
-        )
-            .then(client => {
-                this.client = client;
-                console.log('ProjectDetailComponent: client data ', this.client);
-                console.log('ProjectDetailComponent: client name ', this.client.fields.name);
-            });
+    }
 
-
-        /*
-    console.log('retrieve client from project at id ', this.project.fields.clientRef.sys.id);
-    this.cs.getEntry(
-        this.project.fields.clientRef.sys.id,
-        { include: 2 }
-    )
-        .then(clients => {
-            this.client = clients;
-            console.log('show client name ');
-            console.log('client name ', this.client.fields.name);
-        });*/
-
+    confirmDelete(id) {
+        console.log('confirmDelete: ', id);
     }
 
 }
