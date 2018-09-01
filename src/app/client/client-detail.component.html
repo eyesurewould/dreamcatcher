@@ -1,15 +1,16 @@
 <div class="row client-row">
     <div class="col-md-6 col-sm-12">
-        <h5 class="mt-0">
+        <h5 class="mt-0" *ngIf="client.fields">
             {{client.fields.name}}
         </h5>
-        <p>
+        <p *ngIf="client.fields">
             <a href="mailto:{{client.fields.email}}">{{client.fields.email}}</a>
         </p>
-        <p>
+        <p *ngIf="client.fields">
             <a href="tel:{{client.fields.phone}}">{{client.fields.phone}}</a>
         </p>
-        <p>{{client.fields.socialHandle}}<span *ngIf="client.fields.socialType"> on {{ client.fields.socialType }}</span></p>
+        <p *ngIf="client.fields">{{client.fields.socialHandle}}<span *ngIf="client.fields.socialType"> on {{ client.fields.socialType
+                }}</span></p>
     </div>
     <div class="col-md-6 col-sm-12">
         <h5 class="mt-0">
@@ -21,22 +22,23 @@
     </div>
 </div>
 
-<!-- 
 <div class="row image-row">
-    <div class="project-header">Projects</div>
-    <ul id="thumbnailsList">
-        <li *ngFor="let project of projects.items">
-            <a [routerLink]="['/project', project.sys.id]">
-                <span *ngIf="project.fields.finalImage; else inProgressBlock">
-                    <img src="{{project.fields.finalImage.fields.file.url}}" class="tn" width="200" height="160">
-                </span>
-                <ng-template #inProgressBlock>
-                    <span>
-                        <img src="{{project.fields.assets[0].fields.file.url}}" class="tn" width="200" height="160">
+    <div class="col">
+        <h5 class="mt-0 project-header">Projects</h5>
+        <ul id="thumbnailsList">
+            <li *ngFor="let project of projects.items">
+                <a *ngIf="project.sys.id" [routerLink]="['/project', project.sys.id]">
+                    <span *ngIf="project.fields.finalImage; else inProgressBlock">
+                        <img *ngIf="project" src="{{project.fields.finalImage.fields.file.url}}" class="tn" width="200" height="160">
                     </span>
-                </ng-template>
-            </a>
-        </li>
-    </ul>
+                    <ng-template #inProgressBlock>
+                        <span>
+                            <img *ngIf="project" src="{{project.fields.assets[0].fields.file.url}}" class="tn" width="200" height="160">
+                        </span>
+                    </ng-template>
+                </a>
+                <span *ngIf="project">{{project.fields.title}}</span>
+            </li>
+        </ul>
+    </div>
 </div>
--->

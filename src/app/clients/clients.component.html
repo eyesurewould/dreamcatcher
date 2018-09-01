@@ -1,15 +1,16 @@
-<h3>{{title}}</h3>
 <div class="row">
-    <ul id="thumbnailsList">
-        <!-- <li *ngFor="let client of ( visibleClients | clientFilter:filterBy )"> -->
-        <li *ngFor="let client of clients.items">
-            <a [routerLink]="['/client', client.sys.id]">
-                <h2>{{ client.fields.name }}</h2>
-            </a>
-            <p *ngIf="client.fields.email">{{ client.fields.email }}</p>
-            <p *ngIf="client.fields.phone">{{ client.fields.phone }}</p>
-            <p *ngIf="client.fields.socialHandle">{{ client.fields.socialHandle }}<span *ngIf="client.fields.socialType"> on {{ client.fields.socialType }}</span></p>
-            
-        </li>
-    </ul>
+    <div class="col">
+        <h3>{{title}}</h3>
+        <ul id="thumbnailsList">
+            <li *ngFor="let client of clients.items">
+                <a [routerLink]="['/client', client.sys.id]">
+                    <h2>{{ client.fields.name }}</h2>
+                </a>
+                <p *ngIf="client.fields.email">{{ client.fields.email }}</p>
+                <p *ngIf="client.fields.phone">{{ client.fields.phone }}</p>
+                <p *ngIf="client.fields.socialHandle">{{ client.fields.socialHandle }}<span *ngIf="client.fields.socialType">
+                    on {{ client.fields.socialType }}</span></p>
+            </li>
+        </ul>
+    </div>
 </div>

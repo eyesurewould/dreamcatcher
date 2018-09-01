@@ -1,31 +1,31 @@
-import { Component, OnChanges } from '@angular/core';
-import { Observable } from 'rxjs';
-
+import { Component, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs';
+import { EntryCollection } from 'contentful';
 import { ContentfulService } from '../shared/contentful.service';
-import { Client } from '../client/client';
 
 @Component({
   selector: 'app-clients',
   templateUrl: './clients.component.html',
   styleUrls: ['./clients.component.css']
 })
-export class ClientsComponent implements OnChanges {
+export class ClientsComponent implements OnDestroy {
   title = "Clients";
 
-  private clients: Object[];
+  private clients: EntryCollection<any>;
+  private subscription: Subscription;
 
   constructor(private cs: ContentfulService) {
-    this.cs.getClients().subscribe((data: Array<object>) => {
-      this.clients = data;
-      console.log('constructor: clients ', this.clients);
-    });
-
+    this.subscription = this.cs.getClients('').subscribe(
+      response => {
+        this.clients = response;
+      }
+    )
+    
   }
 
-  ngOnChanges() {
-    this.cs.getClients().subscribe((data: Array<object>) => {
-      this.clients = data;
-      console.log('constructor: clients ', this.clients);
-    });
+  ngOnDestroy() {
+    // unsubscribe to ensure no memory leaks
+    this.subscription.unsubscribe();
   }
+
 }

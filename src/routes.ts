@@ -17,6 +17,5 @@ export const appRoutes: Routes = [
         path: "client/:id",
         component: ClientDetailComponent,
         runGuardsAndResolvers: 'paramsChange' 
-    },
-    { path: "", redirectTo: "/clients", pathMatch: 'full' }
+    }
 ]
