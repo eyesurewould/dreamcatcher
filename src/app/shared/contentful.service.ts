@@ -1,30 +1,23 @@
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
-import { HttpParams } from "@angular/common/http";
-import { HttpHeaders } from "@angular/common/http";
-
 import { environment } from '../../environments/environment';
 
-import { Client } from '../client/delete --- client';
-import { Project } from '../project/delete --- project';
+import { Client } from '../client/client';
+import { Project } from '../project/project';
 import { isDefined } from '@angular/compiler/src/util';
 
-import * as contentfulMgmt from 'contentful-management';
 import * as contentful from 'contentful';
+import * as contentfulMgmt from 'contentful-management';
+
 
 @Injectable({
   providedIn: 'root'
 })
 
 export class ContentfulService {
-  private space: string = environment.contentful.space;
-  private accessToken: string = environment.contentful.accessToken;
-  private personalToken: string = environment.contentful.personalToken;
 
-  private url: string = ''; //a workspace for building a url to call
-  private apiUrl = environment.contentful.urls.api;   //'https://api.contentful.com';
-  private cdnUrl = environment.contentful.urls.cdn;   //'https://cdn.contentful.com';
+  private contentfulClient: contentfulMgmt.ClientAPI;
+  private contentfulMgmtClient: contentfulMgmt.ClientAPI;
 
   private client = new Subject<contentful.Entry<{}>>();
   private clients = new Subject<contentful.EntryCollection<{}>>();
@@ -33,28 +26,31 @@ export class ContentfulService {
   private projects = new Subject<contentful.EntryCollection<{}>>();
   private projectsForClient = new Subject<contentful.EntryCollection<{}>>();
 
-  constructor(protected httpClient: HttpClient) { }
 
-  private contentfulClient = contentful.createClient({
-    // This is the access token for this space. Normally you get the token in the Contentful web app
-    accessToken: this.accessToken,
-    space: this.space
-  })
-  private contentfulMgmtClient = contentfulMgmt.createClient({
-    // This is the access token for this space. Normally you get the token in the Contentful web app
-    accessToken: this.accessToken
-  })
+  constructor() {
+
+    this.contentfulClient = contentful.createClient({
+      // This is the access token for reading content in this space
+      accessToken: environment.contentful.accessToken,
+      space: environment.contentful.space
+    })
+
+    this.contentfulMgmtClient = contentfulMgmt.createClient({
+      // This is the personal token for managing content in any space owned by the account
+      accessToken: environment.contentful.personalToken
+    })
+
+  }
 
   /**
-   * Make an HTTP POST call to the API endpoint using an personal token
-   * and special content headers
+   * Use the Content Management SDK to create a new entry of content type "client"
    * 
    * @param client
    */
   public createClient(client: Client) {
-
-    this.contentfulMgmtClient.getSpace(this.space)
-      .then((space) => space.getEnvironment('<environment-id>'))
+    console.log('createClient: start ', this.client);
+    this.contentfulMgmtClient.getSpace(environment.contentful.space)
+      .then((space) => space.getEnvironment('master'))
       .then((environment) => environment.createEntry('client', {
         fields: {
           name: {
@@ -74,20 +70,23 @@ export class ContentfulService {
           }
         }
       }))
-      .then((entry) => console.log(entry))
+      .then((entry) => entry.publish())
+      .then((entry) => console.log('saveClient: Entry ', entry.sys.id, 'created'))
       .catch(console.error)
 
   }
 
+
   /**
-    * 
+   * Use the Content SDK to retrieve records
+   * 
    * @param id A Contentful Entry ID for an entry of content_type 'client'
    */
   public getClient(id: string): Observable<contentful.Entry<{}>> {
 
     this.contentfulClient.getEntry(id)
       .then((response) => {
-        console.log('getClient: ', response);
+        //console.log('getClient: ', response);
         this.client.next((response));
         return this.client.asObservable();
       })
@@ -101,6 +100,7 @@ export class ContentfulService {
 
 
   /**
+   * Use the Content SDK to retrieve records
    * 
    * @param query A searcy string
    */
@@ -111,7 +111,7 @@ export class ContentfulService {
       include: 3
     })
       .then((response) => {
-        console.log('getClients: ', response);
+        //console.log('getClients: ', response);
         this.clients.next((response));
         return this.clients.asObservable();
       })
@@ -123,8 +123,61 @@ export class ContentfulService {
 
   }
 
+  public saveClient(id: string, client: Client) {
+
+    this.contentfulMgmtClient.getSpace(environment.contentful.space)
+      .then((space) => space.getEnvironment('master'))
+      .then((env) => env.getEntry(id))
+      .then((entry) => {
+        entry.fields.name['en-US'] = client.name;
+        entry.fields.email['en-US'] = client.email;
+        entry.fields.phone['en-US'] = client.phone;
+        entry.fields.socialHandle['en-US'] = client.socialHandle;
+        entry.fields.socialType['en-US'] = client.socialType;
+        return entry.update()
+      })
+      .then((entry) => entry.publish())
+      .then((entry) => console.log('saveClient: Entry ', entry.sys.id, 'updated'))
+      .catch(console.error)
+
+  }
+
 
   /**
+   * Use the Content Management SDK to create a new entry of content type "ink"
+   * 
+   * @param project
+   */
+  public createProject(project: Project) {
+
+    this.contentfulMgmtClient.getSpace(environment.contentful.space)
+      .then((space) => space.getEnvironment('master'))
+      .then((environment) => environment.createEntry('ink', {
+        fields: {
+          title: {
+            'en-US': project.title
+          },
+          description: {
+            'en-US': project.description
+          },
+          location: {
+            'en-US': project.location
+          },
+          size: {
+            'en-US': project.size
+          },
+          style: {
+            'en-US': [project.style]
+          }
+        }
+      }))
+      .then((entry) => console.log(entry))
+      .catch(console.error)
+
+  }
+
+  /**
+   * Use the Content SDK to retrieve records
    * 
    * @param id A Contentful Entry ID for an entry of content_type 'ink' 
    */
@@ -132,7 +185,7 @@ export class ContentfulService {
 
     this.contentfulClient.getEntry(id)
       .then((response) => {
-        console.log('getProject: ', response);
+        //console.log('getProject: ', response);
         this.project.next((response));
         return this.project.asObservable();
       })
@@ -141,10 +194,12 @@ export class ContentfulService {
       });
 
     return this.project.asObservable(); //compiler complains if I don't have this
+
   }
 
 
   /**
+   * Use the Content SDK to retrieve records
    * Supports a full text query, if a value is provided
    * 
    * @param query A search string
@@ -154,11 +209,10 @@ export class ContentfulService {
     const params = (isDefined(query) && query != '') ?
       { content_type: 'ink', include: 3 }
       : { content_type: 'ink', query: query, include: 3 };
-    console.log('getProjects: params ', params);
 
     this.contentfulClient.getEntries(params)
       .then((response) => {
-        console.log('getProjects: ', response);
+        //console.log('getProjects: ', response);
         this.projects.next((response));
         return this.projects.asObservable();
       })
@@ -172,17 +226,17 @@ export class ContentfulService {
 
 
   /**
-    * 
+   * Use the Content SDK to retrieve records
+   * 
    * @param clientId A Contentful Entry ID for an entry of content_type 'client'
    */
   public getProjectsForClient(clientId: string): Observable<contentful.EntryCollection<{}>> {
 
     const params = { content_type: 'ink', include: 3, 'fields.clientRef.sys.id': clientId };
-    console.log('getProjectsForClient: params ', params);
 
     this.contentfulClient.getEntries(params)
       .then((response) => {
-        console.log('getProjectsForClient: ', response);
+        //console.log('getProjectsForClient: ', response);
         this.projectsForClient.next((response));
         return this.projectsForClient.asObservable();
       })
@@ -191,6 +245,7 @@ export class ContentfulService {
       });
 
     return this.projectsForClient.asObservable();
+
   }
 
 }

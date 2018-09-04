@@ -1,28 +1,54 @@
 <div class="row client-row">
     <div class="col-md-6 col-sm-12">
-        <h5 class="mt-0" *ngIf="client.fields">
-            {{client.fields.name}}
-        </h5>
-        <p *ngIf="client.fields">
-            <a href="mailto:{{client.fields.email}}">{{client.fields.email}}</a>
-        </p>
-        <p *ngIf="client.fields">
-            <a href="tel:{{client.fields.phone}}">{{client.fields.phone}}</a>
-        </p>
-        <p *ngIf="client.fields">{{client.fields.socialHandle}}<span *ngIf="client.fields.socialType"> on {{ client.fields.socialType
-                }}</span></p>
+        <div class="mt-0" *ngIf="client.fields">
+            <div class="form-group" *ngIf="isEditable">
+                <h5>Editing Client Details</h5>
+                <label for="name">Name</label>
+                <input type="text" [(ngModel)]="client.fields.name" class="form-control" name="name" required>
+            </div>
+            <h5 *ngIf="!isEditable">{{client.fields.name}}</h5>
+        </div>
+        <div *ngIf="client.fields">
+            <div class="form-group" *ngIf="isEditable">
+                <label for="name">Email</label>
+                <input type="text" [(ngModel)]="client.fields.email" class="form-control" name="email">
+            </div>
+            <a *ngIf="!isEditable" href="mailto:{{client.fields.email}}">{{client.fields.email}}</a>
+        </div>
+        <div *ngIf="client.fields">
+            <div class="form-group" *ngIf="isEditable">
+                <label for="name">Phone</label>
+                <input type="text" [(ngModel)]="client.fields.phone" class="form-control" name="phone">
+            </div>
+            <a *ngIf="!isEditable" href="tel:{{client.fields.phone}}">{{client.fields.phone}}</a>
+        </div>
+        <div *ngIf="isEditable"></div>
+        <div class="form-group" *ngIf="isEditable">
+            <label for="name">Social Handle</label>
+            <input type="text" [(ngModel)]="client.fields.socialHandle" class="form-control" name="socialHandle">
+            <label for="name">Social Network</label>
+            <select class="form-control" id="socialType">
+                <option *ngFor="let type of socialTypes" [value]="type">{{type}}</option>
+            </select>
+        </div>
+        <div *ngIf="!isEditable">
+            <div *ngIf="client.fields">{{client.fields.socialHandle}}
+                <span *ngIf="client.fields.socialType"> on {{ client.fields.socialType}}</span>
+            </div>
+        </div>
     </div>
     <div class="col-md-6 col-sm-12">
         <h5 class="mt-0">
             Actions
         </h5>
-        <div>Edit</div>
-        <div>Add image</div>
-        <div>Delete</div>
+        <div *ngIf="client && !isEditable" (click)="enableEditing();">Edit</div>
+        <div *ngIf="client && isEditable" (click)="save();">Save</div>
+        <div *ngIf="client && !isEditable" [routerLink]="['/projectNew', client.sys.id]">Add Project</div>
+        <div *ngIf="client && !isEditable" (click)="deleteClient(client.sys.id);">Delete</div>
     </div>
 </div>
 
-<div class="row image-row">
+<div *ngIf="!isEditable" class="row image-row">
     <div class="col">
         <h5 class="mt-0 project-header">Projects</h5>
         <ul id="thumbnailsList">

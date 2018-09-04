@@ -1,6 +1,6 @@
-import { Component, OnChanges } from '@angular/core';
-import { EntryCollection } from 'contentful'; 
+import { Component, OnChanges, OnInit } from '@angular/core';
 
+import { EntryCollection } from 'contentful'; 
 import { ContentfulService } from 'angular-contentful-service';
 
 @Component({
@@ -8,24 +8,29 @@ import { ContentfulService } from 'angular-contentful-service';
     templateUrl: './projects.component.html',
     styleUrls: ['./projects.component.css']
 })
-export class ProjectsComponent implements OnChanges {
+export class ProjectsComponent implements OnChanges, OnInit {
     title = 'Recent Projects for all artists';
     
-    private projects: EntryCollection<any>;
+    private projects: EntryCollection<any>; 
 
-    constructor(private cs: ContentfulService) {
+    constructor(private cs: ContentfulService) {}
+
+    load() {
         this.cs.getEntries({ content_type: 'ink', include: 2 })
             .then(projects => {
                 this.projects = projects;
-                console.log(this.projects);
+                //console.log(this.projects);
             })
+
     }
 
-    getEntries(query?: any) {
-        this.cs.getEntries(query).then(res => console.log(res));
+    ngOnInit() { 
+        this.load();
+
     }
 
     ngOnChanges() { 
-        //
+        this.load();
+
     }
 }

@@ -3,6 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { ContentfulService } from '../shared/contentful.service';
 import { Subscription } from 'rxjs';
 import { Entry, EntryCollection } from 'contentful';
+import { Client } from '../client/client';
+import { Project } from '../project/project';
 
 @Component({
     selector: 'client-detail',
@@ -17,6 +19,8 @@ export class ClientDetailComponent implements OnInit, OnDestroy {
     private subscriptionClient: Subscription;
     private subscriptionProjects: Subscription;
 
+    private isEditable: boolean = false;
+
     constructor(private cs: ContentfulService, private route: ActivatedRoute) {
         route.params.subscribe(params => {
             this.id = params['id'];
@@ -25,8 +29,6 @@ export class ClientDetailComponent implements OnInit, OnDestroy {
     }
 
     load(id: string) {
-
-        //the new shit
         this.subscriptionClient = this.cs.getClient(id).subscribe(
             responseClient => {
                 this.client = responseClient;
@@ -53,6 +55,29 @@ export class ClientDetailComponent implements OnInit, OnDestroy {
         // unsubscribe to ensure no memory leaks
         this.subscriptionClient.unsubscribe();
         this.subscriptionProjects.unsubscribe();
+    }
+
+    enableEditing() {
+        console.log('enableEditing: start');
+        this.isEditable = true;
+    }
+
+    save() {
+        console.log('save: start');
+        this.isEditable = false;
+
+        var client = new Client();
+        client.name             = this.client.fields.name;
+        client.email            = this.client.fields.email;
+        client.phone            = this.client.fields.phone;
+        client.socialHandle     = this.client.fields.socialHandle;
+        client.socialType       = this.client.fields.socialType;
+
+        this.cs.saveClient(this.id, client);
+    }
+
+    deleteClient(id: string) {
+        console.log('deleteClient: ', id);
     }
 
 }

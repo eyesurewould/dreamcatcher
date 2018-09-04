@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
 
 import { Entry, EntryCollection } from 'contentful';
@@ -9,7 +9,7 @@ import { ContentfulService } from 'angular-contentful-service';
     templateUrl: './project-detail.component.html',
     styleUrls: ['./project-detail.component.css']
 })
-export class ProjectDetailComponent implements OnInit {
+export class ProjectDetailComponent implements OnInit, OnChanges {
 
     private id: string;
     private client: Entry<any>;
@@ -17,8 +17,7 @@ export class ProjectDetailComponent implements OnInit {
     //private project: EntryCollection<any>;
 
     constructor( private cs: ContentfulService, private router: Router, private activeRoute: ActivatedRoute ) {
-        console.log('constructor: starting');
-        // force route reload whenever params change;
+//TODO: Resolve the routing issue!!! Below we try to force route reload whenever params change;
         this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
         this.router.events.subscribe((evt) => {
@@ -30,13 +29,6 @@ export class ProjectDetailComponent implements OnInit {
                window.scrollTo(0, 0);
             }
         });
-    }
-
-    ngOnInit() {
-        this.activeRoute.params.subscribe(routeParams => {
-            this.load(routeParams.id);
-        });
-
     }
 
     load(id: string) {
@@ -61,6 +53,20 @@ export class ProjectDetailComponent implements OnInit {
                     });
 
             })
+
+    }
+
+    ngOnInit() {
+        this.activeRoute.params.subscribe(routeParams => {
+            this.load(routeParams.id);
+        });
+
+    }
+
+    ngOnChanges() {
+        this.activeRoute.params.subscribe(routeParams => {
+            this.load(routeParams.id);
+        });
 
     }
 

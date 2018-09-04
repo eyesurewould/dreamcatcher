@@ -1,4 +1,4 @@
-import { Component, OnDestroy } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { EntryCollection } from 'contentful';
 import { ContentfulService } from '../shared/contentful.service';
@@ -8,19 +8,30 @@ import { ContentfulService } from '../shared/contentful.service';
   templateUrl: './clients.component.html',
   styleUrls: ['./clients.component.css']
 })
-export class ClientsComponent implements OnDestroy {
+export class ClientsComponent implements OnDestroy, OnInit {
   title = "Clients";
 
   private clients: EntryCollection<any>;
   private subscription: Subscription;
 
-  constructor(private cs: ContentfulService) {
+  constructor(private cs: ContentfulService) { }
+
+  load() {
     this.subscription = this.cs.getClients('').subscribe(
       response => {
         this.clients = response;
       }
     )
-    
+  }
+
+  ngOnInit() {
+    this.load();
+
+  }
+
+  ngOnChanges() {
+    this.load();
+
   }
 
   ngOnDestroy() {

@@ -8,7 +8,7 @@ import { RouterModule } from '@angular/router';
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './navbar/navbar.component';
 
-import { ProjectsComponent } from './Projects/Projects.component';
+import { ProjectsComponent } from './projects/projects.component';
 import { ProjectDetailComponent } from './project/project-detail.component';
 import { ClientsComponent } from './clients/clients.component';
 import { ClientDetailComponent } from './client/client-detail.component';
@@ -17,6 +17,7 @@ import { ContentfulModule } from 'angular-contentful-service';
 import { ContentfulService } from './shared/contentful.service';
 
 import { appRoutes } from '../routes';
+import { ClientCreateComponent } from './client-create/client-create.component';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { appRoutes } from '../routes';
     ProjectsComponent,
     ProjectDetailComponent,
     ClientsComponent,
-    ClientDetailComponent
+    ClientDetailComponent,
+    ClientCreateComponent
   ],
   imports: [
     BrowserModule,
