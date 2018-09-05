@@ -1,50 +1,56 @@
 <div class="row client-row">
   <div class="col-md-6 col-sm-12">
-    <div class="mt-0">
-      <div class="form-group">
-        <h5>Create Client</h5>
-        <label for="name">Name</label>
-        <input type="text" [(ngModel)]="client.name" class="form-control" name="name" required>
-        <div *ngIf="name.invalid && (name.dirty || name.touched)" class="alert alert-danger">
+    <form name="form" (ngSubmit)="clientForm.form.valid && onSubmit()" #clientForm="ngForm" novalidate>
+      <div class="mt-0">
 
-          <div *ngIf="name.errors.required">
-            Name is required.
+        <div class="form-group">
+          <h5>Create Client</h5>
+          <label for="name">Name</label>
+          <input type="text" [(ngModel)]="client.name" class="form-control" name="name" #name="ngModel" [ngClass]="{ 'is-invalid': clientForm.submitted && name.invalid }"
+            required/>
+          <div *ngIf="clientForm.submitted && name.invalid" class="alert alert-danger invalid-feedback">
+            <div *ngIf="name.errors.required">
+              Name is required.
+            </div>
           </div>
-          <div *ngIf="name.errors.minlength">
-            Name must be at least 4 characters long.
-          </div>
-          <div *ngIf="name.errors.forbiddenName">
-            Name cannot be Bob.
-          </div>
+        </div>
 
+        <div class="form-group">
+          <label for="name">Email</label>
+          <input type="text" [(ngModel)]="client.email" class="form-control" name="email" #email="ngModel" [ngClass]="{ 'is-invalid': clientForm.submitted && email.invalid }"
+            email/>
+          <div *ngIf="clientForm.submitted && email.invalid" class="invalid-feedback">
+            <div *ngIf="email.errors.email">Email must be a valid email address</div>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="name">Phone</label>
+          <input type="text" [(ngModel)]="client.phone" class="form-control" name="phone" #phone="ngModel" [ngClass]="{ 'is-invalid': clientForm.submitted && phone.invalid }"/>
+          <div *ngIf="clientForm.submitted && phone.invalid" class="invalid-feedback">
+            <div *ngIf="phone.errors.email">Phone must be a valid US phone number</div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="name">Social Handle</label>
+          <input type="text" [(ngModel)]="client.socialHandle" class="form-control" name="socialHandle" id="socialHandle">
+        </div>
+        <div class="form-group">
+          <label for="name">Social Network</label>
+          <select [(ngModel)]="client.socialType" class="form-control" name="socialType" id="socialType">
+            <option *ngFor="let type of socialTypes" [value]="type">{{type}}</option>
+          </select>
         </div>
       </div>
-      <div class="form-group">
-        <label for="name">Email</label>
-        <input type="text" [(ngModel)]="client.email" class="form-control" name="email">
+      <div class="col-md-6 col-sm-12">
+        <h5 class="mt-0">
+          Actions
+        </h5>
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary" [disabled]="!clientForm.form.valid">Create Client</button>
+        </div>
+        <div [routerLink]="['/clients']">cancel</div>
       </div>
-      <div class="form-group">
-        <label for="name">Phone</label>
-        <input type="text" [(ngModel)]="client.phone" class="form-control" name="phone">
-      </div>
-      <div class="form-group">
-        <label for="name">Social Handle</label>
-        <input type="text" [(ngModel)]="client.socialHandle" class="form-control" name="socialHandle">
-      </div>
-      <div class="form-group">
-        <label for="name">Social Network</label>
-        <select class="form-control" id="socialType" [(ngModel)]="client.socialType">
-          <option *ngFor="let type of socialType" [value]="type">{{type}}</option>
-        </select>
-
-
-      </div>
-    </div>
-    <div class="col-md-6 col-sm-12">
-      <h5 class="mt-0">
-        Actions
-      </h5>
-      <div (click)="createClient();">Save</div>
-      <div [routerLink]="['/clients']">cancel</div>
-    </div>
+    </form>
   </div>
+</div>

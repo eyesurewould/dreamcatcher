@@ -1,8 +1,7 @@
 import { Component } from '@angular/core';
-//import { Subscription } from 'rxjs';
 import { ContentfulService } from '../shared/contentful.service';
-import { Entry } from 'contentful';
 import { Client } from '../client/client';
+import { isNull } from 'util';
 
 @Component({
   selector: 'app-client-create',
@@ -11,33 +10,32 @@ import { Client } from '../client/client';
 })
 export class ClientCreateComponent {
 
-  //private client: Entry<any>;
   private client: Client;
-  private socialType = [
+  private socialTypes = [
     "Instagram",
     "Facebook",
     "Pinterest",
     "Reddit",
-    "Other"
+    "Other",
+    "None"
   ];
 
   constructor(private cs: ContentfulService) { 
     this.client = new Client();
-
   }
 
-  createClient() {
-    console.log('createClient: start');
+  onSubmit() {
+    console.log('createClient: start', JSON.stringify(this.client));
     console.log('createClient: global ', this.client);
-    //var client = new Client();
-    //client.name = this.client.fields.name;
-    //client.email = this.client.fields.email;
-    //client.phone = this.client.fields.phone;
-    //client.socialHandle = this.client.fields.socialHandle;
-    //client.socialType = this.client.fields.socialType;
+
+    if( isNull( this.client.socialType ) ) {
+      this.client.socialType = ["None"];
+    }
 
     console.log('createClient: local ', this.client);
     this.cs.createClient(this.client);
+
+    
   }
 
 }
