@@ -11,3 +11,12 @@
 .ng-dirty {}
 .ng-untouched {}
 .ng-touched {}
+
+/* used in FORMS */
+.section {
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+.btn {
+    margin-right: 10px;
+}

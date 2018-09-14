@@ -1,23 +1,3 @@
-.client-row {
-    padding-top: 18px;
-    padding-left: 0px;
-    padding-bottom: 18px;
-}
-.media {
-    padding-top: 18px;
-    padding-bottom: 18px;
-}
-#client-photo {
-    border: 4px solid #eee;
-    box-shadow: #555 1px 1px 8px 1px;
-}
-.project-header {
-    font-size: 1.2em;
-    font-family: 'Open Sans', sans-serif;
-    padding: 18px;
-    color: #222;
-}
-
 ul {
     padding:0;
     width: 1200px;
@@ -30,4 +10,9 @@ li {
     margin: 6px;
     border: 4px solid #eee;
     box-shadow: #555 1px 1px 8px 1px;
+}
+
+.btn-light {
+    /* tweaking the default Bootstrap style */
+    background-color: #87bbf0;
 }

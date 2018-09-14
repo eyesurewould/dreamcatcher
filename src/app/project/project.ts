@@ -11,3 +11,10 @@ export class Project {
     assets: Asset[];
     clientRef: string;
 }
+
+export enum projectOrder {
+    title = "title",
+    style = "style",
+    status = "status",
+    created = "created"
+}

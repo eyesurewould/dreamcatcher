@@ -1,11 +1,16 @@
-<div class="nav-row row">
+<div class="nav-row">
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <div class="header">
-                <a class="navbar-brand logo" [routerLink] = "['/projects']">{{projectsTitle}}</a>
+            <div class="logo">
+                <a class="navbar-brand logo" [routerLink]="['/']">
+                    <img alt="Dreamcatcher" src="">
+                </a>
             </div>
             <div class="header">
-                <a class="navbar-brand logo" [routerLink] = "['/clients']">{{clientsTitle}}</a>
+                <a class="navbar-brand logo" [routerLink]="['/clients']">{{clientsTitle}}</a>
+            </div>
+            <div class="header">
+                <a class="navbar-brand logo" [routerLink]="['/projects']">{{projectsTitle}}</a>
             </div>
         </div>
     </nav>

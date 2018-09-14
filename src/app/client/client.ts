@@ -7,3 +7,10 @@ export class Client {
     socialType?: string[];
     sys: any;
 }
+
+export enum clientOrder {
+    name = "name",
+    email = "email",
+    phone = "phone",
+    created = "created"
+}

@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AlertModule } from 'ngx-bootstrap';
 import { RouterModule } from '@angular/router';
@@ -18,6 +18,7 @@ import { ContentfulService } from './shared/contentful.service';
 
 import { appRoutes } from '../routes';
 import { ClientCreateComponent } from './client-create/client-create.component';
+import { HomeComponent } from './home/home.component';
 
 
 @NgModule({
@@ -28,11 +29,12 @@ import { ClientCreateComponent } from './client-create/client-create.component';
     ProjectDetailComponent,
     ClientsComponent,
     ClientDetailComponent,
-    ClientCreateComponent
+    ClientCreateComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,
-    FormsModule,
+    ReactiveFormsModule,
     HttpClientModule,
     AlertModule.forRoot(),
     RouterModule.forRoot(appRoutes, {onSameUrlNavigation: 'reload'}),

@@ -2,9 +2,11 @@ import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { environment } from '../../environments/environment';
 
-import { Client } from '../client/client';
-import { Project } from '../project/project';
+import { Client, clientOrder } from '../client/client';
+import { Project, projectOrder } from '../project/project';
 import { isDefined } from '@angular/compiler/src/util';
+
+import { Router } from '@angular/router';
 
 import * as contentful from 'contentful';
 import * as contentfulMgmt from 'contentful-management';
@@ -27,7 +29,7 @@ export class ContentfulService {
   private projectsForClient = new Subject<contentful.EntryCollection<{}>>();
 
 
-  constructor() {
+  constructor(private router: Router) {
 
     this.contentfulClient = contentful.createClient({
       // This is the access token for reading content in this space
@@ -61,17 +63,14 @@ export class ContentfulService {
           },
           phone: {
             'en-US': client.phone
-          },
-          socialHandle: {
-            'en-US': client.socialHandle
-          },
-          socialType: {
-            'en-US': [client.socialType]
           }
         }
       }))
       .then((entry) => entry.publish())
-      .then((entry) => console.log('saveClient: Entry ', entry.sys.id, 'created'))
+      .then((entry) => {
+        console.log('saveClient: Entry ', entry.sys.id, 'created');
+        this.router.navigate(['/client', entry.sys.id]);
+      })
       .catch(console.error)
 
   }
@@ -103,13 +102,33 @@ export class ContentfulService {
    * Use the Content SDK to retrieve records
    * 
    * @param query A searcy string
+   * @param order <optional> The sort order of results (an Enum in /client/client.ts)
+   * @param limit <optional> The maximum number of results
+   * @param skip <optional> The number of found entries to skip (for pagination)
    */
-  public getClients(query?: string): Observable<contentful.EntryCollection<{}>> {
+  public getClients(query?: string, order?: clientOrder, limit?: number, skip?: number): Observable<contentful.EntryCollection<{}>> {
 
-    this.contentfulClient.getEntries({
+    var params = {
       content_type: 'client',
       include: 3
-    })
+    };
+
+    if( order != undefined ) {
+      if( order == 'created') {
+        params['order'] = 'sys.createdAt';
+      } else {
+        params['order'] = 'fields.' + order;
+      }
+    }
+
+    if( limit != undefined ) {
+      params['limit'] = limit;
+    }
+    if( skip != undefined ) {
+      params['skip'] = skip;
+    }
+
+    this.contentfulClient.getEntries(params)
       .then((response) => {
         //console.log('getClients: ', response);
         this.clients.next((response));
@@ -132,14 +151,21 @@ export class ContentfulService {
         entry.fields.name['en-US'] = client.name;
         entry.fields.email['en-US'] = client.email;
         entry.fields.phone['en-US'] = client.phone;
-        entry.fields.socialHandle['en-US'] = client.socialHandle;
-        entry.fields.socialType['en-US'] = client.socialType;
         return entry.update()
       })
       .then((entry) => entry.publish())
       .then((entry) => console.log('saveClient: Entry ', entry.sys.id, 'updated'))
       .catch(console.error)
 
+  }
+
+  /**
+   * Use the Content SDK to remove a record
+   * 
+   * @param id A Contentful entry id.
+   */
+  public deleteClient(id: string) {
+    console.log('deleteClient: id ', id);
   }
 
 
@@ -203,16 +229,40 @@ export class ContentfulService {
    * Supports a full text query, if a value is provided
    * 
    * @param query A search string
+   * @param order <optional> The sort order of results (an Enum in /project/project.ts)
+   * @param limit <optional> The maximum number of results
+   * @param skip <optional> The number of found entries to skip (for pagination)
    */
-  public getProjects(query?: string): Observable<contentful.EntryCollection<{}>> {
+  public getProjects(query?: string, order?: projectOrder, limit?: number, skip?: number): Observable<contentful.EntryCollection<{}>> {
 
-    const params = (isDefined(query) && query != '') ?
-      { content_type: 'ink', include: 3 }
-      : { content_type: 'ink', query: query, include: 3 };
+    var params = {
+      content_type: 'ink',
+      include: 3
+    };
+
+    if( query != undefined ) {
+      if( query != '') {
+        params['query'] = query;
+      }
+    }
+
+    if( order != undefined ) {
+      if( order == 'created') {
+        params['order'] = 'sys.createdAt';
+      } else {
+        params['order'] = 'fields.' + order;
+      }
+    }
+
+    if( limit != undefined ) {
+      params['limit'] = limit;
+    }
+    if( skip != undefined ) {
+      params['skip'] = skip;
+    }
 
     this.contentfulClient.getEntries(params)
       .then((response) => {
-        //console.log('getProjects: ', response);
         this.projects.next((response));
         return this.projects.asObservable();
       })
@@ -246,6 +296,16 @@ export class ContentfulService {
 
     return this.projectsForClient.asObservable();
 
+  }
+
+
+  /**
+   * Use the Content SDK to remove a record
+   * 
+   * @param id A Contentful entry id.
+   */
+  public deleteProject(id: string) {
+    console.log('deleteProject: id ', id);
   }
 
 }

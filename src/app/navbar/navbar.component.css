@@ -3,14 +3,42 @@ nav {
     font-family: 'Lato', sans-serif;
 }
 
-.nav-row {
-    background-color: #424242;   
-}
-
 .logo {
     color: #fff;
     font-family: 'Lato', sans-serif;
     font-size: 1.2em;
+}
+
+.nav-row {
+    width: 100%;
+    margin-right: auto;
+    margin-left: auto;  
+}
+
+@media (min-width: 400px) {
+    .nav-row {
+        max-width: 100%;
+    }
+}
+@media (min-width: 576px) {
+    .nav-row {
+        max-width: 100%;
+    }
+}
+@media (min-width: 768px) {
+    .nav-row {
+        max-width: 100%;
+    }
+}
+@media (min-width: 992px) {
+    .nav-row {
+        max-width: 100%;
+    }
+}
+@media (min-width: 1200px) {
+    .nav-row {
+        max-width: 100%;
+    }
 }
 
 ul.nav a {

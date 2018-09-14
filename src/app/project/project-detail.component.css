@@ -33,3 +33,8 @@ li {
     display: inline;
     padding-bottom: 10px;
 }
+
+.btn-light {
+    /* tweaking the default Bootstrap style */
+    background-color: #87bbf0;
+}

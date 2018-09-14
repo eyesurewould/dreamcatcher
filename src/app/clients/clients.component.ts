@@ -2,6 +2,7 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { EntryCollection } from 'contentful';
 import { ContentfulService } from '../shared/contentful.service';
+import { clientOrder } from '../client/client';
 
 @Component({
   selector: 'app-clients',
@@ -12,12 +13,12 @@ export class ClientsComponent implements OnDestroy, OnInit {
   title = "Clients";
 
   private clients: EntryCollection<any>;
-  private subscription: Subscription;
+  private clientsSubscription: Subscription;
 
   constructor(private cs: ContentfulService) { }
 
   load() {
-    this.subscription = this.cs.getClients('').subscribe(
+    this.clientsSubscription = this.cs.getClients('', clientOrder.name).subscribe(
       response => {
         this.clients = response;
       }
@@ -36,7 +37,7 @@ export class ClientsComponent implements OnDestroy, OnInit {
 
   ngOnDestroy() {
     // unsubscribe to ensure no memory leaks
-    this.subscription.unsubscribe();
+    this.clientsSubscription.unsubscribe();
   }
 
 }

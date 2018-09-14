@@ -1,8 +1,6 @@
 <div class="row" *ngIf="project?.fields">
     <div class="col-md-3 col-sm-12 detail-row">
-        <h3 *ngIf="project.fields.title">
-            {{project.fields.title}}
-        </h3>
+        <div *ngIf="project.fields.title" class="sectionTitle">{{project.fields.title}}</div>
         <p>
             <a *ngFor="let style of project.fields.style" [routerLink]="['/projects', style]">
                 {{style}}

@@ -12,8 +12,8 @@ li {
     box-shadow: #555 1px 1px 8px 1px;
 }
 
-/* for some reason, bootstrap default widths are for 4 cols only */
+/* for some reason, bootstrap default widths are for 4 cols only 
 .col-lg-6, .col-md-8, .col-sm-10, .col-xs-10{
     flex: 0 0 100%;
     min-width: 100%;
-}
+}*/
