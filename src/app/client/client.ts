@@ -12,5 +12,6 @@ export enum clientOrder {
     name = "name",
     email = "email",
     phone = "phone",
-    created = "created"
+    created = "createdAt",
+    updated = "updatedAt"
 }

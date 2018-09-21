@@ -1,11 +1,11 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
-import { ContentfulService } from '../shared/contentful.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs';
+
+import { ContentfulService } from '../shared/contentful.service';
 import { Entry, EntryCollection } from 'contentful';
 import { Client } from '../client/client';
-import { Project } from '../project/project';
 import { emailValidator, phoneValidator } from '../shared/client-validation';
 
 @Component({
@@ -30,7 +30,11 @@ export class ClientDetailComponent implements OnInit, OnDestroy {
 
     private isEditable: boolean = false;
 
-    constructor(private cs: ContentfulService, private route: ActivatedRoute) {
+    constructor(private cs: ContentfulService, private route: ActivatedRoute, private router: Router) {
+        this.router.routeReuseStrategy.shouldReuseRoute = function () {
+            return false;
+        };
+
         route.params.subscribe(params => {
             this.id = params['id'];
         });
@@ -56,11 +60,20 @@ export class ClientDetailComponent implements OnInit, OnDestroy {
             responseClient => {
                 this.client = responseClient;
 
+                this.clientDetailFormGroup.controls['name'].setValue(this.client.fields.name);
+
+                if (this.client.fields.email != undefined) {
+                    this.clientDetailFormGroup.controls['email'].setValue(this.client.fields.email);
+                }
+                if (this.client.fields.phone != undefined) {
+                    this.clientDetailFormGroup.controls['phone'].setValue(this.client.fields.phone);
+                }
+
                 this.subscriptionProjects = this.cs.getProjectsForClient(id).subscribe(
                     responseProjects => {
                         this.projects = responseProjects;
                         this.projectCount = responseProjects.items.length;
-                        console.log(this.projectCount, ' projects: ', responseProjects);
+
                     }
                 )
             }
@@ -75,7 +88,7 @@ export class ClientDetailComponent implements OnInit, OnDestroy {
     }
 
     enableEditing() {
-        console.log('enableEditing: start');
+        console.log('enableEditing: start ', this.clientDetailFormGroup);
         this.isEditable = true;
     }
 
@@ -84,41 +97,29 @@ export class ClientDetailComponent implements OnInit, OnDestroy {
         this.isEditable = false;
     }
 
-    save() {
-        console.log('save: start');
+
+    /**
+     * Save current edits back to Contentful via the service
+     */
+    submit() {
+        console.log('submit: start');
         this.isEditable = false;
 
         var client = new Client();
-        client.name = this.client.fields.name;
-        client.email = this.client.fields.email;
-        client.phone = this.client.fields.phone;
+        client.name = this.clientDetailFormGroup.controls['name'].value;
+        client.email = this.clientDetailFormGroup.controls['email'].value;
+        client.phone = this.clientDetailFormGroup.controls['phone'].value;
 
+        console.log('submit: client data to send ', client);
         this.cs.saveClient(this.id, client);
-    }
 
-    onSubmit() {
-        console.log('onSubmit: start');
-        this.isEditable = false;
+        setTimeout(() => {
+            this.router.navigate(['/client', this.id]);
+        }, 1000);
 
-        var clientData = new Client();
-        clientData.name = this.client.fields.name;
-        clientData.email = this.client.fields.email;
-        clientData.phone = this.client.fields.phone;
-
-        //NOTE: If we needed to push submitted data to other components, 
-        //we would use an EventEmitter to emit to listeners.
-        
-        clientData.name = this.clientDetailFormGroup.controls['name'].value;
-        if (this.clientDetailFormGroup.controls['email'].value !== '') {
-            clientData.email = this.clientDetailFormGroup.controls['email'].value;
-        }
-        if (this.clientDetailFormGroup.controls['phone'].value !== '') {
-            clientData.phone = this.clientDetailFormGroup.controls['phone'].value;
-        }
-        
-        this.cs.createClient(clientData);
 
     }
+
 
     /**
      * Delete a Contentful Entry

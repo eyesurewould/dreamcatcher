@@ -10,10 +10,11 @@
                     <div class="sectionTitle">Client</div>
                 </ng-template>
 
-                <label for="name">Name</label>
+
                 <div *ngIf="client?.fields" class="data">
                     <div *ngIf="isEditable; else readModeName">
-                        <input type="text" formControlName="name" class="form-control" value="{{client?.fields.name}}" required>                        {{client.fields.name}}
+                        <label for="name">Name</label>
+                        <input type="text" formControlName="name" class="form-control" value="{{client.fields.name}}" required>
                         <div *ngIf="clientDetailFormGroup.controls['name'].invalid && (clientDetailFormGroup.controls['name'].dirty || clientDetailFormGroup.controls['name'].touched)"
                             class="alert alert-danger ng-invalid">
                             <div *ngIf="clientDetailFormGroup.controls['name'].errors.required">
@@ -22,13 +23,14 @@
                         </div>
                     </div>
                     <ng-template #readModeName>
-                        <h5>{{client.fields.name}}</h5>
+                        <div class="clientName">{{client.fields.name}}</div>
                     </ng-template>
                 </div>
 
-                <label for="name">Email</label>
+
                 <div *ngIf="client?.fields" class="data">
                     <div *ngIf="isEditable; else readModeEmail">
+                        <label for="name">Email</label>
                         <input type="text" formControlName="email" class="form-control data" value="{{client?.fields.email}}">
 
                         <div *ngIf="clientDetailFormGroup.controls['email'].invalid && (clientDetailFormGroup.controls['email'].dirty || clientDetailFormGroup.controls['email'].touched)"
@@ -39,74 +41,100 @@
                         </div>
                     </div>
                     <ng-template #readModeEmail>
-                        <h5><a *ngIf="!isEditable" href="mailto:{{client.fields.email}}">{{client.fields.email}}</a></h5>
-                        {{client.fields.email}}
+                        <div class="clientDetail">
+                            <a *ngIf="!isEditable" href="mailto:{{client.fields.email}}">{{client.fields.email}}</a>
+                        </div>
                     </ng-template>
                 </div>
-            </div>
 
-            <label for="name">Phone</label>
-            <div *ngIf="client?.fields" class="data">
-                <div *ngIf="isEditable; else readModePhone">
-                    <input type="text" formControlName="phone" class="form-control data" value="{{client.fields.phone}}">
+                <div *ngIf="client?.fields" class="data">
+                    <div *ngIf="isEditable; else readModePhone">
+                        <label for="name">Phone</label>
+                        <input type="text" formControlName="phone" class="form-control data" value="{{client.fields.phone}}">
 
-                    <div *ngIf="clientDetailFormGroup.controls['phone'].invalid && (clientDetailFormGroup.controls['phone'].dirty || clientDetailFormGroup.controls['phone'].touched)"
-                        class="alert alert-danger ng-invalid">
-                        <div *ngIf="clientDetailFormGroup.controls['phone'].errors.invalidPhone">
-                            Phone is not valid.
+                        <div *ngIf="clientDetailFormGroup.controls['phone'].invalid && (clientDetailFormGroup.controls['phone'].dirty || clientDetailFormGroup.controls['phone'].touched)"
+                            class="alert alert-danger ng-invalid">
+                            <div *ngIf="clientDetailFormGroup.controls['phone'].errors.invalidPhone">
+                                Phone is not valid.
+                            </div>
                         </div>
                     </div>
+                    <ng-template #readModePhone>
+                        <div class="clientDetail">
+                            <a *ngIf="!isEditable" href="tel:{{client.fields.phone}}">{{client.fields.phone}}</a>
+                        </div>
+                    </ng-template>
                 </div>
-                <ng-template #readModePhone>
-                    <h5>
-                        <a *ngIf="!isEditable" href="tel:{{client.fields.phone}}">{{client.fields.phone}}</a>
-                    </h5>
-                </ng-template>
             </div>
         </div>
 
         <div class="col-md-6 col-sm-12">
             <div class="section actions">
-                <!-- <h3>Actions</h3> -->
-                <button *ngIf="client && !isEditable" [routerLink]="['/projectNew', client.sys.id]" class="btn btn-primary">Add
-                    Project
-                </button>
-                <button *ngIf="client && !isEditable" (click)="enableEditing();" class="btn btn-light">Edit</button>
-                <button *ngIf="client && !isEditable" (click)="deleteClient(client.sys.id);" class="btn btn-light">Delete</button>
+                <span style="float: right">
+                    
+                    <button *ngIf="client && !isEditable" [routerLink]="['/project-create', client.sys.id]" class="btn btn-primary">Add
+                        Project
+                    </button>
+                    <button *ngIf="client && !isEditable" (click)="enableEditing();" class="btn btn-light">Edit</button>
+                    <button *ngIf="client && !isEditable" (click)="deleteClient(client.sys.id);" class="btn btn-light">Delete</button>
 
-                <button *ngIf="client && isEditable" (click)="save();" [disabled]="!clientDetailFormGroup.valid" class="btn btn-primary">Save</button>
-                <button *ngIf="client && isEditable" (click)="disableEditing();" class="btn btn-light">Cancel</button>
-            </div>
+                    <button *ngIf="client && isEditable" (click)="submit();" type="submit" [disabled]="!clientDetailFormGroup.valid || (!clientDetailFormGroup.dirty || !clientDetailFormGroup.touched)" class="btn btn-primary">Save</button>
+                    <button *ngIf="client && isEditable" (click)="disableEditing();" class="btn btn-light">Cancel</button>
+                </span>
+            </div> 
         </div>
     </div>
 </form>
 
 
-<div *ngIf="!isEditable" class="row image-row">
+<div *ngIf="!isEditable" class="row">
     <div class="col">
         <div class="section">
             <h5>Projects</h5>
+        </div>
+    </div>
+</div>
 
-            <ul id="thumbnailsList" *ngIf="projectCount > 0; else noProjects">
-                <li *ngFor="let project of projects?.items">
-                    <a *ngIf="project.sys.id" [routerLink]="['/project', project.sys.id]">
-                        <span *ngIf="project.fields.finalImage; else inProgressBlock">
-                            <img *ngIf="project" src="{{project.fields.finalImage.fields.file.url}}" class="tn" width="200" height="160">
-                        </span>
-                        <ng-template #inProgressBlock>
-                            <span>
-                                <img *ngIf="project" src="{{project.fields.assets[0].fields.file.url}}" class="tn" width="200" height="160">
-                            </span>
-                        </ng-template>
-                    </a>
-                    <span *ngIf="project">{{project.fields.title}}</span>
-                </li>
-            </ul>
-            <ng-template #noProjects>
-                <div>No projects yet...</div>
+<div *ngIf="!isEditable" class="row">
+    <div class="col card-columns">
+        <div *ngFor="let project of projects?.items">
+            <div class="card" *ngIf="project.fields.finalImage; else inProgressBlock">
+                <img class="card-img-top img-responsive" src="{{project.fields.finalImage.fields.file.url}}" alt="{{project.fields.title}}">
+                <div class="card-body">
+                    <a [routerLink]="['/project', project.sys.id]" class="btn btn-primary">{{project.fields.title}}</a>
+                    <p class="card-text">{{project.fields.style}} - {{project.fields.description}}</p>
+                    <div class="card-textr">
+                        <small class="text-muted">{{project.fields.status}}</small>
+                    </div>
+                </div>
+            </div>
+
+            <ng-template #inProgressBlock>
+                <div class="card" *ngIf="project.fields.assets; else noImage">
+                    <img class="card-img-top img-responsive" src="{{project.fields.assets[0].fields.file.url}}" alt="{{project.fields.title}}">
+                    <div class="card-body">
+                        <a [routerLink]="['/project', project.sys.id]" class="btn btn-primary">{{project.fields.title}}</a>
+                        <h5 class="card-title">{{project.fields.title}}</h5>
+                        <p class="card-text">{{project.fields.style}} - {{project.fields.description}}</p>
+                        <div class="card-textr">
+                            <small class="text-muted">{{project.fields.status}}</small>
+                        </div>
+                    </div>
+                </div>
             </ng-template>
 
+            <ng-template #noImage>
+                <div class="card">
+                    <img class="card-img-top img-responsive" src="https://via.placeholder.com//200x100?text=No+image+yet" alt="{{project.fields.title}}">
+                    <div class="card-body">
+                        <a [routerLink]="['/project', project.sys.id]" class="btn btn-primary">{{project.fields.title}}</a>
+                        <p class="card-text">{{project.fields.style}} - {{project.fields.description}}</p>
+                        <div class="card-textr">
+                            <small class="text-muted">{{project.fields.status}}</small>
+                        </div>
+                    </div>
+                </div>
+            </ng-template>
         </div>
-
     </div>
 </div>

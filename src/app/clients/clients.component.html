@@ -1,25 +1,49 @@
 <div class="row">
-    <div class="col col-lg-6 col-md-8 col-sm-10 col-xs-10">
+    <div class="col">
         <div class="section">
-            <div class="sectionTitle">{{title}}</div>
-            <ul id="thumbnailsList">
-                <li *ngFor="let client of clients.items">
-                    <div class="clientCard">
-                        <div [routerLink]="['/client', client.sys.id]">
-                            <h5>{{ client.fields.name }}</h5>
-                        </div>
-                        <div *ngIf="client.fields.email" class="clientDetail">{{ client.fields.email }}</div>
-                        <div *ngIf="client.fields.phone" class="clientDetail">{{ client.fields.phone }}</div>
-                    </div>
-                </li>
-            </ul>
+            <div class="sectionTitle">Clients</div>
         </div>
     </div>
-
-    <div class="col col-lg-6 col-md-8 col-sm-10 col-xs-10">
+    <div class="col">
         <div class="section">
-            <div class="sectionTitle">Actions</div>
-            <button class="btn btn-primary" [routerLink]="['/client-create']">Add Client</button>
+            <span style="float: right">
+                <button class="btn btn-primary" [routerLink]="['/client-create']">Add Client</button>
+            </span>
         </div>
+    </div>
+</div>
+
+<!--
+<div class="row">
+        <div class="col">
+            <div class="section">
+                <div class="sectionTitle">Actions</div>
+                <button class="btn btn-primary" [routerLink]="['/client-create']">Add Client</button>
+            </div>
+        </div>
+    </div> -->
+
+<div class="row">
+    <div class="col card-columns">
+        <div *ngFor="let client of clients?.items">
+            <div class="card">
+                <div class="card-body">
+                    <h5 [routerLink]="['/client', client.sys.id]">{{ client.fields.name }}</h5>
+                    <a *ngIf="client.fields.email" class="card-text ml-2" href="mailto:{{client.fields.email}}">{{ client.fields.email
+                        }}
+                    </a>
+                    <a *ngIf="client.fields.phone" class="card-text ml-2" href="tel:{{client.fields.phone}}">{{ client.fields.phone
+                        }}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <button *ngIf="skip > 0" (click)="prevPage();" class="btn btn-light">Previous</button>
+        <button *ngIf="(skip + limit) <= total" (click)="nextPage();" class="btn btn-light">Next</button>
     </div>
 </div>

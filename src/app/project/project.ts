@@ -16,5 +16,6 @@ export enum projectOrder {
     title = "title",
     style = "style",
     status = "status",
-    created = "created"
+    created = "createdAt",
+    updated = "updatedAt"
 }

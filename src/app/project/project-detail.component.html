@@ -1,72 +1,228 @@
-<div class="row" *ngIf="project?.fields">
-    <div class="col-md-3 col-sm-12 detail-row">
-        <div *ngIf="project.fields.title" class="sectionTitle">{{project.fields.title}}</div>
-        <p>
-            <a *ngFor="let style of project.fields.style" [routerLink]="['/projects', style]">
-                {{style}}
-            </a>
-        </p>
-        <p>
-            <a [routerLink]="['/client', project.fields.clientRef.sys.id]">
-                {{project.fields.clientRef.fields.name}}
-            </a>
-        </p>
-        <p *ngIf="project.fields.status">{{project.fields.status}}</p>
+<form class="form-group" [formGroup]="projectDetailFormGroup" (ngSubmit)="onSubmit()">
+    <div class="row" *ngIf="project?.fields">
+        <div class="col-xs-12 col-sm-10 col-md-6 col-lg-6 col-xl-6 ">
+
+            <div class="section">
+                <div *ngIf="isEditable; else readModeHeader" class="sectionTitle">
+                    Edit Project Details
+                </div>
+                <ng-template #readModeHeader>
+                    <div class="sectionTitle">Project</div>
+                </ng-template>
+
+
+                <div *ngIf="project?.fields" class="data">
+                    <div *ngIf="isEditable; else readModeTitle">
+                        <label for="name">Title</label>
+                        <input type="text" formControlName="title" class="form-control" value="{{project?.fields.title}}" required>
+
+                        <div *ngIf="projectDetailFormGroup.controls['title'].invalid && (projectDetailFormGroup.controls['title'].dirty || projectDetailFormGroup.controls['title'].touched)"
+                            class="alert alert-danger ng-invalid">
+                            <div *ngIf="projectDetailFormGroup.controls['title'].errors.required">
+                                Title is required.
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template #readModeTitle>
+                        <h5>{{project.fields.title}}</h5>
+                    </ng-template>
+                </div>
+
+                <div *ngIf="project?.fields" class="data">
+                    <div *ngIf="isEditable; else readModeStyle">
+                        <label for="style">Style</label>
+                        <select formControlName="style" class='form-control' value="{{project?.fields.style}}" required>
+                            <option value='traditional'>Traditional</option>
+                            <option value='neo-traditional'>Neo-traditional</option>
+                            <option value='photo-realism'>Photo Realism</option>
+                            <option value='watercolor'>Watercolor</option>
+                            <option value='watermark'>Watermark</option>
+                            <option value='japanese'>Japanese</option>
+                            <option value='pop'>Pop</option>
+                            <option value='trash polka'>Trash Polka</option>
+                        </select>
+
+
+                        <div *ngIf="projectDetailFormGroup.controls['style'].invalid && (projectDetailFormGroup.controls['style'].dirty || projectDetailFormGroup.controls['style'].touched)"
+                            class="alert alert-danger ng-invalid">
+                            <div *ngIf="projectDetailFormGroup.controls['style'].errors.invalidStyle">
+                                Please select one or more styles.
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template #readModeStyle>
+                        <div *ngFor="let style of project.fields.style" [routerLink]="['/projects', style]" class="projectDetail">{{project.fields.style}}</div>
+                    </ng-template>
+                </div>
+
+                <!-- client name is not editable here - read only -->
+                <div class="projectDetail" *ngIf="!isEditable">
+                    <a [routerLink]="['/client', project.fields.clientRef.sys.id]">
+                        {{project.fields.clientRef.fields.name}}
+                    </a>
+                </div>
+
+                <div *ngIf="project?.fields" class="data">
+                    <div *ngIf="isEditable; else readModeStatus">
+                        <label for="status">Status</label>
+                        <select formControlName="status" class='form-control' value="{{project?.fields.status}}" required>
+                            <option value='new'>New</option>
+                            <option value='in progress'>In Progress</option>
+                            <option value='complete'>Complete</option>
+                        </select>
+
+                        <div *ngIf="projectDetailFormGroup.controls['status'].invalid && (projectDetailFormGroup.controls['status'].dirty || projectDetailFormGroup.controls['status'].touched)"
+                            class="alert alert-danger ng-invalid">
+                            <div *ngIf="projectDetailFormGroup.controls['status'].errors.invalidStatus">
+                                Please select a status.
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template #readModeStatus>
+                        <div *ngFor="let status of project.fields.status" class="projectDetail">{{project.fields.status}}</div>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-12 col-sm-10 col-md-6 col-lg-6 col-xl-6">
+            <div class="section">
+                <div *ngIf="isEditable; else readModeDetailsHeader">
+                    <div class="sectionTitle">&nbsp;</div>
+                </div>
+                <ng-template #readModeDetailsHeader>
+                    <div class="sectionTitle">Details</div>
+                </ng-template>
+
+                <div *ngIf="project?.fields" class="data">
+                    <div *ngIf="isEditable; else readModeDescription">
+                        <label for="description">Description</label>
+                        <input type="text" formControlName="description" class="form-control" value="{{project?.fields.description}}">
+                    </div>
+                    <ng-template #readModeDescription>
+                        <div class="projectDetail">{{project.fields.description}}</div>
+                    </ng-template>
+                </div>
+
+                <div *ngIf="project?.fields" class="data">
+                    <div *ngIf="isEditable; else readModeSize">
+                        <label for="size">Size</label>
+                        <input type="text" formControlName="size" class="form-control" value="{{project?.fields.size}}">
+                    </div>
+                    <ng-template #readModeSize>
+                        <div class="projectDetail">{{project.fields.size}}</div>
+                    </ng-template>
+                </div>
+
+                <div *ngIf="project?.fields" class="data">
+                    <div *ngIf="isEditable; else readModeLocation">
+                        <label for="location">Location</label>
+                        <select formControlName="location" class='form-control' value="{{project?.fields.location}}" required>
+                            <option value='head'>head</option>
+                            <option value='neck'>neck</option>
+                            <option value='chest'>chest</option>
+                            <option value='stomach'>stomach</option>
+                            <option value='upper back'>upper back</option>
+                            <option value='lower back'>lower back</option>
+                            <option value='left ribs'>left ribs</option>
+                            <option value='right ribs'>right ribs</option>
+                            <option value='left upper arm'>left upper arm</option>
+                            <option value='right upper arm'>right upper arm</option>
+                            <option value='left lower arm'>left lower arm</option>
+                            <option value='right lower arm'>right lower arm</option>
+                            <option value='left hand'>left hand</option>
+                            <option value='right hand'>right hand</option>
+                            <option value='groin'>groin</option>
+                            <option value='butt'>butt</option>
+                            <option value='left upper leg'>left upper leg</option>
+                            <option value='right upper leg'>right upper leg</option>
+                            <option value='left lower leg'>left lower leg</option>
+                            <option value='right lower leg'>right lower leg</option>
+                            <option value='left foot'>left foot</option>
+                            <option value='right foot'>right foot</option>
+                        </select>
+                    </div>
+                    <ng-template #readModeLocation>
+                        <div class="projectDetail">{{project.fields.location}}</div>
+                    </ng-template>
+                </div>
+
+                <div *ngIf="project?.fields" class="data">
+                    <div *ngIf="isEditable; else readModeTimeEstimate">
+                        <label for="timeEstimate">Hours Estimate</label>
+                        <input type="text" formControlName="timeEstimate" class="form-control" value="{{project?.fields.timeEstimate}}">
+                    </div>
+                    <ng-template #readModeTimeEstimate>
+                        <div class="projectDetail">{{project.fields.timeEstimate}} hours estimated</div>
+                    </ng-template>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="col-md-6 col-sm-12 detail-row">
-        <h5>Details</h5>
-        <p *ngIf="project.fields.description">{{project.fields.description}}</p>
-        <p *ngIf="project.fields.location">{{project.fields.location}} - {{project.fields.size}}</p>
-        <p *ngIf="project.fields.timeEstimate">{{project.fields.timeEstimate}} hours estimated</p>
+
+    <div class="row">
+        <div class="col">
+            <div class="section">
+                <!-- <h5 class="mt-0">
+                    Actions
+                </h5> -->
+                <button *ngIf="project && !isEditable" [routerLink]="['/assetNew', project.sys.id]" class="btn btn-primary">Add
+                    Image
+                </button>
+                <button *ngIf="project && !isEditable" (click)="enableEditing();" class="btn btn-light">Edit</button>
+                <button *ngIf="project && !isEditable" (click)="deleteProject(project.sys.id);" class="btn btn-light">Delete</button>
+
+                <button *ngIf="project && isEditable" (click)="save();" [disabled]="!projectDetailFormGroup.valid || (!projectDetailFormGroup.dirty || !projectDetailFormGroup.touched)"
+                    class="btn btn-primary">Save</button>
+                <button *ngIf="project && isEditable" (click)="disableEditing();" class="btn btn-light">Cancel</button>
+            </div>
+        </div>
     </div>
-    <div class="col-md-3 col-sm-12 detail-row">
-        <h5 class="mt-0">
-            Actions
-        </h5>
-        <div>Edit</div>
-        <div>Add image</div>
-        <div><button (click)="confirmDelete(project.sys.id)">Delete</button></div>
-    </div>
-</div>
+</form>
 
 <!-- if we have a final image, show it -->
 <div class="row" *ngIf="project?.fields.finalImage">
-    <div class="col img-row">
-        <h3>Final Work</h3>
-        <div [ngStyle]="{'background-image': 'url(\'' + project.fields.finalImage.fields.file.url + '?w=575\')', 'min-height': '237px'}"
-            class="img-container d-block d-sm-none">
-        </div>
-        <div [ngStyle]="{'background-image': 'url(\'' + project.fields.finalImage.fields.file.url + '?w=767\')', 'min-height': '384px'}"
-            class="img-container d-none d-sm-block d-md-none">
-        </div>
-        <div [ngStyle]="{'background-image': 'url(\'' + project.fields.finalImage.fields.file.url + '?w=991\')', 'min-height': '495px'}"
-            class="img-container d-none d-md-block d-lg-none">
-        </div>
-        <div [ngStyle]="{'background-image': 'url(\'' + project.fields.finalImage.fields.file.url + '?w=1199\')', 'min-height': '600px'}"
-            class="img-container d-none d-lg-block d-xl-none">
-        </div>
-        <div [ngStyle]="{'background-image': 'url(\'' + project.fields.finalImage.fields.file.url + '?w=1200\')', 'min-height': '600px'}"
-            class="img-container d-none d-xl-block">
+    <div class="col">
+        <div class="sectionTitle">Final Work</div>
+    </div>
+</div>
+<div class="row" *ngIf="project?.fields.finalImage">
+    <div class="col">
+        <div class="card mb-3">
+            <img class="card-img-top img-responsive" src="{{project?.fields.finalImage.fields.file.url}}" alt="">
+            <div class="card-body">
+                <h5 class="card-title">{{project?.fields.finalImage.fields.title}}</h5>
+            </div>
         </div>
     </div>
 </div>
 
+<!-- if we have any images, show them all -->
 <div class="row">
-    <div class="col img-row">
-        <h3>In Progress</h3>
-        <ul id="img-list">
-            <li *ngFor="let image of project.fields.assets">
-                <div [ngStyle]="{'background-image': 'url(\'' + image.fields.file.url + '?w=575\')', 'min-height': '237px'}" class="img-container d-block d-sm-none">
-                </div>
-                <div [ngStyle]="{'background-image': 'url(\'' + image.fields.file.url + '?w=767\')', 'min-height': '384px'}" class="img-container d-none d-sm-block d-md-none">
-                </div>
-                <div [ngStyle]="{'background-image': 'url(\'' + image.fields.file.url + '?w=991\')', 'min-height': '495px'}" class="img-container d-none d-md-block d-lg-none">
-                </div>
-                <div [ngStyle]="{'background-image': 'url(\'' + image.fields.file.url + '?w=1199\')', 'min-height': '600px'}" class="img-container d-none d-lg-block d-xl-none">
-                </div>
-                <div [ngStyle]="{'background-image': 'url(\'' + image.fields.file.url + '?w=1200\')', 'min-height': '600px'}" class="img-container d-none d-xl-block">
-                </div>
-            </li>
-        </ul>
+    <div class="col">
+        <div class="sectionTitle">In Progress</div>
     </div>
 </div>
+<div class="row" *ngIf="project?.fields.assets; else noImage">
+    <div class="col">
+        <div class="card mb-3" *ngFor="let image of project?.fields.assets">
+            <img class="card-img-top img-responsive" src="{{image.fields.file.url}}" alt="{{image.fields.title}}">
+            <div class="card-body">
+                <h5 class="card-title">{{image.fields.title}}</h5>
+            </div>
+        </div>
+    </div>
+</div>
+
+<ng-template #noImage>
+    <div class="row">
+        <div class="col">
+            <div class="card">
+                <img class="card-img-top img-responsive" src="https://via.placeholder.com//200x100?text=No+images+yet" alt="No images yet">
+                <div class="card-body">
+                    <p class="card-text">No images yet</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</ng-template>

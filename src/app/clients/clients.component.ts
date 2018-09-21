@@ -10,16 +10,40 @@ import { clientOrder } from '../client/client';
   styleUrls: ['./clients.component.css']
 })
 export class ClientsComponent implements OnDestroy, OnInit {
-  title = "Clients";
 
   private clients: EntryCollection<any>;
   private clientsSubscription: Subscription;
+  private limit = 20;
+  private skip = 0;
+  private total;
 
   constructor(private cs: ContentfulService) { }
 
   load() {
-    this.clientsSubscription = this.cs.getClients('', clientOrder.name).subscribe(
+    this.clientsSubscription = this.cs.getClients('', clientOrder.name, this.limit, this.skip).subscribe(
       response => {
+        this.total = response.total;
+        this.clients = response;
+      }
+    )
+  }
+
+  nextPage() {
+    this.skip = this.skip + this.limit;
+    this.clientsSubscription = this.cs.getClients('', clientOrder.created, this.limit, this.skip).subscribe(
+      response => {
+        console.log('nextPage: response ', response);
+        this.total = response.total;
+        this.clients = response;
+      }
+    )
+  }
+
+  prevPage() {
+    this.skip = this.skip - this.limit
+    this.clientsSubscription = this.cs.getClients('', clientOrder.created, this.limit, this.skip).subscribe(
+      response => {
+        console.log('prevPage: response ', response);
         this.clients = response;
       }
     )

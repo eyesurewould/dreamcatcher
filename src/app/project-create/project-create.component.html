@@ -1,0 +1,130 @@
+<form class="form-group" [formGroup]="projectFormGroup" (ngSubmit)="submit()">
+  <div class="row client-row">
+    <div class="col col-lg-6 col-md-8 col-sm-10 col-xs-10">
+
+      <div class="section">
+        <div class="sectionTitle">New Project</div>
+
+        <div>
+          <label for="title">Title</label>
+          <div>
+            <input type="text" formControlName="title" class="form-control" required/>
+
+            <div *ngIf="projectFormGroup.controls['title'].invalid && (projectFormGroup.controls['title'].dirty || projectFormGroup.controls['title'].touched)"
+              class="alert alert-danger ng-invalid">
+              <div *ngIf="projectFormGroup.controls['title'].errors.required">
+                Title is required.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label for="status">Status</label>
+          <select formControlName="status" class='form-control' required>
+            <option value='new' selected>New</option>
+            <option value='in progress'>In Progress</option>
+            <option value='complete'>Complete</option>
+          </select>
+
+          <div *ngIf="projectFormGroup.controls['status'].invalid && (projectFormGroup.controls['status'].dirty || projectFormGroup.controls['status'].touched)"
+            class="alert alert-danger ng-invalid">
+            <div *ngIf="projectFormGroup.controls['status'].errors.required">
+              Status is required.
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label for="style">Style</label>
+          <select formControlName="style" class='form-control' required>
+            <option value='traditional'>Traditional</option>
+            <option value='neo-traditional'>Neo-traditional</option>
+            <option value='photo-realism'>Photo Realism</option>
+            <option value='watercolor'>Watercolor</option>
+            <option value='watermark'>Watermark</option>
+            <option value='japanese'>Japanese</option>
+            <option value='pop'>Pop</option>
+            <option value='trash polka'>Trash Polka</option>
+          </select>
+
+          <div *ngIf="projectFormGroup.controls['style'].invalid && (projectFormGroup.controls['style'].dirty || projectFormGroup.controls['style'].touched)"
+            class="alert alert-danger ng-invalid">
+            <div *ngIf="projectFormGroup.controls['style'].errors.required">
+              Style is required.
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label for="description">Description</label>
+          <div>
+            <input type="text" formControlName="description" class="form-control" />
+          </div>
+        </div>
+
+        <div>
+          <label for="size">Size</label>
+          <div>
+            <input type="text" formControlName="size" class="form-control" />
+          </div>
+        </div>
+
+        <div>
+          <label for="location">Location</label>
+          <select formControlName="location" class='form-control' required>
+            <option value='head'>head</option>
+            <option value='neck'>neck</option>
+            <option value='chest'>chest</option>
+            <option value='stomach'>stomach</option>
+            <option value='upper back'>upper back</option>
+            <option value='lower back'>lower back</option>
+            <option value='left ribs'>left ribs</option>
+            <option value='right ribs'>right ribs</option>
+            <option value='left upper arm'>left upper arm</option>
+            <option value='right upper arm'>right upper arm</option>
+            <option value='left lower arm'>left lower arm</option>
+            <option value='right lower arm'>right lower arm</option>
+            <option value='left hand'>left hand</option>
+            <option value='right hand'>right hand</option>
+            <option value='groin'>groin</option>
+            <option value='butt'>butt</option>
+            <option value='left upper leg'>left upper leg</option>
+            <option value='right upper leg'>right upper leg</option>
+            <option value='left lower leg'>left lower leg</option>
+            <option value='right lower leg'>right lower leg</option>
+            <option value='left foot'>left foot</option>
+            <option value='right foot'>right foot</option>
+          </select>
+
+          <div *ngIf="projectFormGroup.controls['location'].invalid && (projectFormGroup.controls['location'].dirty || projectFormGroup.controls['location'].touched)"
+            class="alert alert-danger ng-invalid">
+            <div *ngIf="projectFormGroup.controls['location'].errors.required">
+              Location is required.
+            </div>
+          </div>
+        </div>
+
+        <div>
+          <label for="timeEstimate">Time Estimate (hours)</label>
+          <div>
+            <input type="number" formControlName="timeEstimate" class="form-control" required/>
+
+            <div *ngIf="projectFormGroup.controls['timeEstimate'].invalid && (projectFormGroup.controls['timeEstimate'].dirty || projectFormGroup.controls['timeEstimate'].touched)"
+              class="alert alert-danger ng-invalid">
+              <div *ngIf="projectFormGroup.controls['timeEstimate'].errors.required">
+                Time estimate is required.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section actions">
+          <button type="submit" class="btn btn-primary" [disabled]="!projectFormGroup.valid">Save Project</button>
+          <button class="btn btn-light" [routerLink]="['/projects']">Cancel</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</form>

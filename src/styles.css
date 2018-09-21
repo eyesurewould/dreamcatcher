@@ -9,6 +9,10 @@ body {
 label {
     font-size: 0.75rem;
 }
+.btn-light {
+    /* tweaking the default Bootstrap style */
+    background-color: #87bbf0;
+}
 
 
 /* FORMS: validation messages */
@@ -49,6 +53,5 @@ label {
     /* intended to wrap the data or input field for alignment */
     /*margin-left: 20px;*/
 }
-
 
 

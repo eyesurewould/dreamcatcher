@@ -19,6 +19,7 @@ import { ContentfulService } from './shared/contentful.service';
 import { appRoutes } from '../routes';
 import { ClientCreateComponent } from './client-create/client-create.component';
 import { HomeComponent } from './home/home.component';
+import { ProjectCreateComponent } from './project-create/project-create.component';
 
 
 @NgModule({
@@ -30,7 +31,8 @@ import { HomeComponent } from './home/home.component';
     ClientsComponent,
     ClientDetailComponent,
     ClientCreateComponent,
-    HomeComponent
+    HomeComponent,
+    ProjectCreateComponent
   ],
   imports: [
     BrowserModule,

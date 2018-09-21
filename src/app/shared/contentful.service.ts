@@ -6,8 +6,6 @@ import { Client, clientOrder } from '../client/client';
 import { Project, projectOrder } from '../project/project';
 import { isDefined } from '@angular/compiler/src/util';
 
-import { Router } from '@angular/router';
-
 import * as contentful from 'contentful';
 import * as contentfulMgmt from 'contentful-management';
 
@@ -29,7 +27,7 @@ export class ContentfulService {
   private projectsForClient = new Subject<contentful.EntryCollection<{}>>();
 
 
-  constructor(private router: Router) {
+  constructor() {
 
     this.contentfulClient = contentful.createClient({
       // This is the access token for reading content in this space
@@ -49,29 +47,36 @@ export class ContentfulService {
    * 
    * @param client
    */
-  public createClient(client: Client) {
-    console.log('createClient: start ', this.client);
-    this.contentfulMgmtClient.getSpace(environment.contentful.space)
-      .then((space) => space.getEnvironment('master'))
-      .then((environment) => environment.createEntry('client', {
-        fields: {
-          name: {
-            'en-US': client.name
-          },
-          email: {
-            'en-US': client.email
-          },
-          phone: {
-            'en-US': client.phone
+  public createClient(client: Client): Promise<{}> {
+
+    let promise = new Promise((resolve, reject) => {
+
+      console.log('createClient: start ', this.client);
+      this.contentfulMgmtClient.getSpace(environment.contentful.space)
+        .then((space) => space.getEnvironment('master'))
+        .then((environment) => environment.createEntry('client', {
+          fields: {
+            name: {
+              'en-US': client.name
+            },
+            email: {
+              'en-US': client.email
+            },
+            phone: {
+              'en-US': client.phone
+            }
           }
-        }
-      }))
-      .then((entry) => entry.publish())
-      .then((entry) => {
-        console.log('saveClient: Entry ', entry.sys.id, 'created');
-        this.router.navigate(['/client', entry.sys.id]);
-      })
-      .catch(console.error)
+        }))
+        .then((entry) => entry.publish())
+        .then((entry) => {
+          //this.client.next((entry));
+          console.log('createClient: Entry ', entry.sys.id, 'created');
+          resolve(entry);
+        })
+        .catch(console.error)
+    });
+
+    return promise;
 
   }
 
@@ -113,18 +118,20 @@ export class ContentfulService {
       include: 3
     };
 
-    if( order != undefined ) {
-      if( order == 'created') {
-        params['order'] = 'sys.createdAt';
+    if (order != undefined) {
+      if (order == 'createdAt') {
+        params['order'] = '-sys.createdAt';
+      } else if (order == 'updatedAt') {
+        params['order'] = '-sys.updatedAt';
       } else {
         params['order'] = 'fields.' + order;
       }
     }
 
-    if( limit != undefined ) {
+    if (limit != undefined) {
       params['limit'] = limit;
     }
-    if( skip != undefined ) {
+    if (skip != undefined) {
       params['skip'] = skip;
     }
 
@@ -142,16 +149,31 @@ export class ContentfulService {
 
   }
 
+  /**
+   * Update a client Entry
+   * 
+   * @param id A Contentful Entry id for an existing entry to update
+   * @param client An object with details to update the entry
+   */
   public saveClient(id: string, client: Client) {
 
     this.contentfulMgmtClient.getSpace(environment.contentful.space)
       .then((space) => space.getEnvironment('master'))
       .then((env) => env.getEntry(id))
       .then((entry) => {
-        entry.fields.name['en-US'] = client.name;
-        entry.fields.email['en-US'] = client.email;
-        entry.fields.phone['en-US'] = client.phone;
-        return entry.update()
+        console.log('saveClient: set entry values', entry.fields, ' with client values ', client);
+
+        entry.fields.name = { 'en-US': client.name };
+
+        if (client.email != '') {
+          entry.fields.email = { 'en-US': client.email };
+        }
+        if (client.phone != '') {
+          entry.fields.phone = { 'en-US': client.phone };
+        }
+
+        console.log('saveClient: update entry values', entry.fields);
+        return entry.update();
       })
       .then((entry) => entry.publish())
       .then((entry) => console.log('saveClient: Entry ', entry.sys.id, 'updated'))
@@ -160,7 +182,7 @@ export class ContentfulService {
   }
 
   /**
-   * Use the Content SDK to remove a record
+   * Use the Contentful SDK to remove a record
    * 
    * @param id A Contentful entry id.
    */
@@ -174,33 +196,59 @@ export class ContentfulService {
    * 
    * @param project
    */
-  public createProject(project: Project) {
+  public createProject(project: Project): Promise<{}> {
 
-    this.contentfulMgmtClient.getSpace(environment.contentful.space)
-      .then((space) => space.getEnvironment('master'))
-      .then((environment) => environment.createEntry('ink', {
-        fields: {
-          title: {
-            'en-US': project.title
-          },
-          description: {
-            'en-US': project.description
-          },
-          location: {
-            'en-US': project.location
-          },
-          size: {
-            'en-US': project.size
-          },
-          style: {
-            'en-US': [project.style]
+    let promise = new Promise((resolve, reject) => {
+
+      this.contentfulMgmtClient.getSpace(environment.contentful.space)
+        .then((space) => space.getEnvironment('master'))
+        .then((environment) => environment.createEntry('ink', {
+          fields: {
+            title: {
+              'en-US': project.title
+            },
+            status: {
+              'en-US': [project.status]
+            },
+            style: {
+              'en-US': [project.style]
+            },
+            description: {
+              'en-US': project.description
+            },
+            size: {
+              'en-US': project.size
+            },
+            location: {
+              'en-US': project.location
+            },
+            timeEstimate: {
+              'en-US': project.timeEstimate
+            },
+            clientRef: {
+              'en-US': {
+                sys: {
+                  type: 'Link',
+                  linkType: 'Entry',
+                  id: project.clientRef
+                }
+              }
+            }
           }
-        }
-      }))
-      .then((entry) => console.log(entry))
-      .catch(console.error)
+        }))
+        .then((entry) => entry.publish())
+        .then((entry) => {
+          console.log('createProject: Entry ', entry.sys.id, 'created');
+          resolve(entry);
+        })
+        .catch(console.error)
+
+    });
+
+    return promise;
 
   }
+
 
   /**
    * Use the Content SDK to retrieve records
@@ -240,26 +288,30 @@ export class ContentfulService {
       include: 3
     };
 
-    if( query != undefined ) {
-      if( query != '') {
+    if (query != undefined) {
+      if (query != '') {
         params['query'] = query;
       }
     }
 
-    if( order != undefined ) {
-      if( order == 'created') {
+    if (order != undefined) {
+      if (order == 'createdAt') {
         params['order'] = 'sys.createdAt';
+      } else if (order == 'updatedAt') {
+        params['order'] = 'sys.updatedAt';
       } else {
         params['order'] = 'fields.' + order;
       }
     }
 
-    if( limit != undefined ) {
+    if (limit != undefined) {
       params['limit'] = limit;
     }
-    if( skip != undefined ) {
+    if (skip != undefined) {
       params['skip'] = skip;
     }
+
+    console.log('getProjects: params ', params);
 
     this.contentfulClient.getEntries(params)
       .then((response) => {
@@ -300,7 +352,34 @@ export class ContentfulService {
 
 
   /**
-   * Use the Content SDK to remove a record
+ * Update a project (ink) Entry
+ * 
+ * @param id A Contentful Entry id for an existing entry to update
+ * @param project An object with details to update the entry
+ */
+  public saveProject(id: string, project: Project) {
+
+    this.contentfulMgmtClient.getSpace(environment.contentful.space)
+      .then((space) => space.getEnvironment('master'))
+      .then((env) => env.getEntry(id))
+      .then((entry) => {
+        entry.fields.title['en-US'] = project.title;
+        entry.fields.style['en-US'] = project.style;
+        entry.fields.status['en-US'] = project.status;
+        entry.fields.description['en-US'] = project.description;
+        entry.fields.size['en-US'] = project.size;
+        entry.fields.location['en-US'] = project.location;
+        entry.fields.timeEstimate['en-US'] = project.timeEstimate;
+        return entry.update()
+      })
+      .then((entry) => entry.publish())
+      .then((entry) => console.log('saveProject: Entry ', entry.sys.id, 'updated'))
+      .catch(console.error)
+
+  }
+
+  /**
+   * Use the Contentful SDK to remove a record
    * 
    * @param id A Contentful entry id.
    */

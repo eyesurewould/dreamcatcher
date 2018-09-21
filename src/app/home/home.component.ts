@@ -22,12 +22,12 @@ export class HomeComponent implements OnDestroy, OnInit {
   }
 
   load() {
-    this.clientsSubscription = this.cs.getClients('', clientOrder.created, 5 ).subscribe(
+    this.clientsSubscription = this.cs.getClients('', clientOrder.updated, 5 ).subscribe(
       response => {
         this.clients = response;
       }
     );
-    this.projectsSubscription = this.cs.getProjects('', projectOrder.created, 5).subscribe(
+    this.projectsSubscription = this.cs.getProjects('', projectOrder.updated, 5).subscribe(
       response => {
           this.projects = response;
       }

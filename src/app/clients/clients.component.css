@@ -1,63 +1,34 @@
-ul {
-    padding:0;
-    margin: 20px auto
-}
-li {
-    display: inline
+.btn-light {
+    /* tweaking the default Bootstrap style */
+    background-color: #87bbf0;
 }
 
-/* layout the client card and details */
-.clientCard {
-    margin: 6px;
-    margin-bottom: 20px;
-    border: 4px solid #eee;
-    box-shadow: #555 1px 1px 8px 1px;
-    padding: 10px;
-}
-.clientName {
+.card-body a, .card-body h5 {
+    color: inherit;
     cursor: pointer;
-}
-.clientDetail {
-    padding-left: 15px;
+    display: block;
 }
 
-/* for some reason, bootstrap default widths are for 4 cols only */
-@media (min-width: 0px) {
-    /* --breakpoint-xs: 0; */
-    .col-xs-10 {
-        flex: 0 0 100%;
-        min-width: 100%;
-    }
-}
 @media (min-width: 576px) {
-    /* --breakpoint-sm: 576px; */
-    .col-sm-10 {
-        flex: 0 0 80%;
-        min-width: 100%;
-    }
-}
-@media (min-width: 768px) {
-    /* --breakpoint-md: 768px; */
-    .col-md-8 {
-        flex: 0 0 50%;
-        min-width: 50%;
-    }
-}
-@media (min-width: 992px) {
-    /* --breakpoint-lg: 992px; */
-    .col-lg-6 {
-        flex: 0 0 50%;
-        min-width: 50%;
-    }
-}
-@media (min-width: 1200px) {
-    /* --breakpoint-xl: 1200px; */
-    .col-xl-4 {
-        flex: 0 0 25%;
-        min-width: 25%;
+    .card-columns {
+        column-count: 1;
     }
 }
 
-    
-    
-    
+@media (min-width: 768px) {
+    .card-columns {
+        column-count: 2;
+    }
+}
+
+@media (min-width: 992px) {
+    .card-columns {
+        column-count: 2;
+    }
+}
+
+@media (min-width: 1200px) {
+    .card-columns {
+        column-count: 3;
+    }
+}
