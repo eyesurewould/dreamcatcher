@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ContentfulService } from '../shared/contentful.service';
 import { Client } from '../client/client';
 import { emailValidator, phoneValidator } from '../shared/client-validation';
@@ -14,7 +14,7 @@ import { Router } from '@angular/router';
 export class ClientCreateComponent {
 
   private client: Client;
-
+  
   //RegEx for a US Phone (the Contentful pattern!!)
   // ^\d?[ -.]?\(?\d\d\d\)?[ -.]?\d\d\d[ -.]?\d\d\d\d$ 
   //RegEx for Email (from Contentful!!??)
@@ -30,7 +30,7 @@ export class ClientCreateComponent {
 
   }
 
-  onSubmit() {
+  submit() {
 
     //NOTE: If we needed to push submitted data to other components, 
     //we would use an EventEmitter to emit to listeners.
@@ -42,15 +42,12 @@ export class ClientCreateComponent {
     if (this.clientFormGroup.controls['phone'].value !== '') {
       this.client.phone = this.clientFormGroup.controls['phone'].value;
     }
-
+    
     this.cs.createClient(this.client)
       .then((response) => {
-        //In dev, this line shows an error because the 'response' object 
-        //type isn't an Entry so the compiler doesn't know about the
-        //sys property. Still works, but could be cleaner...
         this.router.navigate(['/client', response.sys.id]);
       });
-
+      
   }
 
 }

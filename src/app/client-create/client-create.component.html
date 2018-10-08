@@ -1,11 +1,12 @@
-<form class="form-group" [formGroup]="clientFormGroup" (ngSubmit)="onSubmit()">
+<form class="form-group" [formGroup]="clientFormGroup" (ngSubmit)="submit()">
   <div class="row client-row">
     <div class="col col-lg-6 col-md-8 col-sm-10 col-xs-10">
 
       <div class="section">
         <div class="sectionTitle">New Client</div>
-        <label for="name">Name</label>
+
         <div>
+          <label for="name">Name</label>
           <input type="text" formControlName="name" class="form-control" required/>
 
           <div *ngIf="clientFormGroup.controls['name'].invalid && (clientFormGroup.controls['name'].dirty || clientFormGroup.controls['name'].touched)"
@@ -43,9 +44,9 @@
 
       <div class="section actions">
         <button type="submit" class="btn btn-primary" [disabled]="!clientFormGroup.valid">Save Client</button>
-        <button class="btn btn-light" [routerLink]="['/clients']">Cancel</button>
+        <button class="btn btn-light" routerLink="['/clients']">Cancel</button>
       </div>
-    </div>
 
+    </div>
   </div>
 </form>

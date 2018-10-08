@@ -1,5 +1,6 @@
-import { Component, OnDestroy, OnChanges, OnInit } from '@angular/core';
+import { Component, OnChanges, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { RouterModule } from '@angular/router';
 import { EntryCollection } from 'contentful';
 import { ContentfulService } from '../shared/contentful.service';
 import { projectOrder } from '../project/project';
@@ -9,46 +10,80 @@ import { projectOrder } from '../project/project';
     templateUrl: './projects.component.html',
     styleUrls: ['./projects.component.css']
 })
-export class ProjectsComponent implements OnDestroy, OnChanges, OnInit {
-    
-    private projects: EntryCollection<any>;
-    private projectsSubscription: Subscription;
+export class ProjectsComponent implements OnChanges, OnInit {
+
     private limit = 20;
     private skip = 0;
     private total;
 
+    private projects: EntryCollection<any>;
+
     constructor(private cs: ContentfulService) { }
 
     load() {
-        this.projectsSubscription = this.cs.getProjects('', projectOrder.created, this.limit).subscribe(
-            response => {
-                this.total = response.total;
-                this.projects = response;
-            }
-        )
+
+        this.cs.getProjects('', projectOrder.updated, this.limit)
+            .then((entries) => {
+                console.log('load: project entries ', entries);
+                this.projects = entries;
+                this.total = entries.total;
+            })
+            .catch((err) => {
+                console.error;
+            });
+
+        //this.cs.getProjects('', projectOrder.created, this.limit)
+        //.then((response) => {
+        //this.total = response.total;
+        //this.projects = response;
+        //    }
+        //) 
 
     }
 
     nextPage() {
         this.skip = this.skip + this.limit;
-        this.projectsSubscription = this.cs.getProjects('', projectOrder.created, this.limit, this.skip).subscribe(
-            response => {
+        this.cs.getProjects('', projectOrder.updated, this.limit, this.skip)
+            .then((entries) => {
+                console.log('nextPage: project entries ', entries);
+                this.projects = entries;
+                this.total = entries.total;
+            })
+            .catch((err) => {
+                console.error;
+            });
+
+        /*
+        this.cs.getProjects('', projectOrder.created, this.limit, this.skip)
+        .then((response) => {
                 console.log('nextPage: response ', response);
-                this.total = response.total;
-                this.projects = response;
+                //this.total = response.total;
+                //this.projects = response;
             }
-        )
+        )*/
 
     }
 
     prevPage() {
         this.skip = this.skip - this.limit
-        this.projectsSubscription = this.cs.getProjects('', projectOrder.created, this.limit, this.skip).subscribe(
-            response => {
+        this.cs.getProjects('', projectOrder.updated, this.limit, this.skip)
+            .then((entries) => {
+                console.log('nextPage: project entries ', entries);
+                this.projects = entries;
+                this.total = entries.total;
+            })
+            .catch((err) => {
+                console.error;
+            });
+
+        /*
+        this.cs.getProjects('', projectOrder.created, this.limit, this.skip)
+        .then((response) => {
                 console.log('prevPage: response ', response);
-                this.projects = response;
+                //this.total = response.total;
+                //this.projects = response;
             }
-        )
+        )*/
 
     }
 
@@ -62,8 +97,4 @@ export class ProjectsComponent implements OnDestroy, OnChanges, OnInit {
 
     }
 
-    ngOnDestroy() {
-        // unsubscribe to ensure no memory leaks
-        this.projectsSubscription.unsubscribe();
-    }
 }

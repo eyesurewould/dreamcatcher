@@ -6,3 +6,8 @@
 .projectDetail {
     padding-left: 15px;
 }
+
+.projectDetail a {
+    color: inherit;
+    border-bottom: 1px solid;
+}

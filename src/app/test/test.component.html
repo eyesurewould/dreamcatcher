@@ -1,0 +1,16 @@
+<p>
+  test works!
+</p>
+{{client?.fields.name}}
+<br/>
+<button (click)="moreDetails()">Get more info</button>
+<div>
+  {{client?.fields.email}}
+</div>
+<br/>
+<button (click)="moreClients()">Get more clients</button>
+<div *ngIf="clients">
+  <div *ngFor="let client of clients.items">
+    {{client.fields.name}}
+  </div>
+</div>

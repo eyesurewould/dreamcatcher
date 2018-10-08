@@ -1,7 +1,6 @@
 import { Component, OnChanges, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
-import { Subscription } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
 
 import { ContentfulService } from '../shared/contentful.service';
 import { Entry } from 'contentful';
@@ -13,11 +12,10 @@ import { Project } from '../project/project';
     styleUrls: ['./project-detail.component.css']
 })
 export class ProjectDetailComponent implements OnInit, OnChanges {
- 
+
     private id: string;
     private project: Entry<any>;
-    private subscription: Subscription;
-    
+
     projectDetailFormGroup = new FormGroup({
         title: new FormControl('', [Validators.required]),
         style: new FormControl('', [Validators.required]),
@@ -25,33 +23,56 @@ export class ProjectDetailComponent implements OnInit, OnChanges {
         description: new FormControl(''),
         size: new FormControl(''),
         location: new FormControl(''),
-        timeEstimate: new FormControl(''), 
+        timeEstimate: new FormControl(''),
     });
 
     private isEditable: boolean = false;
 
-    constructor( private cs: ContentfulService, private router: Router, private activeRoute: ActivatedRoute ) {
-//TODO: Resolve the routing issue!!! Below we try to force route reload whenever params change;
+    constructor(private cs: ContentfulService, private router: Router, private route: ActivatedRoute) {
+        //TODO: Resolve the routing issue!!! Below we try to force route reload whenever params change;
         this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
+        route.params.subscribe(params => {
+            this.id = params['id'];
+        });
+
+        /*
         this.router.events.subscribe((evt) => {
             if (evt instanceof NavigationEnd) {
                 console.log(evt);
-               // trick the Router into believing it's last link wasn't previously loaded
-               this.router.navigated = false;
-               // if you need to scroll back to top, here is the right place
-               window.scrollTo(0, 0);
+                // trick the Router into believing it's last link wasn't previously loaded
+                this.router.navigated = false;
+                // if you need to scroll back to top, here is the right place
+                window.scrollTo(0, 0);
             }
-        });
+        }); */
     }
 
-    load(id: string) {
-        console.log('load: project entry id ', id);
+    ngOnInit() {
+        this.route.params.subscribe(routeParams => {
+            this.load(routeParams.id);
+        });
 
-        this.subscription = this.cs.getProject(id).subscribe(
-            responseProject => {
+    }
+
+    ngOnChanges() {
+        this.route.params.subscribe(routeParams => {
+            this.load(routeParams.id);
+        });
+
+    }
+
+    /**
+     * Load a Project entry
+     * 
+     * @param id A Contentful Entry id
+     */
+    load(id: string) {
+
+        this.cs.getProject(id)
+            .then((responseProject) => {
                 this.project = responseProject;
-                
+
                 if (this.project.fields.style != undefined) {
                     this.projectDetailFormGroup.controls['title'].setValue(this.project.fields.title);
                 }
@@ -72,27 +93,15 @@ export class ProjectDetailComponent implements OnInit, OnChanges {
                 }
                 if (this.project.fields.timeEstimate != undefined) {
                     this.projectDetailFormGroup.controls['timeEstimate'].setValue(this.project.fields.timeEstimate);
-                }        
-        
-                console.log('load: project: ', responseProject);
-            }
-        )
+                }
+
+            })
+            .catch((err) => {
+                console.error;
+            })
 
     }
 
-    ngOnInit() {
-        this.activeRoute.params.subscribe(routeParams => {
-            this.load(routeParams.id);
-        });
-
-    }
-
-    ngOnChanges() {
-        this.activeRoute.params.subscribe(routeParams => {
-            this.load(routeParams.id);
-        });
-
-    }
 
     enableEditing() {
         console.log('enableEditing: start');
@@ -104,32 +113,44 @@ export class ProjectDetailComponent implements OnInit, OnChanges {
         this.isEditable = false;
     }
 
-    onSubmit() {
-        console.log('onSubmit: start');
+
+    /**
+     * Save current edits back to Contentful via the service
+     */
+    submit() {
+        console.log('submit: start');
         this.isEditable = false;
 
-        var projectData = new Project();
-        projectData.title = this.project.fields.title;
-        projectData.style = this.project.fields.style;
-        projectData.status = this.project.fields.status;
-        projectData.description = this.project.fields.description;
-        projectData.size = this.project.fields.size;
-        projectData.location = this.project.fields.location;
-        projectData.timeEstimate = this.project.fields.timeEstimate;
+        var project = new Project();
+        project.title = this.project.fields.title;
+        project.style = this.project.fields.style;
+        project.status = this.project.fields.status;
+        project.description = this.project.fields.description;
+        project.size = this.project.fields.size;
+        project.location = this.project.fields.location;
+        project.timeEstimate = this.project.fields.timeEstimate;
 
         //NOTE: If we needed to push submitted data to other components, 
         //we would use an EventEmitter to emit to listeners.
-        
-        projectData.title = this.projectDetailFormGroup.controls['title'].value;
-        
+
+        project.title = this.projectDetailFormGroup.controls['title'].value;
+
         if (this.projectDetailFormGroup.controls['style'].value !== '') {
-            projectData.style = this.projectDetailFormGroup.controls['style'].value;
+            project.style = this.projectDetailFormGroup.controls['style'].value;
         }
         if (this.projectDetailFormGroup.controls['status'].value !== '') {
-            projectData.status = this.projectDetailFormGroup.controls['status'].value;
+            project.status = this.projectDetailFormGroup.controls['status'].value;
         }
-        
-        this.cs.saveProject(this.project.sys.id, projectData);
+
+        console.log('submit: project data to send ', project);
+        this.cs.saveProject(this.project.sys.id, project)
+            .then((entry) => {
+                console.log('submit: saved ', entry);
+                //now navigate so the page is re-loaded
+            })
+            .catch((err) => {
+                console.error;
+            })
 
     }
 
@@ -140,7 +161,14 @@ export class ProjectDetailComponent implements OnInit, OnChanges {
      */
     deleteProject(id: string) {
         console.log('deleteProject: ', id);
-        this.cs.deleteProject(id);
+        this.cs.deleteProject(id)
+            .then(() => {
+                console.log('deleteProject: deleted ');
+                this.router.navigate(['/projects']);
+            })
+            .catch((err) => {
+                console.error;
+            })
     }
 
 }

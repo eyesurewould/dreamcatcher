@@ -19,13 +19,7 @@ export class ContentfulService {
   private contentfulClient: contentfulMgmt.ClientAPI;
   private contentfulMgmtClient: contentfulMgmt.ClientAPI;
 
-  private client = new Subject<contentful.Entry<{}>>();
-  private clients = new Subject<contentful.EntryCollection<{}>>();
-
-  private project = new Subject<contentful.Entry<{}>>();
-  private projects = new Subject<contentful.EntryCollection<{}>>();
-  private projectsForClient = new Subject<contentful.EntryCollection<{}>>();
-
+  //private clients: contentful.EntryCollection<any>;
 
   constructor() {
 
@@ -47,36 +41,32 @@ export class ContentfulService {
    * 
    * @param client
    */
-  public createClient(client: Client): Promise<{}> {
+  public createClient(client: Client) {
 
-    let promise = new Promise((resolve, reject) => {
-
-      console.log('createClient: start ', this.client);
-      this.contentfulMgmtClient.getSpace(environment.contentful.space)
-        .then((space) => space.getEnvironment('master'))
-        .then((environment) => environment.createEntry('client', {
-          fields: {
-            name: {
-              'en-US': client.name
-            },
-            email: {
-              'en-US': client.email
-            },
-            phone: {
-              'en-US': client.phone
-            }
+    console.log('createClient: start ', client);
+    return this.contentfulMgmtClient.getSpace(environment.contentful.space)
+      .then((space) => space.getEnvironment('master'))
+      .then((environment) => environment.createEntry('client', {
+        fields: {
+          name: {
+            'en-US': client.name
+          },
+          email: {
+            'en-US': client.email
+          },
+          phone: {
+            'en-US': client.phone
           }
-        }))
-        .then((entry) => entry.publish())
-        .then((entry) => {
-          //this.client.next((entry));
-          console.log('createClient: Entry ', entry.sys.id, 'created');
-          resolve(entry);
-        })
-        .catch(console.error)
-    });
-
-    return promise;
+        }
+      }))
+      .then((entry) => entry.publish())
+      .then((entry) => {
+        console.log('createClient: Entry ', entry.sys.id, 'created');
+        return entry
+      })
+      .catch((err) => {
+        console.error;
+      });
 
   }
 
@@ -86,19 +76,15 @@ export class ContentfulService {
    * 
    * @param id A Contentful Entry ID for an entry of content_type 'client'
    */
-  public getClient(id: string): Observable<contentful.Entry<{}>> {
-
-    this.contentfulClient.getEntry(id)
+  public getClient(id: string) {
+    return this.contentfulClient.getEntry(id)
       .then((response) => {
-        //console.log('getClient: ', response);
-        this.client.next((response));
-        return this.client.asObservable();
+        console.log('getClient(): ' + response);
+        return response;
       })
       .catch((err) => {
         console.error;
       });
-
-    return this.client.asObservable(); //compiler complains if I don't have this
 
   }
 
@@ -111,7 +97,7 @@ export class ContentfulService {
    * @param limit <optional> The maximum number of results
    * @param skip <optional> The number of found entries to skip (for pagination)
    */
-  public getClients(query?: string, order?: clientOrder, limit?: number, skip?: number): Observable<contentful.EntryCollection<{}>> {
+  public getClients(query?: string, order?: clientOrder, limit?: number, skip?: number) {
 
     var params = {
       content_type: 'client',
@@ -135,18 +121,26 @@ export class ContentfulService {
       params['skip'] = skip;
     }
 
-    this.contentfulClient.getEntries(params)
+    return this.contentfulClient.getEntries(params)
       .then((response) => {
-        //console.log('getClients: ', response);
-        this.clients.next((response));
-        return this.clients.asObservable();
+        console.log('getClients: clients ', response);
+        return response;
       })
       .catch((err) => {
         console.error;
       });
 
-    return this.clients.asObservable(); //compiler complains if I don't have this
-
+    /* OLD
+    this.contentfulClient.getEntries(params)
+      .then((response) => {
+        this.clients = response;
+        console.log('getClients: clients ', this.clients);
+        return this.clients;
+      })
+      .catch((err) => {
+        console.error;
+      });
+      */
   }
 
   /**
@@ -157,7 +151,7 @@ export class ContentfulService {
    */
   public saveClient(id: string, client: Client) {
 
-    this.contentfulMgmtClient.getSpace(environment.contentful.space)
+    return this.contentfulMgmtClient.getSpace(environment.contentful.space)
       .then((space) => space.getEnvironment('master'))
       .then((env) => env.getEntry(id))
       .then((entry) => {
@@ -175,9 +169,16 @@ export class ContentfulService {
         console.log('saveClient: update entry values', entry.fields);
         return entry.update();
       })
-      .then((entry) => entry.publish())
-      .then((entry) => console.log('saveClient: Entry ', entry.sys.id, 'updated'))
-      .catch(console.error)
+      .then((entry) => {
+        return entry.publish();
+      })
+      .then((entry) => {
+        console.log('saveClient: Entry ', entry.sys.id, ' updated');
+        return entry
+      })
+      .catch((err) => {
+        console.error;
+      });
 
   }
 
@@ -188,6 +189,17 @@ export class ContentfulService {
    */
   public deleteClient(id: string) {
     console.log('deleteClient: id ', id);
+
+    return this.contentfulMgmtClient.getSpace(environment.contentful.space)
+      .then((space) => space.getEnvironment('master'))
+      .then((env) => env.getEntry(id))
+      .then((entry) => entry.unpublish())
+      .then((entry) => entry.delete())
+      .then(() => console.log('deleteClient: client deleted.'))
+      .catch((err) => {
+        console.error;
+      });
+
   }
 
 
@@ -196,13 +208,13 @@ export class ContentfulService {
    * 
    * @param project
    */
-  public createProject(project: Project): Promise<{}> {
+  public createProject(project: Project) {
 
-    let promise = new Promise((resolve, reject) => {
-
-      this.contentfulMgmtClient.getSpace(environment.contentful.space)
-        .then((space) => space.getEnvironment('master'))
-        .then((environment) => environment.createEntry('ink', {
+    return this.contentfulMgmtClient.getSpace(environment.contentful.space)
+      .then((space) => space.getEnvironment('master'))
+      .then((environment) => {
+        console.log('createProject: got env - about to create an entry for ', project.title);
+        return environment.createEntry('ink', {
           fields: {
             title: {
               'en-US': project.title
@@ -235,17 +247,19 @@ export class ContentfulService {
               }
             }
           }
-        }))
-        .then((entry) => entry.publish())
-        .then((entry) => {
-          console.log('createProject: Entry ', entry.sys.id, 'created');
-          resolve(entry);
         })
-        .catch(console.error)
-
-    });
-
-    return promise;
+      })
+      .then((entry) => {
+        //console.log('createProject: publish it ', entry);
+        return entry.publish();
+      })
+      .then((entry) => {
+        //console.log('createProject: publish success ', entry);
+        return entry;
+      })
+      .catch((err) => {
+        console.error;
+      });
 
   }
 
@@ -255,19 +269,15 @@ export class ContentfulService {
    * 
    * @param id A Contentful Entry ID for an entry of content_type 'ink' 
    */
-  public getProject(id: string): Observable<contentful.Entry<{}>> {
-
-    this.contentfulClient.getEntry(id)
+  public getProject(id: string) {
+    return this.contentfulClient.getEntry(id)
       .then((response) => {
-        //console.log('getProject: ', response);
-        this.project.next((response));
-        return this.project.asObservable();
+        console.log('getProject: ', response);
+        return response;
       })
       .catch((err) => {
         console.error;
       });
-
-    return this.project.asObservable(); //compiler complains if I don't have this
 
   }
 
@@ -281,7 +291,7 @@ export class ContentfulService {
    * @param limit <optional> The maximum number of results
    * @param skip <optional> The number of found entries to skip (for pagination)
    */
-  public getProjects(query?: string, order?: projectOrder, limit?: number, skip?: number): Observable<contentful.EntryCollection<{}>> {
+  public getProjects(query?: string, order?: projectOrder, limit?: number, skip?: number) {
 
     var params = {
       content_type: 'ink',
@@ -312,17 +322,14 @@ export class ContentfulService {
     }
 
     console.log('getProjects: params ', params);
-
-    this.contentfulClient.getEntries(params)
+    return this.contentfulClient.getEntries(params)
       .then((response) => {
-        this.projects.next((response));
-        return this.projects.asObservable();
+        console.log('getProjects: projects ', response);
+        return response;
       })
       .catch((err) => {
         console.error;
       });
-
-    return this.projects.asObservable(); //compiler complains if I don't have this
 
   }
 
@@ -332,21 +339,23 @@ export class ContentfulService {
    * 
    * @param clientId A Contentful Entry ID for an entry of content_type 'client'
    */
-  public getProjectsForClient(clientId: string): Observable<contentful.EntryCollection<{}>> {
+  public getProjectsForClient(clientId: string) {
 
-    const params = { content_type: 'ink', include: 3, 'fields.clientRef.sys.id': clientId };
+    const params = { 
+      content_type: 'ink', 
+      include: 3, 
+      order: '-sys.updatedAt', 
+      'fields.clientRef.sys.id': clientId 
+    };
 
-    this.contentfulClient.getEntries(params)
+    return this.contentfulClient.getEntries(params)
       .then((response) => {
-        //console.log('getProjectsForClient: ', response);
-        this.projectsForClient.next((response));
-        return this.projectsForClient.asObservable();
+        console.log('getProjectsForClient(): ', response);
+        return response;
       })
       .catch((err) => {
         console.error;
       });
-
-    return this.projectsForClient.asObservable();
 
   }
 
@@ -359,22 +368,50 @@ export class ContentfulService {
  */
   public saveProject(id: string, project: Project) {
 
-    this.contentfulMgmtClient.getSpace(environment.contentful.space)
+    return this.contentfulMgmtClient.getSpace(environment.contentful.space)
       .then((space) => space.getEnvironment('master'))
       .then((env) => env.getEntry(id))
       .then((entry) => {
-        entry.fields.title['en-US'] = project.title;
-        entry.fields.style['en-US'] = project.style;
-        entry.fields.status['en-US'] = project.status;
-        entry.fields.description['en-US'] = project.description;
-        entry.fields.size['en-US'] = project.size;
-        entry.fields.location['en-US'] = project.location;
-        entry.fields.timeEstimate['en-US'] = project.timeEstimate;
+        console.log('saveProject: retrieved entry to update ', entry);
+        console.log('saveProject: load the data from project ', project);
+
+        entry.fields.title = { 'en-US': project.title };
+
+        if (project.style[0] != '') {
+          entry.fields.style = { 'en-US': project.style };
+        }
+        if (project.status[0] != '') {
+          entry.fields.status = { 'en-US': project.status };
+        }
+        if (project.description != '') {
+          entry.fields.description = { 'en-US': project.description };
+        }
+        if (project.size != '') {
+          entry.fields.size = { 'en-US': project.size };
+        }
+        if (project.location[0] != '') {
+          entry.fields.location = { 'en-US': project.location };
+        }
+        if (project.timeEstimate != null) {
+          entry.fields.timeEstimate = { 'en-US': project.timeEstimate };
+        }
+
+        console.log('saveProject: now call update ', entry);
+
         return entry.update()
       })
-      .then((entry) => entry.publish())
-      .then((entry) => console.log('saveProject: Entry ', entry.sys.id, 'updated'))
-      .catch(console.error)
+      .then((entry) => {
+        console.log('saveProject: update returned, now publish ', entry);
+        return entry.publish()
+      })
+      .then((entry) => {
+        console.log('saveProject: publish returned, now exit ', entry);
+        console.log('saveProject: Entry ', entry.sys.id, 'updated');
+        return entry;
+      })
+      .catch((err) => {
+        console.error;
+      })
 
   }
 
@@ -385,6 +422,16 @@ export class ContentfulService {
    */
   public deleteProject(id: string) {
     console.log('deleteProject: id ', id);
+
+    return this.contentfulMgmtClient.getSpace(environment.contentful.space)
+      .then((space) => space.getEnvironment('master'))
+      .then((env) => env.getEntry(id))
+      .then((entry) => entry.unpublish())
+      .then((entry) => entry.delete())
+      .then(() => console.log('deleteProject; project deleted.'))
+      .catch((err) => {
+        console.error;
+      });
   }
 
 }

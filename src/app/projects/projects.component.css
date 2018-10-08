@@ -3,6 +3,19 @@
     background-color: #87bbf0;
 }
 
+.card-title {
+    font-size: 1.25rem;
+    margin-bottom: .5rem;
+    line-height: 1.2;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.project-card-link {
+    color: inherit;
+    text-decoration: none;
+}
+
 @media (min-width: 576px) {
     .card-columns {
         column-count: 2;

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ContentfulService } from '../shared/contentful.service';
 import { Project } from '../project/project';
@@ -23,7 +23,7 @@ export class ProjectCreateComponent {
     description: new FormControl(''),
     size: new FormControl(''),
     location: new FormControl('', [Validators.required]),
-    timeEstimate: new FormControl(''),
+    timeEstimate: new FormControl(),
   });
 
   constructor(private cs: ContentfulService, private router: Router, private route: ActivatedRoute) {
@@ -37,26 +37,40 @@ export class ProjectCreateComponent {
   }
 
   submit() {
-
-    //NOTE: If we needed to push submitted data to other components, 
-    //we would use an EventEmitter to emit to listeners.
-
     this.project.title = this.projectFormGroup.controls['title'].value;
-    this.project.status = this.projectFormGroup.controls['status'].value;
-    this.project.style = this.projectFormGroup.controls['style'].value;
-    this.project.description = this.projectFormGroup.controls['description'].value;
-    this.project.size = this.projectFormGroup.controls['size'].value;
-    this.project.location = [this.projectFormGroup.controls['location'].value];
-    this.project.timeEstimate = this.projectFormGroup.controls['timeEstimate'].value;
 
-    console.log('submit: this.project ', this.project);
+    if (this.projectFormGroup.controls['status'].value !== '') {
+      this.project.status = this.projectFormGroup.controls['status'].value;
+    }
+    if (this.projectFormGroup.controls['style'].value !== '') {
+      this.project.style = this.projectFormGroup.controls['style'].value;
+    }
+    if (this.projectFormGroup.controls['description'].value !== '') {
+      this.project.description = this.projectFormGroup.controls['description'].value;
+    }
+    if (this.projectFormGroup.controls['size'].value !== '') {
+      this.project.size = this.projectFormGroup.controls['size'].value;
+    }
+    if (this.projectFormGroup.controls['location'].value !== '') {
+      this.project.location = [this.projectFormGroup.controls['location'].value];
+    }
+    if (this.projectFormGroup.controls['timeEstimate'].value !== '') {
+      this.project.timeEstimate = this.projectFormGroup.controls['timeEstimate'].value;
+    }
+    //console.log('submit: this.project ', this.project);
 
     this.cs.createProject(this.project)
-      .then(() => {
+      .then((entry) => {
         console.log('submit: service call completed');
-        this.router.navigate(['/client', this.id]);
-      }
-    );
+
+        //introduce a slight pause here so the new project has time to 
+        //appear in subsequent query for all projects for this client
+        setTimeout(() => {
+          this.router.navigate(['/client', this.id]);
+        },
+          400);
+        
+      });
 
   }
 

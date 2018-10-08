@@ -21,6 +21,9 @@ import { ClientCreateComponent } from './client-create/client-create.component';
 import { HomeComponent } from './home/home.component';
 import { ProjectCreateComponent } from './project-create/project-create.component';
 
+import { TestComponent } from './test/test.component';
+import { TestPromiseService } from './shared/test-promise.service';
+
 
 @NgModule({
   declarations: [
@@ -32,21 +35,23 @@ import { ProjectCreateComponent } from './project-create/project-create.componen
     ClientDetailComponent,
     ClientCreateComponent,
     HomeComponent,
-    ProjectCreateComponent
+    ProjectCreateComponent,
+    TestComponent,
   ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
     HttpClientModule,
     AlertModule.forRoot(),
-    RouterModule.forRoot(appRoutes, {onSameUrlNavigation: 'reload'}),
+    RouterModule.forRoot(appRoutes),
     ContentfulModule.forRoot({
       space: 'c8b8vlhklpan', // your space ID
       accessToken: 'd9b824ae53d462d5e7b27e0f8502a380df22a9901905c305705be7bdda310e6f', // your access token
     })
   ],
   providers: [ 
-    ContentfulService
+    ContentfulService,
+    TestPromiseService
   ],
   bootstrap: [ AppComponent ]
 })

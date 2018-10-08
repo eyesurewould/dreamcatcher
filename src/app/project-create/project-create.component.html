@@ -7,14 +7,12 @@
 
         <div>
           <label for="title">Title</label>
-          <div>
-            <input type="text" formControlName="title" class="form-control" required/>
+          <input type="text" formControlName="title" class="form-control" required/>
 
-            <div *ngIf="projectFormGroup.controls['title'].invalid && (projectFormGroup.controls['title'].dirty || projectFormGroup.controls['title'].touched)"
-              class="alert alert-danger ng-invalid">
-              <div *ngIf="projectFormGroup.controls['title'].errors.required">
-                Title is required.
-              </div>
+          <div *ngIf="projectFormGroup.controls['title'].invalid && (projectFormGroup.controls['title'].dirty || projectFormGroup.controls['title'].touched)"
+            class="alert alert-danger ng-invalid">
+            <div *ngIf="projectFormGroup.controls['title'].errors.required">
+              Title is required.
             </div>
           </div>
         </div>
@@ -58,16 +56,12 @@
 
         <div>
           <label for="description">Description</label>
-          <div>
-            <input type="text" formControlName="description" class="form-control" />
-          </div>
+          <input type="text" formControlName="description" class="form-control" />
         </div>
 
         <div>
           <label for="size">Size</label>
-          <div>
-            <input type="text" formControlName="size" class="form-control" />
-          </div>
+          <input type="text" formControlName="size" class="form-control" />
         </div>
 
         <div>
@@ -107,21 +101,19 @@
 
         <div>
           <label for="timeEstimate">Time Estimate (hours)</label>
-          <div>
-            <input type="number" formControlName="timeEstimate" class="form-control" required/>
+          <input type="number" formControlName="timeEstimate" class="form-control" required/>
 
-            <div *ngIf="projectFormGroup.controls['timeEstimate'].invalid && (projectFormGroup.controls['timeEstimate'].dirty || projectFormGroup.controls['timeEstimate'].touched)"
-              class="alert alert-danger ng-invalid">
-              <div *ngIf="projectFormGroup.controls['timeEstimate'].errors.required">
-                Time estimate is required.
-              </div>
+          <div *ngIf="projectFormGroup.controls['timeEstimate'].invalid && (projectFormGroup.controls['timeEstimate'].dirty || projectFormGroup.controls['timeEstimate'].touched)"
+            class="alert alert-danger ng-invalid">
+            <div *ngIf="projectFormGroup.controls['timeEstimate'].errors.required">
+              Time estimate is required.
             </div>
           </div>
         </div>
 
         <div class="section actions">
           <button type="submit" class="btn btn-primary" [disabled]="!projectFormGroup.valid">Save Project</button>
-          <button class="btn btn-light" [routerLink]="['/projects']">Cancel</button>
+          <a class="btn btn-light" href="/projects">Cancel</a>
         </div>
       </div>
 

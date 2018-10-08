@@ -1,4 +1,4 @@
-<form class="form-group" [formGroup]="clientDetailFormGroup" (ngSubmit)="onSubmit()">
+<form class="form-group" formGroup="clientDetailFormGroup" (ngSubmit)="submit()">
     <div class="row client-row">
         <div class="col col-lg-6 col-md-8 col-sm-10 col-xs-10">
 
@@ -71,17 +71,22 @@
         <div class="col-md-6 col-sm-12">
             <div class="section actions">
                 <span style="float: right">
-                    
-                    <button *ngIf="client && !isEditable" [routerLink]="['/project-create', client.sys.id]" class="btn btn-primary">Add
-                        Project
-                    </button>
+
+                    <!--
+                        <button *ngIf="client && !isEditable" routerLink="/project-create{{client.sys.id}}" class="btn btn-primary">Add
+                            Project
+                        </button>
+                    -->
+                    <a *ngIf="client && !isEditable" href="/project-create/{{client.sys.id}}" class="btn btn-light">Add Project
+                    </a>
                     <button *ngIf="client && !isEditable" (click)="enableEditing();" class="btn btn-light">Edit</button>
                     <button *ngIf="client && !isEditable" (click)="deleteClient(client.sys.id);" class="btn btn-light">Delete</button>
 
-                    <button *ngIf="client && isEditable" (click)="submit();" type="submit" [disabled]="!clientDetailFormGroup.valid || (!clientDetailFormGroup.dirty || !clientDetailFormGroup.touched)" class="btn btn-primary">Save</button>
+                    <button *ngIf="client && isEditable" (click)="submit();" type="submit" [disabled]="!clientDetailFormGroup.valid || (!clientDetailFormGroup.dirty || !clientDetailFormGroup.touched)"
+                        class="btn btn-primary">Save</button>
                     <button *ngIf="client && isEditable" (click)="disableEditing();" class="btn btn-light">Cancel</button>
                 </span>
-            </div> 
+            </div>
         </div>
     </div>
 </form>
@@ -89,7 +94,7 @@
 
 <div *ngIf="!isEditable" class="row">
     <div class="col">
-        <div class="section">
+        <div class="sectionTitle">
             <h5>Projects</h5>
         </div>
     </div>
@@ -97,44 +102,82 @@
 
 <div *ngIf="!isEditable" class="row">
     <div class="col card-columns">
-        <div *ngFor="let project of projects?.items">
-            <div class="card" *ngIf="project.fields.finalImage; else inProgressBlock">
-                <img class="card-img-top img-responsive" src="{{project.fields.finalImage.fields.file.url}}" alt="{{project.fields.title}}">
-                <div class="card-body">
-                    <a [routerLink]="['/project', project.sys.id]" class="btn btn-primary">{{project.fields.title}}</a>
-                    <p class="card-text">{{project.fields.style}} - {{project.fields.description}}</p>
-                    <div class="card-textr">
-                        <small class="text-muted">{{project.fields.status}}</small>
+        <div *ngIf="projectCount > 0; else noProjects">
+            <div class="card" *ngFor="let project of projects?.items">
+                <a href="/project/{{project.sys.id}}">
+                    <!-- three options for image to display:
+                                    Based on status and image availability 
+                                    1) Final - show final image
+                                    2) In Progress - show first regular image
+                                    3) No images - show placeholder
+                                    -->
+                    <img *ngIf="project.fields.finalImage; else inProgressBlock" class="card-img-top img-responsive" src="{{project.fields.finalImage.fields.file.url}}"
+                        alt="{{project.fields.title}}">
+                    <ng-template #inProgressBlock>
+                        <img *ngIf="project.fields.assets; else noImage" class="card-img-top img-responsive" src="{{project.fields.assets[0].fields.file.url}}"
+                            alt="{{project.fields.title}}">
+                    </ng-template>
+                    <ng-template #noImage>
+                        <img class="card-img-top img-responsive" src="https://via.placeholder.com//200x100?text=No+image+yet" alt="{{project.fields.title}}">
+                    </ng-template>
+
+                    <div class="card-body">
+                        <div class="card-title">{{project.fields.title}}</div>
+                        <p class="card-text">{{project.fields.style}} - {{project.fields.description}}</p>
+                        <div class="card-text">
+                            <small class="text-muted">{{project.fields.status}}</small>
+                        </div>
                     </div>
-                </div>
+                </a>
             </div>
 
-            <ng-template #inProgressBlock>
-                <div class="card" *ngIf="project.fields.assets; else noImage">
-                    <img class="card-img-top img-responsive" src="{{project.fields.assets[0].fields.file.url}}" alt="{{project.fields.title}}">
-                    <div class="card-body">
-                        <a [routerLink]="['/project', project.sys.id]" class="btn btn-primary">{{project.fields.title}}</a>
-                        <h5 class="card-title">{{project.fields.title}}</h5>
-                        <p class="card-text">{{project.fields.style}} - {{project.fields.description}}</p>
-                        <div class="card-textr">
-                            <small class="text-muted">{{project.fields.status}}</small>
-                        </div>
-                    </div>
-                </div>
-            </ng-template>
+            <!--
+            <div *ngFor="let project of projects?.items">
 
-            <ng-template #noImage>
-                <div class="card">
-                    <img class="card-img-top img-responsive" src="https://via.placeholder.com//200x100?text=No+image+yet" alt="{{project.fields.title}}">
+                <div class="card" *ngIf="project.fields.finalImage; else inProgressBlock">
+                    <img class="card-img-top img-responsive" src="{{project.fields.finalImage.fields.file.url}}" alt="{{project.fields.title}}">
                     <div class="card-body">
-                        <a [routerLink]="['/project', project.sys.id]" class="btn btn-primary">{{project.fields.title}}</a>
+                        <a routerLink="['/project', project.sys.id]" class="btn btn-primary">{{project.fields.title}}</a>
                         <p class="card-text">{{project.fields.style}} - {{project.fields.description}}</p>
                         <div class="card-textr">
                             <small class="text-muted">{{project.fields.status}}</small>
                         </div>
                     </div>
                 </div>
-            </ng-template>
+
+                <ng-template #inProgressBlock>
+                    <div class="card" *ngIf="project.fields.assets; else noImage">
+                        <img class="card-img-top img-responsive" src="{{project.fields.assets[0].fields.file.url}}" alt="{{project.fields.title}}">
+                        <div class="card-body">
+                            <a routerLink="['/project', project.sys.id]" class="btn btn-primary">{{project.fields.title}}</a>
+                            <h5 class="card-title">{{project.fields.title}}</h5>
+                            <p class="card-text">{{project.fields.style}} - {{project.fields.description}}</p>
+                            <div class="card-textr">
+                                <small class="text-muted">{{project.fields.status}}</small>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+
+                <ng-template #noImage>
+                    <div class="card">
+                        <img class="card-img-top img-responsive" src="https://via.placeholder.com//200x100?text=No+image+yet" alt="{{project.fields.title}}">
+                        <div class="card-body">
+                            <a routerLink="['/project', project.sys.id]" class="btn btn-primary">{{project.fields.title}}</a>
+                            <p class="card-text">{{project.fields.style}} - {{project.fields.description}}</p>
+                            <div class="card-textr">
+                                <small class="text-muted">{{project.fields.status}}</small>
+                            </div>
+                        </div>
+                    </div>
+                </ng-template>
+            </div>
+
+            -->
         </div>
+
+        <ng-template #noProjects>
+            <p>No projects yet...</p>
+        </ng-template>
     </div>
 </div>

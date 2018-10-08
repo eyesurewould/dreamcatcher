@@ -1,7 +1,6 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription } from 'rxjs';
 
 import { ContentfulService } from '../shared/contentful.service';
 import { Entry, EntryCollection } from 'contentful';
@@ -13,14 +12,12 @@ import { emailValidator, phoneValidator } from '../shared/client-validation';
     templateUrl: './client-detail.component.html',
     styleUrls: ['./client-detail.component.css']
 })
-export class ClientDetailComponent implements OnInit, OnDestroy {
+export class ClientDetailComponent implements OnInit {
 
     private id: string;
     private client: Entry<any>;
     private projects: EntryCollection<any>;
     private projectCount = 0;
-    private subscriptionClient: Subscription;
-    private subscriptionProjects: Subscription;
 
     clientDetailFormGroup = new FormGroup({
         name: new FormControl('', [Validators.required]),
@@ -28,16 +25,13 @@ export class ClientDetailComponent implements OnInit, OnDestroy {
         phone: new FormControl('', phoneValidator(/^\d?[ -.]?\(?\d\d\d\)?[ -.]?\d\d\d[ -.]?\d\d\d\d$/g))
     });
 
-    private isEditable: boolean = false;
+    public isEditable: boolean = false;
 
     constructor(private cs: ContentfulService, private route: ActivatedRoute, private router: Router) {
-        this.router.routeReuseStrategy.shouldReuseRoute = function () {
-            return false;
-        };
-
         route.params.subscribe(params => {
             this.id = params['id'];
         });
+
     }
 
     ngOnInit() {
@@ -56,8 +50,9 @@ export class ClientDetailComponent implements OnInit, OnDestroy {
      * @param id A Contentful Entry id
      */
     load(id: string) {
-        this.subscriptionClient = this.cs.getClient(id).subscribe(
-            responseClient => {
+
+        this.cs.getClient(id)
+            .then((responseClient) => {
                 this.client = responseClient;
 
                 this.clientDetailFormGroup.controls['name'].setValue(this.client.fields.name);
@@ -68,24 +63,22 @@ export class ClientDetailComponent implements OnInit, OnDestroy {
                 if (this.client.fields.phone != undefined) {
                     this.clientDetailFormGroup.controls['phone'].setValue(this.client.fields.phone);
                 }
-
-                this.subscriptionProjects = this.cs.getProjectsForClient(id).subscribe(
-                    responseProjects => {
+            
+                this.cs.getProjectsForClient(id)
+                    .then((responseProjects) => {
+                        console.log('load: projects ', responseProjects);
                         this.projects = responseProjects;
+                        console.log('load: projects count ', responseProjects.items.length);
                         this.projectCount = responseProjects.items.length;
 
-                    }
-                )
-            }
-        )
+                    })
+            })
+            .catch((err) => {
+                console.error;
+            })
+
     }
 
-
-    ngOnDestroy() {
-        // unsubscribe to ensure no memory leaks
-        this.subscriptionClient.unsubscribe();
-        this.subscriptionProjects.unsubscribe();
-    }
 
     enableEditing() {
         console.log('enableEditing: start ', this.clientDetailFormGroup);
@@ -111,12 +104,13 @@ export class ClientDetailComponent implements OnInit, OnDestroy {
         client.phone = this.clientDetailFormGroup.controls['phone'].value;
 
         console.log('submit: client data to send ', client);
-        this.cs.saveClient(this.id, client);
-
-        setTimeout(() => {
-            this.router.navigate(['/client', this.id]);
-        }, 1000);
-
+        this.cs.saveClient(this.id, client)
+            .then((entry) => {
+                console.log('submit: saved ', entry);
+            })
+            .catch((err) => {
+                console.error;
+            })
 
     }
 
@@ -128,7 +122,14 @@ export class ClientDetailComponent implements OnInit, OnDestroy {
      */
     deleteClient(id: string) {
         console.log('deleteClient: ', id);
-        this.cs.deleteClient(id);
+        this.cs.deleteClient(id)
+            .then(() => {
+                console.log('deleteClient: deleted ');
+                this.router.navigate(['/clients']);
+            })
+            .catch((err) => {
+                console.error;
+            })
     }
 
 }

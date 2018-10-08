@@ -2,15 +2,15 @@
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
             <div class="logo">
-                <a class="navbar-brand logo" [routerLink]="['/']">
-                    <img alt="Dreamcatcher" src="">
+                <a class="navbar-brand logo" routerLink="/">
+                    <img alt="Home" src="">
                 </a>
             </div>
-            <div class="header">
-                <a class="navbar-brand logo" [routerLink]="['/clients']">{{clientsTitle}}</a>
+            <div class="nav-item">
+                <a class="navbar-brand logo" routerLink="/clients">{{clientsTitle}}</a>
             </div>
-            <div class="header">
-                <a class="navbar-brand logo" [routerLink]="['/projects']">{{projectsTitle}}</a>
+            <div class="nav-item">
+                <a class="navbar-brand logo" routerLink="/projects">{{projectsTitle}}</a>
             </div>
         </div>
     </nav>

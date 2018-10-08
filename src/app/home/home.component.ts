@@ -1,5 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
 import { EntryCollection } from 'contentful';
 import { ContentfulService } from '../shared/contentful.service';
 import { clientOrder } from '../client/client';
@@ -10,40 +9,42 @@ import { projectOrder } from '../project/project';
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css']
 })
-export class HomeComponent implements OnDestroy, OnInit {
+export class HomeComponent implements OnInit {
 
   private clients: EntryCollection<any>;
-  private projects: EntryCollection<any>; 
-  private clientsSubscription: Subscription;
-  private projectsSubscription: Subscription;
+  private projects: EntryCollection<any>;
 
-  constructor(private cs: ContentfulService) { 
+  private clientLimit = 6;
+  private projectLimit = 6;
+
+  constructor(private cs: ContentfulService) {
 
   }
 
   load() {
-    this.clientsSubscription = this.cs.getClients('', clientOrder.updated, 5 ).subscribe(
-      response => {
-        this.clients = response;
-      }
-    );
-    this.projectsSubscription = this.cs.getProjects('', projectOrder.updated, 5).subscribe(
-      response => {
-          this.projects = response;
-      }
-    );
+    this.cs.getClients('', clientOrder.updated, this.clientLimit)
+      .then((entries) => {
+        console.log('load: client entries ', entries);
+        this.clients = entries;
+      })
+      .catch((err) => {
+        console.error;
+      });
+
+      this.cs.getProjects('', projectOrder.updated, this.projectLimit)
+      .then((entries) => {
+        console.log('load: project entries ', entries);
+        this.projects = entries;
+      })
+      .catch((err) => {
+        console.error;
+      });
 
   }
 
   ngOnInit() {
     this.load();
 
-  }
-
-  ngOnDestroy() {
-    // unsubscribe to ensure no memory leaks
-    this.clientsSubscription.unsubscribe();
-    this.projectsSubscription.unsubscribe();
   }
 
 }

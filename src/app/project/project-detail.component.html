@@ -1,4 +1,4 @@
-<form class="form-group" [formGroup]="projectDetailFormGroup" (ngSubmit)="onSubmit()">
+<form class="form-group" formGroup="projectDetailFormGroup" (ngSubmit)="submit()">
     <div class="row" *ngIf="project?.fields">
         <div class="col-xs-12 col-sm-10 col-md-6 col-lg-6 col-xl-6 ">
 
@@ -51,13 +51,13 @@
                         </div>
                     </div>
                     <ng-template #readModeStyle>
-                        <div *ngFor="let style of project.fields.style" [routerLink]="['/projects', style]" class="projectDetail">{{project.fields.style}}</div>
+                        <div *ngFor="let style of project.fields.style" routerLink="['/projects', style]" class="projectDetail">{{project.fields.style}}</div>
                     </ng-template>
                 </div>
 
                 <!-- client name is not editable here - read only -->
                 <div class="projectDetail" *ngIf="!isEditable">
-                    <a [routerLink]="['/client', project.fields.clientRef.sys.id]">
+                    <a routerLink="['/client', project.fields.clientRef.sys.id]">
                         {{project.fields.clientRef.fields.name}}
                     </a>
                 </div>
@@ -166,13 +166,13 @@
                 <!-- <h5 class="mt-0">
                     Actions
                 </h5> -->
-                <button *ngIf="project && !isEditable" [routerLink]="['/assetNew', project.sys.id]" class="btn btn-primary">Add
+                <button *ngIf="project && !isEditable" routerLink="['/assetNew', project.sys.id]" class="btn btn-light">Add
                     Image
                 </button>
                 <button *ngIf="project && !isEditable" (click)="enableEditing();" class="btn btn-light">Edit</button>
                 <button *ngIf="project && !isEditable" (click)="deleteProject(project.sys.id);" class="btn btn-light">Delete</button>
 
-                <button *ngIf="project && isEditable" (click)="save();" [disabled]="!projectDetailFormGroup.valid || (!projectDetailFormGroup.dirty || !projectDetailFormGroup.touched)"
+                <button *ngIf="project && isEditable" (click)="submit();" type="submit" [disabled]="!projectDetailFormGroup.valid || (!projectDetailFormGroup.dirty || !projectDetailFormGroup.touched)"
                     class="btn btn-primary">Save</button>
                 <button *ngIf="project && isEditable" (click)="disableEditing();" class="btn btn-light">Cancel</button>
             </div>

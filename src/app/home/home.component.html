@@ -1,47 +1,74 @@
 <div class="row">
-    <div class="col col-lg-6 col-md-6 col-sm-6 col-xs-10">
+    <div class="col">
         <div class="section">
             <div class="sectionTitle">Recent Clients</div>
-            <ul id="thumbnailsList">
-                <li *ngFor="let client of clients?.items">
-                    <div [routerLink]="['/client', client.sys.id]">
-                        <div class="clientCard">
-                        <h5>{{ client.fields.name }}</h5>
-                        <div *ngIf="client.fields.email" class="clientDetail">{{ client.fields.email }}</div>
-                        <div *ngIf="client.fields.phone" class="clientDetail">{{ client.fields.phone }}</div>
-                    </div>
+        </div>
+    </div>
+    <div class="col">
+        <div class="section">
+            <span style="float: right">
+                <button class="btn btn-light" routerLink="/client-create">+</button>
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col card-columns">
+        <div *ngFor="let client of clients?.items">
+            <div class="card client-card">
+                <div class="card-body">
+                    <a class="card-title" href="/client/{{client.sys.id}}">{{ client.fields.name }}</a>
+                    <a *ngIf="client.fields.email" class="card-text ml-2" href="mailto:{{client.fields.email}}">{{
+                        client.fields.email
+                        }}
+                    </a>
+                    <a *ngIf="client.fields.phone" class="card-text ml-2" href="tel:{{client.fields.phone}}">{{
+                        client.fields.phone
+                        }}
+                    </a>
                 </div>
-                </li>
-            </ul>
+            </div>
         </div>
     </div>
+</div>
 
-    <div class="col col-lg-6 col-md-6 col-sm-6 col-xs-10">
-        <div class="section">
-            <div class="sectionTitle">Recent Projects</div>
-            <ul id="thumbnailsList">
-                <li *ngFor="let project of projects?.items">
-                    <!-- the routerLink bind results in a URL path like "/project/3" where 3 is the id value for the client of the *ngFor directive -->
-                    <div [routerLink]="['/project', project.sys.id]">
-                        <span style="display: none;">hidden</span>
-                        <span *ngIf="project.fields.finalImage; else inProgressBlock">
-                            <img src="{{project.fields.finalImage.fields.file.url}}" class="projectThumbnail" width="200" height="160">
-                        </span>
-                        <ng-template #inProgressBlock>
-                            <span>
-                                <img src="{{project.fields.assets[0].fields.file.url}}" class="projectThumbnail" width="200" height="160">
-                            </span>
-                        </ng-template>
+<div class="row">
+    <div class="col">
+        <div class="sectionTitle">Recent Projects</div>
+    </div>
+</div>
+<div class="row">
+    <div class="col card-columns">
+        <div *ngFor="let project of projects?.items">
+            <a class="card project-card" *ngIf="project.fields.finalImage; else inProgressBlock" href="/project/{{project.sys.id}}">
+                <img class="card-img-top img-responsive" src="{{project.fields.finalImage.fields.file.url}}" alt="{{project.fields.title}}">
+                <div class="card-body">
+                    <h5>{{project.fields.title}}</h5>
+                    <p class="card-text">{{project.fields.style}} - {{project.fields.description}}</p>
+                </div>
+            </a>
+
+            <ng-template #inProgressBlock>
+                <a class="card project-card" *ngIf="project.fields.assets; else noImage" href="/project/{{project.sys.id}}">
+                    <img class="card-img-top img-responsive" src="{{project.fields.assets[0].fields.file.url}}" alt="{{project.fields.title}}">
+                    <div class="card-body">
+                        <h5>{{project.fields.title}}</h5>
+                        <p class="card-text">{{project.fields.style}} - {{project.fields.description}}</p>
                     </div>
-                </li>
-            </ul>
-        </div>
-    </div>
+                </a>
+            </ng-template>
 
-    <div class="col col-lg-6 col-md-6 col-sm-12 col-xs-12">
-        <div class="section">
-            <div class="sectionTitle">Actions</div>
-            <button class="btn btn-primary" [routerLink]="['/client-create']">Add Client</button>
+            <ng-template #noImage>
+                <a class="card project-card" href="/project/{{project.sys.id}}">
+                    <img class="card-img-top img-responsive" src="https://via.placeholder.com//200x100?text=No+image+yet"
+                        alt="{{project.fields.title}}">
+                    <div class="card-body">
+                        <h5>{{project.fields.title}}</h5>
+                        <p class="card-text">{{project.fields.style}} - {{project.fields.description}}</p>
+                    </div>
+                </a>
+            </ng-template>
         </div>
     </div>
 </div>

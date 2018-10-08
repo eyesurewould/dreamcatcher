@@ -8,6 +8,8 @@ import { ProjectsComponent } from './app/projects/projects.component';
 import { ProjectDetailComponent } from './app/project/project-detail.component';
 import { ProjectCreateComponent } from './app/project-create/project-create.component';
 
+import { TestComponent } from './app/test/test.component';
+
 export const appRoutes: Routes = [
     { path: "", component: HomeComponent },
     { path: "projects", component: ProjectsComponent },
@@ -22,5 +24,6 @@ export const appRoutes: Routes = [
     { path: "client-create", component: ClientCreateComponent},
     { path: "project-create/:id", 
         component: ProjectCreateComponent,
-        runGuardsAndResolvers: 'paramsChange'}
+        runGuardsAndResolvers: 'paramsChange'},
+    { path: "test", component: TestComponent}
 ]

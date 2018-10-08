@@ -1,37 +1,51 @@
-/* lists for both the clients and projects */
-ul {
-    padding:0;
-    /*width: 1200px;*/
-    margin: 20px auto
-}
-li {
-    display: inline
-}
-
-/* layout the project cards and details */
-.projectThumbnail {
-    margin: 6px;
-    border: 4px solid #eee;
-    box-shadow: #555 1px 1px 8px 1px;
-}
-
-/* layout the client card and details */
-.clientCard {
-    margin: 6px;
-    border: 4px solid #eee;
-    box-shadow: #555 1px 1px 8px 1px;
-    margin-bottom: 20px;
-    padding: 10px;
-    height: 160px;
-}
-.clientName {
-    cursor: pointer;
-}
-.clientDetail {
-    padding-left: 15px;
-}
-
 .btn-light {
     /* tweaking the default Bootstrap style */
     background-color: #87bbf0;
+}
+
+.card-body a, .card-body h5 {
+    color: inherit;
+    cursor: pointer;
+    display: block;
+}
+
+.card-title {
+    font-size: 1.25rem;
+    margin-bottom: .5rem;
+    line-height: 1.2;
+    font-weight: 500;
+    text-decoration: none;
+}
+
+.card-text {
+    display: block;
+}
+
+.project-card {
+    cursor: pointer;
+    color: inherit;
+}
+
+@media (min-width: 576px) {
+    .card-columns {
+        column-count: 1;
+    }
+}
+
+@media (min-width: 768px) {
+    .card-columns {
+        column-count: 2;
+    }
+}
+
+@media (min-width: 992px) {
+    .card-columns {
+        column-count: 2;
+    }
+}
+
+@media (min-width: 1200px) {
+    .card-columns {
+        column-count: 3;
+    }
 }

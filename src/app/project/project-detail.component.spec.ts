@@ -1,14 +1,34 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ReactiveFormsModule } from '@angular/forms';
+import { of } from 'rxjs';
 
 import { ProjectDetailComponent } from './project-detail.component';
+import { Router } from '@angular/router';
+
+import { ActivatedRouteStub } from '../../testing/activated-route-stub';
 
 describe('ProjectDetailComponent', () => {
   let component: ProjectDetailComponent;
   let fixture: ComponentFixture<ProjectDetailComponent>;
 
+  let activatedRoute = new ActivatedRouteStub();
+
+  const routerSpy = jasmine.createSpyObj('Router', ['navigateByUrl']);
+
   beforeEach(async(() => {
+    activatedRoute.setParamMap({ id: '32HyWGjCTYqyGgyOg4ICU8' }); //a project id
+
     TestBed.configureTestingModule({
-      declarations: [ ProjectDetailComponent ]
+      imports: [ReactiveFormsModule],
+      declarations: [ ProjectDetailComponent ],
+      providers: [ 
+        { provide: Router, useValue: routerSpy },
+        {
+          provide: ActivatedRouteStub, useValue: {
+            params: of({ id: 'test' })
+          }
+        }
+      ]
     })
     .compileComponents();
   }));
