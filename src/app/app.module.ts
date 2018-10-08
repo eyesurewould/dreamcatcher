@@ -23,6 +23,7 @@ import { ProjectCreateComponent } from './project-create/project-create.componen
 
 import { TestComponent } from './test/test.component';
 import { TestPromiseService } from './shared/test-promise.service';
+import { FooterComponent } from './footer/footer.component';
 
 
 @NgModule({
@@ -37,6 +38,7 @@ import { TestPromiseService } from './shared/test-promise.service';
     HomeComponent,
     ProjectCreateComponent,
     TestComponent,
+    FooterComponent,
   ],
   imports: [
     BrowserModule,

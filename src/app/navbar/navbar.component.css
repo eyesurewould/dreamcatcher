@@ -3,13 +3,16 @@ nav {
     font-family: 'Lato', sans-serif;
 }
 
-.logo, .nav-item {
+.logo {
     color: #fff;
     font-family: 'Lato', sans-serif;
     font-size: 1.2em;
 }
 
 .nav-item {
+    color: #fff;
+    font-family: 'Lato', sans-serif;
+    font-size: 1.2em;
     float: right;
 }
 

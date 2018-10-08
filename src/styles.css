@@ -27,8 +27,8 @@ label {
 
 /* FORMS: placement, spacing*/
 .section {
-    padding-top: 10px;
-    padding-bottom: 10px;
+    padding-top: 0.5em;
+    padding-bottom: 0.5em;
 }
 .sectionTitle {
     font-size: 1.75rem;
