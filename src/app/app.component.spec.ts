@@ -6,6 +6,7 @@ import { AppComponent } from './app.component';
 //import { RouterModule } from '@angular/router';
 import { RouterTestingModule } from '@angular/router/testing'
 import { NavbarComponent } from './navbar/navbar.component';
+import { FooterComponent } from './footer/footer.component';
 //import { appRoutes } from '../routes';
 
 describe('AppComponent', () => {
@@ -19,7 +20,8 @@ describe('AppComponent', () => {
     TestBed.configureTestingModule({
       declarations: [
         AppComponent,
-        NavbarComponent
+        NavbarComponent,
+        FooterComponent
       ],
       imports: [ 
         RouterTestingModule 

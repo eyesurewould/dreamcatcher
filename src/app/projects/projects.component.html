@@ -7,6 +7,28 @@
 </div>
 
 <div class="row">
+    <div class="col">
+        <div class="section searchSection text-center">
+            <span class="searchResults">
+                <input type="search" class="input" (keydown)="onSearchKeydown($event)" placeholder="search here">
+                {{nowShowing}}
+                <a *ngIf="query != ''" href="/projects">
+                    <svg class="icon ml-1" width="1em" height="1em">
+                        <use xlink:href="/assets/symbol-defs.svg#icon-cancel-circle"></use>
+                    </svg>
+                </a>
+            </span>
+        </div>
+    </div>
+</div>
+
+<div class="row" *ngIf="errorMessage != ''">
+    <div class="col">
+        <h5 class="text-center">{{errorMessage}}</h5>
+    </div>
+</div>
+
+<div class="row">
     <div class="col card-columns" id="projects-container">
         <div class="card" *ngFor="let project of projects?.items">
             <a href="/project/{{project.sys.id}}" class="project-card-link">
@@ -42,7 +64,8 @@
 
 <div class="row">
     <div class="col">
-        <button *ngIf="skip > 0" (click)="prevPage();" class="btn btn-light">Previous</button>
-        <button *ngIf="(skip + limit) <= total" (click)="nextPage();" class="btn btn-light">Next</button>
+        <h5 class="searchResults" *ngIf="total > 0">{{nowShowing}}</h5>
+        <button *ngIf="skip > 0" (click)="prevPage();" onClick="window.scrollTo(0,0);" class="btn btn-light">Previous</button>
+        <button *ngIf="(skip + limit) <= total" (click)="nextPage();" onClick="window.scrollTo(0,0);" class="btn btn-light">Next</button>
     </div>
 </div>

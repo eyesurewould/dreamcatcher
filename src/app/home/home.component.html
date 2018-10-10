@@ -13,6 +13,12 @@
     </div>
 </div>
 
+<div class="row" *ngIf="errorMessageClients != ''">
+    <div class="col">
+        <h5 class="text-center">{{errorMessageClients}}</h5>
+    </div>
+</div>
+
 <div class="row">
     <div class="col card-columns">
         <div *ngFor="let client of clients?.items">
@@ -38,6 +44,13 @@
         <div class="sectionTitle">Recent Projects</div>
     </div>
 </div>
+
+<div class="row" *ngIf="errorMessageProjects != ''">
+    <div class="col">
+        <h5 class="text-center">{{errorMessageProjects}}</h5>
+    </div>
+</div>
+
 <div class="row">
     <div class="col card-columns">
         <div *ngFor="let project of projects?.items">

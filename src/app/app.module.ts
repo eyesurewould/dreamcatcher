@@ -45,16 +45,21 @@ import { FooterComponent } from './footer/footer.component';
     ReactiveFormsModule,
     HttpClientModule,
     AlertModule.forRoot(),
-    RouterModule.forRoot(appRoutes),
     ContentfulModule.forRoot({
       space: 'c8b8vlhklpan', // your space ID
       accessToken: 'd9b824ae53d462d5e7b27e0f8502a380df22a9901905c305705be7bdda310e6f', // your access token
-    })
+    }),
+    RouterModule.forRoot(
+      appRoutes, 
+      {onSameUrlNavigation: 'reload'}
+    )
   ],
   providers: [ 
     ContentfulService,
     TestPromiseService
   ],
-  bootstrap: [ AppComponent ]
+  bootstrap: [ 
+    AppComponent 
+  ]
 })
 export class AppModule { }

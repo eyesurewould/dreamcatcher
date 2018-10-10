@@ -17,6 +17,9 @@ export class HomeComponent implements OnInit {
   private clientLimit = 6;
   private projectLimit = 6;
 
+  private errorMessageClients = '';
+  private errorMessageProjects = '';
+
   constructor(private cs: ContentfulService) {
 
   }
@@ -28,6 +31,7 @@ export class HomeComponent implements OnInit {
         this.clients = entries;
       })
       .catch((err) => {
+        this.errorMessageClients = 'A problem occurred while retrieving data. Please retry later.';
         console.error;
       });
 
@@ -37,6 +41,7 @@ export class HomeComponent implements OnInit {
         this.projects = entries;
       })
       .catch((err) => {
+        this.errorMessageProjects = 'A problem occurred while retrieving data. Please retry later.';
         console.error;
       });
 

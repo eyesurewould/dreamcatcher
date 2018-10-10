@@ -1,3 +1,21 @@
+.searchSection {
+    margin-bottom: 1rem;
+}
+
+/* we are over-riding these two classes from the global styles.css */
+.section {
+    padding-bottom: inherit;
+}
+.sectionTitle {
+    margin-bottom: inherit;
+}
+/* *************************************************************** */
+
+.searchResults {
+    font-size: 0.75rem;
+}
+
+
 .btn-light {
     /* tweaking the default Bootstrap style */
     background-color: #87bbf0;

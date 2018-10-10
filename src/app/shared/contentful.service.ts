@@ -104,6 +104,12 @@ export class ContentfulService {
       include: 3
     };
 
+    if (query != undefined) {
+      if (query != '') {
+        params['query'] = query;
+      }
+    }
+
     if (order != undefined) {
       if (order == 'createdAt') {
         params['order'] = '-sys.createdAt';
@@ -121,26 +127,15 @@ export class ContentfulService {
       params['skip'] = skip;
     }
 
+    //console.log('getClients: params ' params);
     return this.contentfulClient.getEntries(params)
       .then((response) => {
-        console.log('getClients: clients ', response);
         return response;
       })
       .catch((err) => {
         console.error;
       });
 
-    /* OLD
-    this.contentfulClient.getEntries(params)
-      .then((response) => {
-        this.clients = response;
-        console.log('getClients: clients ', this.clients);
-        return this.clients;
-      })
-      .catch((err) => {
-        console.error;
-      });
-      */
   }
 
   /**
@@ -321,10 +316,8 @@ export class ContentfulService {
       params['skip'] = skip;
     }
 
-    console.log('getProjects: params ', params);
     return this.contentfulClient.getEntries(params)
       .then((response) => {
-        console.log('getProjects: projects ', response);
         return response;
       })
       .catch((err) => {
