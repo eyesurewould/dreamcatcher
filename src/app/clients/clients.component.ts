@@ -12,13 +12,20 @@ import { clientOrder } from '../client/client';
 })
 export class ClientsComponent implements OnInit {
 
-  private limit = 10; //number of entries per page
-  private skip = 0;   //number in the full set we want to start at (e.g. if skip = 100, we want 100,101,102...119 for a total of 20 entries)
-  private total;
-  private nowShowing = '';
-  private query = '';
-  private errorMessage = '';
+  //number of entries per page. 
+  //TODO: Move to configuration
+  private limit = 10; 
 
+  //number in the full set we want to start at 
+  //(e.g. if skip = 50, we want 50, 51, 52...59 for a total of 10 
+  //entries (or whatever limit is set to))
+  private skip = 0;   
+  private total;
+  private query = '';
+  
+  private errorMessage = '';
+  private nowShowing = '';
+  
   public clients: EntryCollection<any>;
 
   constructor(private cs: ContentfulService, private route: ActivatedRoute, private router: Router) {
@@ -57,6 +64,10 @@ export class ClientsComponent implements OnInit {
 
   }
 
+  /** 
+   * Pagination method - get a subset of records 
+   * from Contentful via the ContentfulService
+   */
   getPage() {
     this.cs.getClients(this.query, clientOrder.name, this.limit, this.skip)
       .then((entries) => {
@@ -84,10 +95,13 @@ export class ClientsComponent implements OnInit {
 
   }
 
+  /**
+   * We capture key strokes in the input field. Enter triggers the search
+   * @param event 
+   */
   onSearchKeydown(event) {
     if (event.key === "Enter") {
       this.skip = 0;
-      console.log('onSearchKeydown: value ', event.srcElement.value);
       this.query = event.srcElement.value;
       this.load();
       this.router.navigate(['/clients', this.query]);

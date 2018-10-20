@@ -1,13 +1,14 @@
-import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Injectable, ElementRef } from '@angular/core';
 import { environment } from '../../environments/environment';
 
 import { Client, clientOrder } from '../client/client';
 import { Project, projectOrder } from '../project/project';
-import { isDefined } from '@angular/compiler/src/util';
+import { Image } from './image';
 
 import * as contentful from 'contentful';
 import * as contentfulMgmt from 'contentful-management';
+
+import { HttpClient, HttpEventType, HttpEvent, HttpHeaders, HttpParams, HttpRequest } from '@angular/common/http';
 
 
 @Injectable({
@@ -19,18 +20,17 @@ export class ContentfulService {
   private contentfulClient: contentfulMgmt.ClientAPI;
   private contentfulMgmtClient: contentfulMgmt.ClientAPI;
 
-  //private clients: contentful.EntryCollection<any>;
-
-  constructor() {
+  constructor(private el: ElementRef, private http: HttpClient) {
 
     this.contentfulClient = contentful.createClient({
-      // This is the access token for reading content in this space
       accessToken: environment.contentful.accessToken,
       space: environment.contentful.space
     })
 
     this.contentfulMgmtClient = contentfulMgmt.createClient({
-      // This is the personal token for managing content in any space owned by the account
+      // This is not actually a PERSONAL token. It's for managing 
+      // content in any space owned by the account, so more like
+      // a master token
       accessToken: environment.contentful.personalToken
     })
 
@@ -43,7 +43,6 @@ export class ContentfulService {
    */
   public createClient(client: Client) {
 
-    console.log('createClient: start ', client);
     return this.contentfulMgmtClient.getSpace(environment.contentful.space)
       .then((space) => space.getEnvironment('master'))
       .then((environment) => environment.createEntry('client', {
@@ -77,9 +76,10 @@ export class ContentfulService {
    * @param id A Contentful Entry ID for an entry of content_type 'client'
    */
   public getClient(id: string) {
+
     return this.contentfulClient.getEntry(id)
       .then((response) => {
-        console.log('getClient(): ' + response);
+        //console.log('getClient(): ' + response);
         return response;
       })
       .catch((err) => {
@@ -127,7 +127,6 @@ export class ContentfulService {
       params['skip'] = skip;
     }
 
-    //console.log('getClients: params ' params);
     return this.contentfulClient.getEntries(params)
       .then((response) => {
         return response;
@@ -150,8 +149,6 @@ export class ContentfulService {
       .then((space) => space.getEnvironment('master'))
       .then((env) => env.getEntry(id))
       .then((entry) => {
-        console.log('saveClient: set entry values', entry.fields, ' with client values ', client);
-
         entry.fields.name = { 'en-US': client.name };
 
         if (client.email != '') {
@@ -161,7 +158,6 @@ export class ContentfulService {
           entry.fields.phone = { 'en-US': client.phone };
         }
 
-        console.log('saveClient: update entry values', entry.fields);
         return entry.update();
       })
       .then((entry) => {
@@ -183,7 +179,6 @@ export class ContentfulService {
    * @param id A Contentful entry id.
    */
   public deleteClient(id: string) {
-    console.log('deleteClient: id ', id);
 
     return this.contentfulMgmtClient.getSpace(environment.contentful.space)
       .then((space) => space.getEnvironment('master'))
@@ -208,7 +203,6 @@ export class ContentfulService {
     return this.contentfulMgmtClient.getSpace(environment.contentful.space)
       .then((space) => space.getEnvironment('master'))
       .then((environment) => {
-        console.log('createProject: got env - about to create an entry for ', project.title);
         return environment.createEntry('ink', {
           fields: {
             title: {
@@ -245,11 +239,10 @@ export class ContentfulService {
         })
       })
       .then((entry) => {
-        //console.log('createProject: publish it ', entry);
         return entry.publish();
       })
       .then((entry) => {
-        //console.log('createProject: publish success ', entry);
+        console.log('createProject: Entry ', entry.sys.id, ' created');
         return entry;
       })
       .catch((err) => {
@@ -267,7 +260,6 @@ export class ContentfulService {
   public getProject(id: string) {
     return this.contentfulClient.getEntry(id)
       .then((response) => {
-        console.log('getProject: ', response);
         return response;
       })
       .catch((err) => {
@@ -334,16 +326,15 @@ export class ContentfulService {
    */
   public getProjectsForClient(clientId: string) {
 
-    const params = { 
-      content_type: 'ink', 
-      include: 3, 
-      order: '-sys.updatedAt', 
-      'fields.clientRef.sys.id': clientId 
+    const params = {
+      content_type: 'ink',
+      include: 3,
+      order: '-sys.updatedAt',
+      'fields.clientRef.sys.id': clientId
     };
 
     return this.contentfulClient.getEntries(params)
       .then((response) => {
-        console.log('getProjectsForClient(): ', response);
         return response;
       })
       .catch((err) => {
@@ -360,14 +351,17 @@ export class ContentfulService {
  * @param project An object with details to update the entry
  */
   public saveProject(id: string, project: Project) {
+    let envHolder: any; //environment must be retained for later use
 
     return this.contentfulMgmtClient.getSpace(environment.contentful.space)
       .then((space) => space.getEnvironment('master'))
-      .then((env) => env.getEntry(id))
+      .then((env) => {
+        //save a handle to the environment object - we'll need it later
+        envHolder = env;
+        return env.getEntry(id);
+      })
       .then((entry) => {
-        console.log('saveProject: retrieved entry to update ', entry);
-        console.log('saveProject: load the data from project ', project);
-
+        //push data into a container
         entry.fields.title = { 'en-US': project.title };
 
         if (project.style[0] != '') {
@@ -389,6 +383,50 @@ export class ContentfulService {
           entry.fields.timeEstimate = { 'en-US': project.timeEstimate };
         }
 
+        //IN PROGRESS - working on calling the Upload service
+
+        //here is an asset ID (not connected to an entry yet)
+        // 4EJUBLSYcggCce8AkGeKqs
+
+        let inputEl: HTMLInputElement = this.el.nativeElement.querySelector('#file');
+        let fileCount: number = inputEl.files.length;
+        var assetId;
+        var assetRequest;
+
+        if (fileCount > 0) { // a file was selected
+
+          for (var i = 0; i < fileCount; i++) {
+            //create a new formData instance for each loop
+            let formData = new FormData();
+            formData.append('file', inputEl.files.item(i));
+
+            console.log('file name ', inputEl.files.item(i).name);
+            console.log('file type ', inputEl.files.item(i).type);
+
+            assetId = this.uploadFile(formData)
+
+            assetRequest = {
+              fields: {
+                file: {
+                  "en-US": {
+                    contentType: inputEl.files.item(i).type,
+                    fileName: inputEl.files.item(i).name,
+                    uploadFrom: {
+                      sys: {
+                        type: "Link",
+                        linkType: "Upload",
+                        id: assetId
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
+          }
+
+        }
+
         console.log('saveProject: now call update ', entry);
 
         return entry.update()
@@ -398,7 +436,6 @@ export class ContentfulService {
         return entry.publish()
       })
       .then((entry) => {
-        console.log('saveProject: publish returned, now exit ', entry);
         console.log('saveProject: Entry ', entry.sys.id, 'updated');
         return entry;
       })
@@ -414,17 +451,100 @@ export class ContentfulService {
    * @param id A Contentful entry id.
    */
   public deleteProject(id: string) {
-    console.log('deleteProject: id ', id);
 
     return this.contentfulMgmtClient.getSpace(environment.contentful.space)
       .then((space) => space.getEnvironment('master'))
       .then((env) => env.getEntry(id))
       .then((entry) => entry.unpublish())
       .then((entry) => entry.delete())
-      .then(() => console.log('deleteProject; project deleted.'))
+      .then(() => console.log('deleteProject; project ', id, 'deleted'))
       .catch((err) => {
         console.error;
       });
+  }
+
+
+  //IN PROGRESS  
+  /**
+   * Use the Content Management SDK to create a new asset
+   * 
+   * @param image
+   */
+  public createImage(image: Image) {  //project: Project) {
+
+    return this.contentfulMgmtClient.getSpace(environment.contentful.space)
+      .then((space) => space.getEnvironment('master'))
+      .then((environment) => {
+        //ON HOLD - return to this after the Upload service is complete, but need 
+        //to commit latest for upcoming review
+        environment.createAsset({
+          fields: {
+            title: {
+              'en-US': image.title
+            },
+            file: {
+              'en-US': {
+                contentType: 'image/jpeg',
+                fileName: image.fileName,
+                upload: 'https://example.com/example.jpg'
+              }
+            }
+          }
+        })
+      })
+      .then((asset) => {
+        console.log('createImage: process it ', asset);
+        return asset.process();
+      })
+      .then((asset) => {
+        console.log('createImage: publish it ', asset);
+        return asset.publish();
+      })
+      .then((asset) => {
+        console.log('createImage: publish success ', asset);
+        return asset;
+      })
+      .catch((err) => {
+        console.error;
+      });
+
+  }
+
+
+  /************************************************************************
+   * Helper methods
+   ************************************************************************ 
+   */
+
+
+  uploadFile(formData: FormData) {
+    let URL = environment.contentful.urls.upload + '/spaces/' + environment.contentful.space + '/uploads';
+
+    let myHeaders = new HttpHeaders();
+    myHeaders = myHeaders.append('Authorization', 'Bearer ' + environment.contentful.accessToken);
+    myHeaders = myHeaders.append('Content-Type', 'application/octet-stream');
+
+    let myParams = new HttpParams();
+
+    //call the angular http method
+    return this.http
+      .post(
+        URL,
+        formData,
+        {
+          params: myParams,
+          headers: myHeaders
+        }
+      ).pipe(map((res: Response) => {
+        res.sys.id;
+      }
+      )).subscribe(
+        //map the success function and alert the response
+        (success) => {
+          console.log(success);
+        },
+        (error) => console.log(error))
+
   }
 
 }

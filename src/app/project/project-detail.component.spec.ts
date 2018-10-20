@@ -19,13 +19,17 @@ describe('ProjectDetailComponent', () => {
     activatedRoute.setParamMap({ id: '32HyWGjCTYqyGgyOg4ICU8' }); //a project id
 
     TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule],
-      declarations: [ ProjectDetailComponent ],
+      imports: [
+        ReactiveFormsModule
+      ],
+      declarations: [ 
+        ProjectDetailComponent 
+      ],
       providers: [ 
         { provide: Router, useValue: routerSpy },
         {
           provide: ActivatedRouteStub, useValue: {
-            params: of({ id: 'test' })
+            params: of({ id: '32HyWGjCTYqyGgyOg4ICU8' })
           }
         }
       ]
@@ -42,4 +46,11 @@ describe('ProjectDetailComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+/** 
+ * Need to add tests
+ * 1) read mode - show project details
+ * 2) edit mode - show required field and 'save' button
+ */
+
 });

@@ -30,11 +30,21 @@ describe('HomeComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should display more than 0 clients', () => {
-    expect( fixture.nativeElement.querySelectorAll('.client-card').length).toBeGreaterThan(0); 
+  it('should contain multiple divs', () => {
+    expect( native.querySelectorAll("div.clients_box > div").length).toBeGreaterThan(0); 
   });
+
+  //FAILS currently - the DOM elements are still in flux, so this will be resolved once
+  //the ClientsComponent is complete
+  it('should display more than 0 clients', () => {
+    console.log(native);
+    expect( native.querySelectorAll('.client-card').length).toBeGreaterThan(0); 
+  });
+
+  //FAILS currently - the DOM elements are still in flux, so this will be resolved once
+  //the ProjectsComponent is complete
   it('should display more than 0 projects', () => {
-    expect( fixture.nativeElement.querySelectorAll('.project-card').length).toBeGreaterThan(0); 
+    expect( native.querySelectorAll('.project-card').length).toBeGreaterThan(0); 
   });
   
 

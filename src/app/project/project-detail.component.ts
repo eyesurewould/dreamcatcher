@@ -5,6 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ContentfulService } from '../shared/contentful.service';
 import { Entry } from 'contentful';
 import { Project } from '../project/project';
+import { Image } from '../shared/image';
 
 @Component({
     selector: 'project-detail',
@@ -26,17 +27,22 @@ export class ProjectDetailComponent implements OnInit, OnChanges {
         timeEstimate: new FormControl(''),
     });
 
+    private selectedFiles: FileList;
+
     private isEditable: boolean = false;
+    private saving = false;
 
     constructor(private cs: ContentfulService, private router: Router, private route: ActivatedRoute) {
-        //TODO: Resolve the routing issue!!! Below we try to force route reload whenever params change;
+        //TODO: Resolve the routing issue!!! 
+        //Below we try to force route reload whenever params 
+        //change but caching re-uses stale content
         this.router.routeReuseStrategy.shouldReuseRoute = () => false;
 
         route.params.subscribe(params => {
             this.id = params['id'];
         });
 
-        /*
+        /* IN PROGRESS
         this.router.events.subscribe((evt) => {
             if (evt instanceof NavigationEnd) {
                 console.log(evt);
@@ -104,34 +110,34 @@ export class ProjectDetailComponent implements OnInit, OnChanges {
 
 
     enableEditing() {
-        console.log('enableEditing: start');
+        //console.log('enableEditing: start');
         this.isEditable = true;
     }
 
     disableEditing() {
-        console.log('disableEditing: start');
+        //console.log('disableEditing: start');
         this.isEditable = false;
     }
 
+    /**
+     * Each time the file select dialog is used, we REPLACE the
+     * set of selected files to be uploaded on submit.
+     * @param event 
+     */
+    onFileSelected(event) {
+        this.selectedFiles = event.target.files;
+        
+    }
 
     /**
      * Save current edits back to Contentful via the service
      */
     submit() {
-        console.log('submit: start');
+        //console.log('submit: start');
         this.isEditable = false;
+        this.saving = true;
 
         var project = new Project();
-        project.title = this.project.fields.title;
-        project.style = this.project.fields.style;
-        project.status = this.project.fields.status;
-        project.description = this.project.fields.description;
-        project.size = this.project.fields.size;
-        project.location = this.project.fields.location;
-        project.timeEstimate = this.project.fields.timeEstimate;
-
-        //NOTE: If we needed to push submitted data to other components, 
-        //we would use an EventEmitter to emit to listeners.
 
         project.title = this.projectDetailFormGroup.controls['title'].value;
 
@@ -141,12 +147,49 @@ export class ProjectDetailComponent implements OnInit, OnChanges {
         if (this.projectDetailFormGroup.controls['status'].value !== '') {
             project.status = this.projectDetailFormGroup.controls['status'].value;
         }
+        if (this.projectDetailFormGroup.controls['description'].value !== '') {
+            project.description = this.projectDetailFormGroup.controls['description'].value;
+        }
+        if (this.projectDetailFormGroup.controls['size'].value !== '') {
+            project.size = this.projectDetailFormGroup.controls['size'].value;
+        }
+        if (this.projectDetailFormGroup.controls['location'].value !== '') {
+            project.location = this.projectDetailFormGroup.controls['location'].value;
+        }
+        if (this.projectDetailFormGroup.controls['timeEstimate'].value !== '') {
+            project.timeEstimate = this.projectDetailFormGroup.controls['timeEstimate'].value;
+        }
+        if (this.selectedFiles !== null) {
 
-        console.log('submit: project data to send ', project);
+            // IN PROGRESS
+            //here we are in the component back-end and we want to gather the File objects 
+            //and provide them to the service for uploading. We should keep them as true
+            //File objects versus trying to manipulate them into something else (and
+            //currently we do that since the whole FileList is stuffed into a local var)
+
+            /*
+            let newAssets: Image[];
+            for(var i = 0; i < this.selectedFiles.length; i++) {
+                let image = new Image();
+                image.fileName = this.selectedFiles[i].name;
+                image.type = this.selectedFiles[i].type;
+                image.title = this.selectedFiles[i].name;
+                image.file = <File>this.selectedFiles[i];
+
+                console.log('a new image ', image);
+                newAssets[i] = image;
+            }; */
+
+            //console.log('all new images ', this.selectedFiles);
+            project.assets = this.selectedFiles;
+        }
+
+        //console.log('submit: project data to send ', project);
         this.cs.saveProject(this.project.sys.id, project)
             .then((entry) => {
-                console.log('submit: saved ', entry);
                 //now navigate so the page is re-loaded
+                this.saving = false;
+                this.router.navigate(['/project', this.project.sys.id]);
             })
             .catch((err) => {
                 console.error;
@@ -160,10 +203,10 @@ export class ProjectDetailComponent implements OnInit, OnChanges {
      * @param id A Contentful Entry id
      */
     deleteProject(id: string) {
-        console.log('deleteProject: ', id);
+        //console.log('deleteProject: ', id);
         this.cs.deleteProject(id)
             .then(() => {
-                console.log('deleteProject: deleted ');
+                console.log('deleteProject: deleted ', id);
                 this.router.navigate(['/projects']);
             })
             .catch((err) => {

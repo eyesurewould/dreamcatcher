@@ -1,4 +1,4 @@
-import { Asset } from '../shared/asset'
+import { Image } from '../shared/image'
 
 export class Project {
     title: string;
@@ -8,7 +8,7 @@ export class Project {
     size: string;
     timeEstimate: number;
     status: string[];
-    assets: Asset[];
+    assets: FileList;
     clientRef: string;
 }
 

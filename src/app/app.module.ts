@@ -6,24 +6,23 @@ import { AlertModule } from 'ngx-bootstrap';
 import { RouterModule } from '@angular/router';
 
 import { AppComponent } from './app.component';
+import { appRoutes } from '../routes';
 import { NavbarComponent } from './navbar/navbar.component';
+import { FooterComponent } from './footer/footer.component';
 
-import { ProjectsComponent } from './projects/projects.component';
-import { ProjectDetailComponent } from './project/project-detail.component';
-import { ClientsComponent } from './clients/clients.component';
-import { ClientDetailComponent } from './client/client-detail.component';
-
-import { ContentfulModule } from 'angular-contentful-service';
 import { ContentfulService } from './shared/contentful.service';
 
-import { appRoutes } from '../routes';
-import { ClientCreateComponent } from './client-create/client-create.component';
 import { HomeComponent } from './home/home.component';
+import { ClientsComponent } from './clients/clients.component';
+import { ClientDetailComponent } from './client/client-detail.component';
+import { ClientCreateComponent } from './client-create/client-create.component';
+import { ProjectsComponent } from './projects/projects.component';
+import { ProjectDetailComponent } from './project/project-detail.component';
 import { ProjectCreateComponent } from './project-create/project-create.component';
 
+//TODO: Remove this after testing
 import { TestComponent } from './test/test.component';
-import { TestPromiseService } from './shared/test-promise.service';
-import { FooterComponent } from './footer/footer.component';
+import { TestUploadComponent } from './test/test-upload/test-upload.component';
 
 
 @NgModule({
@@ -39,24 +38,20 @@ import { FooterComponent } from './footer/footer.component';
     ProjectCreateComponent,
     TestComponent,
     FooterComponent,
+    TestUploadComponent,
   ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
     HttpClientModule,
     AlertModule.forRoot(),
-    ContentfulModule.forRoot({
-      space: 'c8b8vlhklpan', // your space ID
-      accessToken: 'd9b824ae53d462d5e7b27e0f8502a380df22a9901905c305705be7bdda310e6f', // your access token
-    }),
     RouterModule.forRoot(
       appRoutes, 
       {onSameUrlNavigation: 'reload'}
     )
   ],
   providers: [ 
-    ContentfulService,
-    TestPromiseService
+    ContentfulService
   ],
   bootstrap: [ 
     AppComponent 

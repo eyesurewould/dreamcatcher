@@ -22,4 +22,11 @@ describe('ClientsComponent', () => {
   it('should create', () => { 
     expect(component).toBeTruthy();
   });
+
+  /**
+   * Need tests for 
+   * 1) load at least one client record
+   * 2) show 'Add Client' button
+   */
+  
 });

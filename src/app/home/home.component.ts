@@ -14,6 +14,7 @@ export class HomeComponent implements OnInit {
   private clients: EntryCollection<any>;
   private projects: EntryCollection<any>;
 
+  //TODO: Move these to configuration
   private clientLimit = 6;
   private projectLimit = 6;
 
@@ -27,7 +28,7 @@ export class HomeComponent implements OnInit {
   load() {
     this.cs.getClients('', clientOrder.updated, this.clientLimit)
       .then((entries) => {
-        console.log('load: client entries ', entries);
+        //console.log('load: client entries ', entries);
         this.clients = entries;
       })
       .catch((err) => {
@@ -37,7 +38,7 @@ export class HomeComponent implements OnInit {
 
       this.cs.getProjects('', projectOrder.updated, this.projectLimit)
       .then((entries) => {
-        console.log('load: project entries ', entries);
+        //console.log('load: project entries ', entries);
         this.projects = entries;
       })
       .catch((err) => {

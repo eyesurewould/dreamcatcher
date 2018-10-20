@@ -1,0 +1,10 @@
+<div >
+  <input class="hidden" id="file" type="file" (change)="onFileSelected($event);" multiple #fileInput>
+  <button type="button" (click)="fileInput.click()">Select Image</button>
+  <ul *ngIf="selectedFiles != null">
+      <li *ngFor="let file of selectedFiles">
+              {{file.name}}
+      </li>
+  </ul>
+</div>
+<button (click)="submit()" class="btn btn-primary">Save</button>

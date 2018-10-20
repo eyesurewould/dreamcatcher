@@ -25,7 +25,7 @@ describe('ProjectsComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ProjectsComponent], // declare the test component
+      declarations: [ProjectsComponent], 
       imports: [HttpModule],
     });
     fixture = TestBed.createComponent(ProjectsComponent);

@@ -65,6 +65,8 @@ export class ProjectCreateComponent {
 
         //introduce a slight pause here so the new project has time to 
         //appear in subsequent query for all projects for this client
+        //TODO: Investigate a cleaner way to handle this - reach out
+        //to Contenful dev team and see if they have a webhook or something
         setTimeout(() => {
           this.router.navigate(['/client', this.id]);
         },

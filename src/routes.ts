@@ -9,6 +9,7 @@ import { ProjectDetailComponent } from './app/project/project-detail.component';
 import { ProjectCreateComponent } from './app/project-create/project-create.component';
 
 import { TestComponent } from './app/test/test.component';
+import { TestUploadComponent } from './app/test/test-upload/test-upload.component';
 
 export const appRoutes: Routes = [
     { path: "", component: HomeComponent },
@@ -30,5 +31,6 @@ export const appRoutes: Routes = [
     { path: "project-create/:id", 
         component: ProjectCreateComponent,
         runGuardsAndResolvers: 'paramsChange'},
-    { path: "test", component: TestComponent}
+    { path: "test", component: TestComponent},
+    { path: "test-upload", component: TestUploadComponent}
 ]

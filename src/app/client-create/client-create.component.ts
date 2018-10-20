@@ -15,10 +15,10 @@ export class ClientCreateComponent {
 
   private client: Client;
   
-  //RegEx for a US Phone (the Contentful pattern!!)
-  // ^\d?[ -.]?\(?\d\d\d\)?[ -.]?\d\d\d[ -.]?\d\d\d\d$ 
-  //RegEx for Email (from Contentful!!??)
-  // ^\w[\w.-]*@([\w-]+\.)+[\w-]+$ (doesn't seem very clean)
+  //TODO: RegEx patterns are from Contentful. They are NOT great
+  //Patterns are duplicated here and in the ClientComponent, so
+  //re-factor to a shared loaction to remove duplication.
+  //Consider making them part of configuration for easy adjustment.
   clientFormGroup = new FormGroup({
     name: new FormControl('', [Validators.required]),
     email: new FormControl('', emailValidator(/^\w[\w.-]*@([\w-]+\.)+[\w-]+$/g)),
@@ -32,8 +32,6 @@ export class ClientCreateComponent {
 
   submit() {
 
-    //NOTE: If we needed to push submitted data to other components, 
-    //we would use an EventEmitter to emit to listeners.
     this.client.name = this.clientFormGroup.controls['name'].value;
 
     if (this.clientFormGroup.controls['email'].value !== '') {

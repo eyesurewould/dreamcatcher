@@ -1,8 +1,17 @@
-<form class="form-group" formGroup="projectDetailFormGroup" (ngSubmit)="submit()">
+<form class="form-group" [formGroup]="projectDetailFormGroup" (ngSubmit)="submit()">
     <div class="row" *ngIf="project?.fields">
         <div class="col-xs-12 col-sm-10 col-md-6 col-lg-6 col-xl-6 ">
 
-            <div class="section">
+
+            <!-- TODO - finish adding the "Saving" flag check to show a spinner...-->
+            <div class="section" *ngIf="saving">
+                <div *ngIf="isEditable; else readModeHeader" class="sectionTitle">
+                    <svg class="icon ml-1" >
+                        <use xlink:href="/assets/symbol-defs.svg#icon-spinner3"></use>
+                    </svg>
+                </div>
+            </div>
+            <div class="section" *ngIf="!saving">
                 <div *ngIf="isEditable; else readModeHeader" class="sectionTitle">
                     Edit Project Details
                 </div>
@@ -10,11 +19,11 @@
                     <div class="sectionTitle">Project</div>
                 </ng-template>
 
-
                 <div *ngIf="project?.fields" class="data">
                     <div *ngIf="isEditable; else readModeTitle">
                         <label for="name">Title</label>
-                        <input type="text" formControlName="title" class="form-control" value="{{project?.fields.title}}" required>
+                        <input type="text" formControlName="title" class="form-control" value="{{project?.fields.title}}"
+                            required>
 
                         <div *ngIf="projectDetailFormGroup.controls['title'].invalid && (projectDetailFormGroup.controls['title'].dirty || projectDetailFormGroup.controls['title'].touched)"
                             class="alert alert-danger ng-invalid">
@@ -65,7 +74,8 @@
                 <div *ngIf="project?.fields" class="data">
                     <div *ngIf="isEditable; else readModeStatus">
                         <label for="status">Status</label>
-                        <select formControlName="status" class='form-control' value="{{project?.fields.status}}" required>
+                        <select formControlName="status" class='form-control' value="{{project?.fields.status}}"
+                            required>
                             <option value='new'>New</option>
                             <option value='in progress'>In Progress</option>
                             <option value='complete'>Complete</option>
@@ -117,7 +127,8 @@
                 <div *ngIf="project?.fields" class="data">
                     <div *ngIf="isEditable; else readModeLocation">
                         <label for="location">Location</label>
-                        <select formControlName="location" class='form-control' value="{{project?.fields.location}}" required>
+                        <select formControlName="location" class='form-control' value="{{project?.fields.location}}"
+                            required>
                             <option value='head'>head</option>
                             <option value='neck'>neck</option>
                             <option value='chest'>chest</option>
@@ -150,11 +161,21 @@
                 <div *ngIf="project?.fields" class="data">
                     <div *ngIf="isEditable; else readModeTimeEstimate">
                         <label for="timeEstimate">Hours Estimate</label>
-                        <input type="text" formControlName="timeEstimate" class="form-control" value="{{project?.fields.timeEstimate}}">
+                        <input type="number" formControlName="timeEstimate" class="form-control" value="{{project?.fields.timeEstimate}}">
                     </div>
                     <ng-template #readModeTimeEstimate>
                         <div class="projectDetail">{{project.fields.timeEstimate}} hours estimated</div>
                     </ng-template>
+                </div>
+
+                <div *ngIf="isEditable">
+                    <input type="file" id="file" class="hidden" (change)="onFileSelected($event);" multiple #fileInput>
+                    <button type="button" (click)="fileInput.click()">Select Images</button>
+                    <ul *ngIf="selectedFiles != null">
+                        <li *ngFor="let file of selectedFiles">
+                                {{file.name}}
+                        </li>
+                    </ul>
                 </div>
             </div>
         </div>
@@ -163,9 +184,6 @@
     <div class="row">
         <div class="col">
             <div class="section">
-                <!-- <h5 class="mt-0">
-                    Actions
-                </h5> -->
                 <button *ngIf="project && !isEditable" routerLink="['/assetNew', project.sys.id]" class="btn btn-light">Add
                     Image
                 </button>
@@ -218,7 +236,8 @@
     <div class="row">
         <div class="col">
             <div class="card">
-                <img class="card-img-top img-responsive" src="https://via.placeholder.com//200x100?text=No+images+yet" alt="No images yet">
+                <img class="card-img-top img-responsive" src="https://via.placeholder.com//200x100?text=No+images+yet"
+                    alt="No images yet">
                 <div class="card-body">
                     <p class="card-text">No images yet</p>
                 </div>

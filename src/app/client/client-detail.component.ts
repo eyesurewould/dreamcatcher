@@ -66,9 +66,8 @@ export class ClientDetailComponent implements OnInit {
             
                 this.cs.getProjectsForClient(id)
                     .then((responseProjects) => {
-                        console.log('load: projects ', responseProjects);
                         this.projects = responseProjects;
-                        console.log('load: projects count ', responseProjects.items.length);
+                        //console.log('load: projects count ', responseProjects.items.length);
                         this.projectCount = responseProjects.items.length;
 
                     })
@@ -81,12 +80,12 @@ export class ClientDetailComponent implements OnInit {
 
 
     enableEditing() {
-        console.log('enableEditing: start ', this.clientDetailFormGroup);
+        //console.log('enableEditing: start ', this.clientDetailFormGroup);
         this.isEditable = true;
     }
 
     disableEditing() {
-        console.log('disableEditing: start');
+        //console.log('disableEditing: start');
         this.isEditable = false;
     }
 
@@ -95,7 +94,7 @@ export class ClientDetailComponent implements OnInit {
      * Save current edits back to Contentful via the service
      */
     submit() {
-        console.log('submit: start');
+        //console.log('submit: start');
         this.isEditable = false;
 
         var client = new Client();
@@ -103,7 +102,7 @@ export class ClientDetailComponent implements OnInit {
         client.email = this.clientDetailFormGroup.controls['email'].value;
         client.phone = this.clientDetailFormGroup.controls['phone'].value;
 
-        console.log('submit: client data to send ', client);
+        //console.log('submit: client data to send ', client);
         this.cs.saveClient(this.id, client)
             .then((entry) => {
                 console.log('submit: saved ', entry);
@@ -121,10 +120,10 @@ export class ClientDetailComponent implements OnInit {
      * @param id A Contentful Entry id
      */
     deleteClient(id: string) {
-        console.log('deleteClient: ', id);
+        //console.log('deleteClient: ', id);
         this.cs.deleteClient(id)
             .then(() => {
-                console.log('deleteClient: deleted ');
+                console.log('deleteClient: deleted ', id);
                 this.router.navigate(['/clients']);
             })
             .catch((err) => {

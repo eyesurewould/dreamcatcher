@@ -11,3 +11,7 @@
     color: inherit;
     border-bottom: 1px solid;
 }
+
+.hidden {
+    display: none;
+}

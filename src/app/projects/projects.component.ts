@@ -57,6 +57,10 @@ export class ProjectsComponent implements OnChanges, OnInit {
 
     }
 
+    /** 
+   * Pagination method - get a subset of records 
+   * from Contentful via the ContentfulService
+   */
     getPage() {
         this.cs.getProjects(this.query, projectOrder.updated, this.limit, this.skip)
             .then((entries) => {
@@ -85,11 +89,13 @@ export class ProjectsComponent implements OnChanges, OnInit {
 
     }
 
+    /**
+    * We capture key strokes in the input field. Enter triggers the search
+    * @param event 
+    */
     onSearchKeydown(event) {
         if (event.key === "Enter") {
             this.skip = 0;
-            console.log('onSearchKeydown: ENTER ', event);
-            console.log('onSearchKeydown: value ', event.srcElement.value);
             this.query = event.srcElement.value;
             this.load();
             this.router.navigate(['/projects', this.query]);

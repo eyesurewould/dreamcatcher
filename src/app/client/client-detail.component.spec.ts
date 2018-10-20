@@ -7,7 +7,6 @@ import { Router } from '@angular/router';
 import { ContentfulService } from '../shared/contentful.service';
 
 import { ActivatedRoute } from '@angular/router';
-//import { ActivatedRouteStub } from '../../testing/activated-route-stub';
 
 describe('ClientDetailComponent', () => {
   let component: ClientDetailComponent;
@@ -21,7 +20,6 @@ describe('ClientDetailComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      //imports: [ReactiveFormsModule],
       declarations: [ ClientDetailComponent ],
       providers: [
         { provide: Router, useValue: routerSpy },
@@ -36,19 +34,17 @@ describe('ClientDetailComponent', () => {
 
     fixture = TestBed.createComponent(ClientDetailComponent);
     component = fixture.componentInstance;
-    //de = fixture.debugElement.query(By.css('#projects-container'));
-    //element = de.nativeElement;
   }));
 
   it('should create', () => {
     expect(component).toBeTruthy();
   });
 
-/*
-  it('#enableEditing() should toggle #isEditable', () => {
-    expect(component.isEditable).toBe(false, 'off at first');
-    component.enableEditing();
-    expect(component.isEditable).toBe(true, 'on after click');
-  });
-  */
+  /**
+   * Need tests for 
+   * 1) load at least one project record (or 'No projects yet')
+   * 2) show 'Add Project' button
+   */
+
+
 });

@@ -19,10 +19,10 @@
     </div>
 </div>
 
-<div class="row">
+<div class="row" id="client_row">
     <div class="col card-columns">
-        <div *ngFor="let client of clients?.items">
-            <div class="card client-card">
+        <div *ngFor="let client of clients?.items" class="clients_box">
+            <div class="card client-card" >
                 <div class="card-body">
                     <a class="card-title" href="/client/{{client.sys.id}}">{{ client.fields.name }}</a>
                     <a *ngIf="client.fields.email" class="card-text ml-2" href="mailto:{{client.fields.email}}">{{

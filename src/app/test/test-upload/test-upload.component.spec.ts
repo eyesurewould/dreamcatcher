@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FooterComponent } from './footer.component';
+import { TestUploadComponent } from './test-upload.component';
 
-describe('FooterComponent', () => {
-  let component: FooterComponent;
-  let fixture: ComponentFixture<FooterComponent>;
+describe('TestUploadComponent', () => {
+  let component: TestUploadComponent;
+  let fixture: ComponentFixture<TestUploadComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FooterComponent ]
+      declarations: [ TestUploadComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FooterComponent);
+    fixture = TestBed.createComponent(TestUploadComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -22,9 +22,4 @@ describe('FooterComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-
-  /**
-   * Not much to test here. Maybe test that the 
-   * social links exist?
-   */
 });

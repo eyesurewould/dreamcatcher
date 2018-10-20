@@ -1,16 +1,10 @@
-<p>
-  test works!
-</p>
-{{client?.fields.name}}
-<br/>
-<button (click)="moreDetails()">Get more info</button>
-<div>
-  {{client?.fields.email}}
+<div >
+    <input id="file" type="file" (change)="onFileSelected($event);"  #fileInput>
+    <button type="button" (click)="fileInput.click()">Select Image</button>
+    <ul *ngIf="selectedFiles != null">
+        <li *ngFor="let file of selectedFiles">
+                {{file.name}}
+        </li>
+    </ul>
 </div>
-<br/>
-<button (click)="moreClients()">Get more clients</button>
-<div *ngIf="clients">
-  <div *ngFor="let client of clients.items">
-    {{client.fields.name}}
-  </div>
-</div>
+<button (click)="submit()" class="btn btn-primary">Save</button>

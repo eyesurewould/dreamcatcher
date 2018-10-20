@@ -7,20 +7,15 @@ import { HttpModule }    from '@angular/http';
 
 describe('NavbarComponent', () => {
  
-//Typescript declarations.
   let comp: NavbarComponent;
   let fixture: ComponentFixture<NavbarComponent>;
   let de: DebugElement;
   let element: HTMLElement;
-  //let mockNav: NavbarComponent[];
- 
-  // beforeEach is called once before every `it` block in a test.
-  // Use this to configure to the component, inject services etc.
    
   beforeEach(()=> {
     
     TestBed.configureTestingModule({
-        declarations: [ NavbarComponent ], // declare the test component
+        declarations: [ NavbarComponent ],
         imports: [ HttpModule], 
     });
     fixture = TestBed.createComponent(NavbarComponent);
@@ -38,4 +33,5 @@ describe('NavbarComponent', () => {
     expect(element.innerHTML).toContain("/clients");
     expect(element.innerHTML).toContain("/projects");
   })
+  
 })

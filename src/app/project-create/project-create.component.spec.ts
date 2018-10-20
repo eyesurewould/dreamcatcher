@@ -19,8 +19,12 @@ describe('ProjectCreateComponent', () => {
     activatedRoute.setParamMap({ id: '6ju75Q1JcI2EOC0QMiuOo6' }); //a client id
 
     TestBed.configureTestingModule({
-      imports: [ReactiveFormsModule],
-      declarations: [ ProjectCreateComponent ],
+      imports: [
+        ReactiveFormsModule
+      ],
+      declarations: [ 
+        ProjectCreateComponent 
+      ],
       providers: [ 
         { provide: Router, useValue: routerSpy },
         {
@@ -42,4 +46,9 @@ describe('ProjectCreateComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  /**
+   * Needs to add tests for
+   * 1) required fields
+   */
 });

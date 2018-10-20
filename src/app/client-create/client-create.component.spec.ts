@@ -30,4 +30,10 @@ describe('ClientCreateComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
+
+  /**
+   * Need tests for 
+   * 1) Validation for client name (required)
+   */
+
 });
