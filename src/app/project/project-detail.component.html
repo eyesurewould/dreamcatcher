@@ -66,7 +66,7 @@
 
                 <!-- client name is not editable here - read only -->
                 <div class="projectDetail" *ngIf="!isEditable">
-                    <a routerLink="['/client', project.fields.clientRef.sys.id]">
+                    <a href="/client/{{project.fields.clientRef.sys.id}}">
                         {{project.fields.clientRef.fields.name}}
                     </a>
                 </div>

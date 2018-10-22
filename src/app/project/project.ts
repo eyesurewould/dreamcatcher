@@ -4,10 +4,10 @@ export class Project {
     title: string;
     description: string;
     style: string[];
+    status: string[];
     location: string[];
     size: string;
     timeEstimate: number;
-    status: string[];
     assets: FileList;
     clientRef: string;
 }

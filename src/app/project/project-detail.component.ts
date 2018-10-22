@@ -79,26 +79,28 @@ export class ProjectDetailComponent implements OnInit, OnChanges {
             .then((responseProject) => {
                 this.project = responseProject;
 
-                if (this.project.fields.style != undefined) {
-                    this.projectDetailFormGroup.controls['title'].setValue(this.project.fields.title);
+                var fields = this.projectDetailFormGroup.controls;
+
+                if (this.project.fields.title != undefined) {
+                    fields['title'].setValue(this.project.fields.title);
                 }
                 if (this.project.fields.style != undefined) {
-                    this.projectDetailFormGroup.controls['style'].setValue(this.project.fields.style);
+                    fields['style'].setValue(this.project.fields.style);
                 }
                 if (this.project.fields.status != undefined) {
-                    this.projectDetailFormGroup.controls['status'].setValue(this.project.fields.status);
+                    fields['status'].setValue(this.project.fields.status);
                 }
                 if (this.project.fields.description != undefined) {
-                    this.projectDetailFormGroup.controls['description'].setValue(this.project.fields.description);
+                    fields['description'].setValue(this.project.fields.description);
                 }
                 if (this.project.fields.size != undefined) {
-                    this.projectDetailFormGroup.controls['size'].setValue(this.project.fields.size);
+                    fields['size'].setValue(this.project.fields.size);
                 }
                 if (this.project.fields.location != undefined) {
-                    this.projectDetailFormGroup.controls['location'].setValue(this.project.fields.location);
+                    fields['location'].setValue(this.project.fields.location);
                 }
                 if (this.project.fields.timeEstimate != undefined) {
-                    this.projectDetailFormGroup.controls['timeEstimate'].setValue(this.project.fields.timeEstimate);
+                    fields['timeEstimate'].setValue(this.project.fields.timeEstimate);
                 }
 
             })
@@ -138,27 +140,33 @@ export class ProjectDetailComponent implements OnInit, OnChanges {
         this.saving = true;
 
         var project = new Project();
+        var fields = this.projectDetailFormGroup.controls;
 
-        project.title = this.projectDetailFormGroup.controls['title'].value;
+        console.log('a text field ', fields['title']);
+        console.log('an array field ', fields['style']);
 
-        if (this.projectDetailFormGroup.controls['style'].value !== '') {
-            project.style = this.projectDetailFormGroup.controls['style'].value;
+        //if (fields['title'].touched && fields['title'].value !== '' ) {
+            project.title = fields['title'].value;
+        //}
+        if (fields['style'].touched && fields['style'].value !== '') {
+            project.style = fields['style'].value;
         }
-        if (this.projectDetailFormGroup.controls['status'].value !== '') {
-            project.status = this.projectDetailFormGroup.controls['status'].value;
+        if (fields['status'].touched && fields['status'].value !== '') {
+            project.status = fields['status'].value;
         }
-        if (this.projectDetailFormGroup.controls['description'].value !== '') {
-            project.description = this.projectDetailFormGroup.controls['description'].value;
+        if (fields['description'].touched && fields['description'].value !== '') {
+            project.description = fields['description'].value;
         }
-        if (this.projectDetailFormGroup.controls['size'].value !== '') {
-            project.size = this.projectDetailFormGroup.controls['size'].value;
+        if (fields['size'].touched && fields['size'].value !== '') {
+            project.size = fields['size'].value;
         }
-        if (this.projectDetailFormGroup.controls['location'].value !== '') {
-            project.location = this.projectDetailFormGroup.controls['location'].value;
+        if (fields['location'].touched && fields['location'].value !== '') {
+            project.location = fields['location'].value;
         }
-        if (this.projectDetailFormGroup.controls['timeEstimate'].value !== '') {
-            project.timeEstimate = this.projectDetailFormGroup.controls['timeEstimate'].value;
+        if (fields['timeEstimate'].touched && fields['timeEstimate'].value !== '') {
+            project.timeEstimate = fields['timeEstimate'].value;
         }
+/*
         if (this.selectedFiles !== null) {
 
             // IN PROGRESS
@@ -167,7 +175,7 @@ export class ProjectDetailComponent implements OnInit, OnChanges {
             //File objects versus trying to manipulate them into something else (and
             //currently we do that since the whole FileList is stuffed into a local var)
 
-            /*
+            
             let newAssets: Image[];
             for(var i = 0; i < this.selectedFiles.length; i++) {
                 let image = new Image();
@@ -178,12 +186,12 @@ export class ProjectDetailComponent implements OnInit, OnChanges {
 
                 console.log('a new image ', image);
                 newAssets[i] = image;
-            }; */
+            }; 
 
             //console.log('all new images ', this.selectedFiles);
             project.assets = this.selectedFiles;
         }
-
+*/
         //console.log('submit: project data to send ', project);
         this.cs.saveProject(this.project.sys.id, project)
             .then((entry) => {

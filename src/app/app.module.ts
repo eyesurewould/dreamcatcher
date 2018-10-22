@@ -38,7 +38,7 @@ import { TestUploadComponent } from './test/test-upload/test-upload.component';
     ProjectCreateComponent,
     TestComponent,
     FooterComponent,
-    TestUploadComponent,
+    TestUploadComponent
   ],
   imports: [
     BrowserModule,

@@ -49,7 +49,15 @@ export class TestComponent {
         //post the form data to the url defined above and map the response. Then subscribe //to initiate the post. if you don't subscribe, angular wont post.
         //.post(URL, formData, this.httpOptions).pipe(map((res: Response) => res.json())).subscribe(
         .post(URL, formData, this.httpOptions).pipe(map((res: Response) => {
-          return console.log('response: ', res.sys.id);
+          var sys;
+          var id = null;
+          if(res.sys != null) {
+              sys = res.sys;
+              if(res.sys.id != null) {
+                id = res.sys.id;
+              }
+          }
+          return console.log('response: ', id);
         }
         )).subscribe(
           //map the success function and alert the response

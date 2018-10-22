@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { environment } from '../../environments/environment';
 
 @Component({
   selector: 'app-footer',
@@ -7,7 +8,14 @@ import { Component, OnInit } from '@angular/core';
 })
 export class FooterComponent implements OnInit {
 
-  constructor() { }
+  private email = '';
+  private instagram = '';
+  constructor() { 
+
+    //TODO: pull this info from a user's profile
+    this.email = 'missyjahntattoos@gmail.com';
+    this.instagram = 'https://www.instagram.com/missyjahntattoos/'
+  }
 
   ngOnInit() {
   }

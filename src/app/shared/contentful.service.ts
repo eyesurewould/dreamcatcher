@@ -1,14 +1,17 @@
-import { Injectable, ElementRef } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 
 import { Client, clientOrder } from '../client/client';
 import { Project, projectOrder } from '../project/project';
 import { Image } from './image';
 
+import { Observable, Subject } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 import * as contentful from 'contentful';
 import * as contentfulMgmt from 'contentful-management';
 
-import { HttpClient, HttpEventType, HttpEvent, HttpHeaders, HttpParams, HttpRequest } from '@angular/common/http';
+import { HttpClient, HttpEventType, HttpResponse, HttpHeaders, HttpParams, HttpRequest } from '@angular/common/http';
 
 
 @Injectable({
@@ -20,7 +23,7 @@ export class ContentfulService {
   private contentfulClient: contentfulMgmt.ClientAPI;
   private contentfulMgmtClient: contentfulMgmt.ClientAPI;
 
-  constructor(private el: ElementRef, private http: HttpClient) {
+  constructor(private http: HttpClient) {
 
     this.contentfulClient = contentful.createClient({
       accessToken: environment.contentful.accessToken,
@@ -184,6 +187,10 @@ export class ContentfulService {
       .then((space) => space.getEnvironment('master'))
       .then((env) => env.getEntry(id))
       .then((entry) => entry.unpublish())
+
+      //TODO: Make permanent deletion a system-wide configuration 
+      //and only archive by default (with a manual data cleanup
+      //option for DevOps to control)
       .then((entry) => entry.delete())
       .then(() => console.log('deleteClient: client deleted.'))
       .catch((err) => {
@@ -246,7 +253,7 @@ export class ContentfulService {
         return entry;
       })
       .catch((err) => {
-        console.error;
+        console.error(err);
       });
 
   }
@@ -260,6 +267,7 @@ export class ContentfulService {
   public getProject(id: string) {
     return this.contentfulClient.getEntry(id)
       .then((response) => {
+        console.log(response);
         return response;
       })
       .catch((err) => {
@@ -362,13 +370,14 @@ export class ContentfulService {
       })
       .then((entry) => {
         //push data into a container
-        entry.fields.title = { 'en-US': project.title };
-
-        if (project.style[0] != '') {
-          entry.fields.style = { 'en-US': project.style };
+        if (project.title != '') {
+          entry.fields.title = { 'en-US': project.title };
         }
-        if (project.status[0] != '') {
-          entry.fields.status = { 'en-US': project.status };
+        if (project.style && project.style[0] != '') {
+          entry.fields.style = { 'en-US': [project.style] };
+        }
+        if (project.status && project.status[0] != '') {
+          entry.fields.status = { 'en-US': [project.status] };
         }
         if (project.description != '') {
           entry.fields.description = { 'en-US': project.description };
@@ -376,55 +385,11 @@ export class ContentfulService {
         if (project.size != '') {
           entry.fields.size = { 'en-US': project.size };
         }
-        if (project.location[0] != '') {
-          entry.fields.location = { 'en-US': project.location };
+        if (project.location && project.location[0] != '') {
+          entry.fields.location = { 'en-US': [project.location] };
         }
         if (project.timeEstimate != null) {
           entry.fields.timeEstimate = { 'en-US': project.timeEstimate };
-        }
-
-        //IN PROGRESS - working on calling the Upload service
-
-        //here is an asset ID (not connected to an entry yet)
-        // 4EJUBLSYcggCce8AkGeKqs
-
-        let inputEl: HTMLInputElement = this.el.nativeElement.querySelector('#file');
-        let fileCount: number = inputEl.files.length;
-        var assetId;
-        var assetRequest;
-
-        if (fileCount > 0) { // a file was selected
-
-          for (var i = 0; i < fileCount; i++) {
-            //create a new formData instance for each loop
-            let formData = new FormData();
-            formData.append('file', inputEl.files.item(i));
-
-            console.log('file name ', inputEl.files.item(i).name);
-            console.log('file type ', inputEl.files.item(i).type);
-
-            assetId = this.uploadFile(formData)
-
-            assetRequest = {
-              fields: {
-                file: {
-                  "en-US": {
-                    contentType: inputEl.files.item(i).type,
-                    fileName: inputEl.files.item(i).name,
-                    uploadFrom: {
-                      sys: {
-                        type: "Link",
-                        linkType: "Upload",
-                        id: assetId
-                      }
-                    }
-                  }
-                }
-              }
-            }
-
-          }
-
         }
 
         console.log('saveProject: now call update ', entry);
@@ -440,7 +405,7 @@ export class ContentfulService {
         return entry;
       })
       .catch((err) => {
-        console.error;
+        console.error(err);
       })
 
   }
@@ -456,6 +421,10 @@ export class ContentfulService {
       .then((space) => space.getEnvironment('master'))
       .then((env) => env.getEntry(id))
       .then((entry) => entry.unpublish())
+
+      //TODO: Make permanent deletion a system-wide configuration 
+      //and only archive by default (with a manual data cleanup
+      //option for DevOps to control)
       .then((entry) => entry.delete())
       .then(() => console.log('deleteProject; project ', id, 'deleted'))
       .catch((err) => {
@@ -516,9 +485,106 @@ export class ContentfulService {
    ************************************************************************ 
    */
 
+  public upload(files: Set<File>): {[key:string]:Observable<number>} {
+    let URL = environment.contentful.urls.upload + '/spaces/' + environment.contentful.space + '/uploads';
+
+    // this will be the our resulting map
+    const status = {};
+
+    files.forEach(file => {
+      // create a new multipart-form for every file
+      const formData: FormData = new FormData();
+      formData.append('file', file, file.name);
+
+      // create a http-post request and pass the form
+      // tell it to report the upload progress
+      const req = new HttpRequest('POST', URL, formData, {
+        reportProgress: true
+      });
+
+      // create a new progress-subject for every file
+      const progress = new Subject<number>();
+
+      // send the http-request and subscribe for progress-updates
+      this.http.request(req).subscribe(event => {
+        if (event.type === HttpEventType.UploadProgress) {
+
+          // calculate the progress percentage
+          const percentDone = Math.round(100 * event.loaded / event.total);
+
+          // pass the percentage into the progress-stream
+          progress.next(percentDone);
+        } else if (event instanceof HttpResponse) {
+
+          // Close the progress-stream if we get an answer form the API
+          // The upload is complete
+          progress.complete();
+        }
+      });
+
+      // Save every progress-observable in a map of all observables
+      status[file.name] = {
+        progress: progress.asObservable()
+      };
+    });
+
+    // return the map of progress.observables
+    return status;
+  }
 
   uploadFile(formData: FormData) {
     let URL = environment.contentful.urls.upload + '/spaces/' + environment.contentful.space + '/uploads';
+
+    /*
+      //IN PROGRESS - working on calling the Upload service
+
+        //here is an asset ID (not connected to an entry yet)
+        // 4EJUBLSYcggCce8AkGeKqs
+
+        let inputEl: HTMLInputElement = this.el.nativeElement.querySelector('#file');
+        let fileCount: number = inputEl.files.length;
+        var assetId;
+        var assetRequest;
+
+        if (fileCount > 0) { // a file was selected
+
+          for (var i = 0; i < fileCount; i++) {
+            //create a new formData instance for each loop
+            let formData = new FormData();
+            formData.append('file', inputEl.files.item(i));
+
+            console.log('file name ', inputEl.files.item(i).name);
+            console.log('file type ', inputEl.files.item(i).type);
+
+            assetId = this.uploadFile(formData)
+
+            assetRequest = {
+              fields: {
+                file: {
+                  "en-US": {
+                    contentType: inputEl.files.item(i).type,
+                    fileName: inputEl.files.item(i).name,
+                    uploadFrom: {
+                      sys: {
+                        type: "Link",
+                        linkType: "Upload",
+                        id: assetId
+                      }
+                    }
+                  }
+                }
+              }
+            }
+
+          }
+
+        }
+
+
+    */
+
+
+    
 
     let myHeaders = new HttpHeaders();
     myHeaders = myHeaders.append('Authorization', 'Bearer ' + environment.contentful.accessToken);
