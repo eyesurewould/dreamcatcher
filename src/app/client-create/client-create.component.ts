@@ -22,7 +22,8 @@ export class ClientCreateComponent {
   clientFormGroup = new FormGroup({
     name: new FormControl('', [Validators.required]),
     email: new FormControl('', emailValidator(/^\w[\w.-]*@([\w-]+\.)+[\w-]+$/g)),
-    phone: new FormControl('', phoneValidator(/^\d?[ -.]?\(?\d\d\d\)?[ -.]?\d\d\d[ -.]?\d\d\d\d$/g))
+    phone: new FormControl('', phoneValidator(/^\d?[ -.]?\(?\d\d\d\)?[ -.]?\d\d\d[ -.]?\d\d\d\d$/g)),
+    notes: new FormControl('')
   });
 
   constructor(private cs: ContentfulService, private router: Router) {
@@ -40,7 +41,11 @@ export class ClientCreateComponent {
     if (this.clientFormGroup.controls['phone'].value !== '') {
       this.client.phone = this.clientFormGroup.controls['phone'].value;
     }
+    if (this.clientFormGroup.controls['notes'].value !== '') {
+      this.client.notes = this.clientFormGroup.controls['notes'].value;
+    }
     
+    //console.log('submit: client data to send ', this.client);
     this.cs.createClient(this.client)
       .then((response) => {
         this.router.navigate(['/client', response.sys.id]);

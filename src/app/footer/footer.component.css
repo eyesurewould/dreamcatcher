@@ -1,10 +1,18 @@
 .page-footer {
     background-color: #424242;
     font-family: 'Lato', sans-serif;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    width: 100%;
 }
 
 .footer-copyright {
     color: #fff;
     font-family: 'Lato', sans-serif;
-    font-size: 1em;
+    font-size: 8pt;
+}
+
+.footer-copyright a {
+    line-height: inherit
 }

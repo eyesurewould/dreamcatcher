@@ -34,6 +34,10 @@
     box-shadow: #555 1px 1px 8px 1px;
 }
 
+/* display the client name larger when in read mode */
+.clientName {
+    font-size: larger
+}
 
 .clientDetail {
     padding-left: 15px;

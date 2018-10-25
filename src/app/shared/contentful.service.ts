@@ -12,6 +12,7 @@ import * as contentful from 'contentful';
 import * as contentfulMgmt from 'contentful-management';
 
 import { HttpClient, HttpEventType, HttpResponse, HttpHeaders, HttpParams, HttpRequest } from '@angular/common/http';
+import { identifierModuleUrl } from '@angular/compiler';
 
 
 @Injectable({
@@ -58,6 +59,9 @@ export class ContentfulService {
           },
           phone: {
             'en-US': client.phone
+          },
+          notes: {
+            'en-US': client.notes
           }
         }
       }))
@@ -159,6 +163,9 @@ export class ContentfulService {
         }
         if (client.phone != '') {
           entry.fields.phone = { 'en-US': client.phone };
+        }
+        if (client.notes != '') {
+          entry.fields.notes = { 'en-US': client.notes };
         }
 
         return entry.update();
@@ -480,137 +487,175 @@ export class ContentfulService {
   }
 
 
+  /**
+ * Use the Content Management SDK to create a new asset
+ * 
+ * @param image
+ */
+  public createAssetFromUpload(imageId: string, imageType: string, imageFileName: string) {
+
+    return this.contentfulMgmtClient.getSpace(environment.contentful.space)
+      .then((space) => space.getEnvironment('master'))
+      .then((environment) => {
+        return environment.createAsset({
+          fields: {
+            title: {
+              'en-US' : imageFileName
+            },
+            file: {
+              'en-US': {
+                contentType: imageType,
+                fileName: imageFileName,
+                uploadFrom: {
+                  sys: {
+                    type: 'Link',
+                    linkType: 'Upload',
+                    id: imageId
+                  }
+                }
+              }
+            }
+          }
+        })
+      })
+      .then((asset) => {
+        console.log('createAssetFromUpload: process it ', asset);
+        asset.processForLocale('en-US')
+        .then((asset) => {
+          console.log('createAssetFromUpload: returned from the call to process the asset', asset);
+          console.log('createAssetFromUpload: url to the asset', asset.fields.file['en-US'].url);
+        });
+      })
+      .then((asset) => {
+        console.log('createAssetFromUpload: publish it ', asset);
+        asset.publish();
+      })
+      .then((asset) => {
+        console.log('createAssetFromUpload: publish success ', asset);
+        return asset;
+      })
+      .catch((err) => {
+        console.error;
+      });
+
+  }
+
+
   /************************************************************************
    * Helper methods
    ************************************************************************ 
    */
 
-  public upload(files: Set<File>): {[key:string]:Observable<number>} {
-    let URL = environment.contentful.urls.upload + '/spaces/' + environment.contentful.space + '/uploads';
+  /**
+   * Receives an input field with potentially multiple files. Each
+   * selected file is uploaded to Contenful and the image id is assigned 
+   * to a new Asset object.
+   * The set of Asset ids (not image ids) is returned
+   * 
+   * @param files 
+   * @returns ids
+   */
+  //public upload(files: Set<File>): { [key: string]: Observable<number> } {
+  public upload(files: FileList): { [key: string]: Observable<number> } {
 
     // this will be the our resulting map
-    const status = {};
+    let status;
 
-    files.forEach(file => {
+    Array.from(files).forEach(file => {
+      console.log('upload: ready to upload ', file.name);
       // create a new multipart-form for every file
       const formData: FormData = new FormData();
       formData.append('file', file, file.name);
 
-      // create a http-post request and pass the form
-      // tell it to report the upload progress
-      const req = new HttpRequest('POST', URL, formData, {
-        reportProgress: true
-      });
+      this.uploadFile(formData)
+        .then((id) => {
+          if (id != null) {
 
-      // create a new progress-subject for every file
-      const progress = new Subject<number>();
+            this.createAssetFromUpload(id, file.type, file.name)
+              .then((assetId) => {
+                console.log('upload: assetId ', assetId);
+                //status.append({ 'id': assetId });
+                //console.log('upload: status object so far...', status);
+              })
+          } else {
+            console.log('upload: no id returned');
+          }
+        })
 
-      // send the http-request and subscribe for progress-updates
-      this.http.request(req).subscribe(event => {
-        if (event.type === HttpEventType.UploadProgress) {
-
-          // calculate the progress percentage
-          const percentDone = Math.round(100 * event.loaded / event.total);
-
-          // pass the percentage into the progress-stream
-          progress.next(percentDone);
-        } else if (event instanceof HttpResponse) {
-
-          // Close the progress-stream if we get an answer form the API
-          // The upload is complete
-          progress.complete();
-        }
-      });
-
-      // Save every progress-observable in a map of all observables
-      status[file.name] = {
-        progress: progress.asObservable()
-      };
     });
 
     // return the map of progress.observables
     return status;
   }
 
-  uploadFile(formData: FormData) {
+  uploadFile(formData: FormData): Promise<string> {
     let URL = environment.contentful.urls.upload + '/spaces/' + environment.contentful.space + '/uploads';
+    let httpHeaders = new HttpHeaders({
+      'Content-Type': 'application/octet-stream',
+      'Authorization': 'Bearer ' + environment.contentful.personalToken
+    });
 
-    /*
-      //IN PROGRESS - working on calling the Upload service
+    var sys;
+    var id = null;
 
-        //here is an asset ID (not connected to an entry yet)
-        // 4EJUBLSYcggCce8AkGeKqs
-
-        let inputEl: HTMLInputElement = this.el.nativeElement.querySelector('#file');
-        let fileCount: number = inputEl.files.length;
-        var assetId;
-        var assetRequest;
-
-        if (fileCount > 0) { // a file was selected
-
-          for (var i = 0; i < fileCount; i++) {
-            //create a new formData instance for each loop
-            let formData = new FormData();
-            formData.append('file', inputEl.files.item(i));
-
-            console.log('file name ', inputEl.files.item(i).name);
-            console.log('file type ', inputEl.files.item(i).type);
-
-            assetId = this.uploadFile(formData)
-
-            assetRequest = {
-              fields: {
-                file: {
-                  "en-US": {
-                    contentType: inputEl.files.item(i).type,
-                    fileName: inputEl.files.item(i).name,
-                    uploadFrom: {
-                      sys: {
-                        type: "Link",
-                        linkType: "Upload",
-                        id: assetId
-                      }
-                    }
-                  }
-                }
-              }
-            }
-
-          }
-
-        }
-
-
-    */
-
-
-    
-
-    let myHeaders = new HttpHeaders();
-    myHeaders = myHeaders.append('Authorization', 'Bearer ' + environment.contentful.accessToken);
-    myHeaders = myHeaders.append('Content-Type', 'application/octet-stream');
-
-    let myParams = new HttpParams();
+    console.log('uploadFile: start file upload');
 
     //call the angular http method
-    return this.http
-      .post(
-        URL,
-        formData,
-        {
-          params: myParams,
-          headers: myHeaders
+    return this.http.post(
+      URL,
+      formData,
+      {
+        headers: httpHeaders,
+        responseType: 'json'
+      }).pipe(
+        map((res: Response) => {
+        // need to extract an ID value, but we don't have an Class for the response
+        let resultJson = JSON.stringify(res);
+        let result = JSON.parse(resultJson);
+        if (result.sys != null) {
+          sys = result.sys;
+          if (result.sys.id != null) {
+            id = result.sys.id;
+          }
         }
-      ).pipe(map((res: Response) => {
-        res.sys.id;
+
+        console.log('uploadFile: file uploaded: ', id);
+        return id;
+      })).toPromise()
+
+
+    /*
+    //call the angular http method
+    this.http
+      //post the form data to the url defined above and map the response. Then subscribe 
+      //to initiate the post. if you don't subscribe, angular wont post.
+      .post(URL, formData, {
+        headers: httpHeaders,
+        responseType: 'json'
+      }).pipe(map((res: Response) => {
+        // need to extract an ID value, but we don't have an Class for the response
+        let resultJson = JSON.stringify(res);
+        let result = JSON.parse(resultJson);
+        if (result.sys != null) {
+          sys = result.sys;
+          if (result.sys.id != null) {
+            id = result.sys.id;
+          }
+        }
+        
+        return id;
       }
       )).subscribe(
         //map the success function and alert the response
         (success) => {
-          console.log(success);
+          //console.log(success);
+          return success;
         },
-        (error) => console.log(error))
+        (error) => console.log(error));
 
+    console.log('uploadFile: response: ', id);
+    return id;*/
   }
 
 }
+

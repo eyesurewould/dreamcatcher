@@ -5,6 +5,7 @@ body {
 }
 .main-content {
     color: #333;
+    margin-bottom: 85px;
 }
 label {
     font-size: 0.75rem;

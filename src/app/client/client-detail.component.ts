@@ -22,7 +22,8 @@ export class ClientDetailComponent implements OnInit {
     clientDetailFormGroup = new FormGroup({
         name: new FormControl('', [Validators.required]),
         email: new FormControl('', emailValidator(/^\w[\w.-]*@([\w-]+\.)+[\w-]+$/g)),
-        phone: new FormControl('', phoneValidator(/^\d?[ -.]?\(?\d\d\d\)?[ -.]?\d\d\d[ -.]?\d\d\d\d$/g))
+        phone: new FormControl('', phoneValidator(/^\d?[ -.]?\(?\d\d\d\)?[ -.]?\d\d\d[ -.]?\d\d\d\d$/g)),
+        notes: new FormControl('')
     });
 
     public isEditable: boolean = false;
@@ -54,6 +55,8 @@ export class ClientDetailComponent implements OnInit {
         this.cs.getClient(id)
             .then((responseClient) => {
                 this.client = responseClient;
+                console.log('why no phone? ', responseClient);
+                console.log('why no phone? ', this.client.fields.phone);
 
                 this.clientDetailFormGroup.controls['name'].setValue(this.client.fields.name);
 
@@ -62,6 +65,9 @@ export class ClientDetailComponent implements OnInit {
                 }
                 if (this.client.fields.phone != undefined) {
                     this.clientDetailFormGroup.controls['phone'].setValue(this.client.fields.phone);
+                }
+                if (this.client.fields.notes != undefined) {
+                    this.clientDetailFormGroup.controls['notes'].setValue(this.client.fields.notes);
                 }
             
                 this.cs.getProjectsForClient(id)
@@ -101,8 +107,9 @@ export class ClientDetailComponent implements OnInit {
         client.name = this.clientDetailFormGroup.controls['name'].value;
         client.email = this.clientDetailFormGroup.controls['email'].value;
         client.phone = this.clientDetailFormGroup.controls['phone'].value;
+        client.notes = this.clientDetailFormGroup.controls['notes'].value;
 
-        //console.log('submit: client data to send ', client);
+        console.log('submit: client data to send ', client);
         this.cs.saveClient(this.id, client)
             .then((entry) => {
                 console.log('submit: saved ', entry);
