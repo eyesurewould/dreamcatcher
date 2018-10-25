@@ -142,12 +142,7 @@ export class ProjectDetailComponent implements OnInit, OnChanges {
         var project = new Project();
         var fields = this.projectDetailFormGroup.controls;
 
-        console.log('a text field ', fields['title']);
-        console.log('an array field ', fields['style']);
-
-        //if (fields['title'].touched && fields['title'].value !== '' ) {
             project.title = fields['title'].value;
-        //}
         if (fields['style'].touched && fields['style'].value !== '') {
             project.style = fields['style'].value;
         }
