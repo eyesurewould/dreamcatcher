@@ -3,6 +3,11 @@
     background-color: #87bbf0;
 }
 
+.clientDetail .link {
+    color: #4186d1;
+    border-bottom: 1px solid;
+}
+
 @media (min-width: 576px) {
     .card-columns {
         column-count: 2;

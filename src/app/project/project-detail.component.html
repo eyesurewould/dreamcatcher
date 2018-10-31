@@ -6,7 +6,7 @@
             <!-- TODO - finish adding the "Saving" flag check to show a spinner...-->
             <div class="section" *ngIf="saving">
                 <div *ngIf="isEditable; else readModeHeader" class="sectionTitle">
-                    <svg class="icon ml-1" >
+                    <svg class="icon ml-1">
                         <use xlink:href="/assets/symbol-defs.svg#icon-spinner3"></use>
                     </svg>
                 </div>
@@ -60,13 +60,15 @@
                         </div>
                     </div>
                     <ng-template #readModeStyle>
-                        <div *ngFor="let style of project.fields.style" routerLink="['/projects', style]" class="projectDetail">{{project.fields.style}}</div>
+                        <div class="projectDetail">
+                            <span *ngFor="let style of project.fields.style" [routerLink]="['/projects', style]" class="link">{{project.fields.style}}</span>
+                        </div>
                     </ng-template>
                 </div>
 
                 <!-- client name is not editable here - read only -->
                 <div class="projectDetail" *ngIf="!isEditable">
-                    <span [routerLink]="['/client/' + project.fields.clientRef.sys.id ]">
+                    <span class="link" [routerLink]="['/client/' + project.fields.clientRef.sys.id ]">
                         {{project.fields.clientRef.fields.name}}
                     </span>
                 </div>
@@ -173,7 +175,7 @@
                     <button type="button" (click)="fileInput.click()">Select Images</button>
                     <ul *ngIf="selectedFiles != null">
                         <li *ngFor="let file of selectedFiles">
-                                {{file.name}}
+                            {{file.name}}
                         </li>
                     </ul>
                 </div>

@@ -7,8 +7,8 @@
     padding-left: 15px;
 }
 
-.projectDetail a {
-    color: inherit;
+.projectDetail .link {
+    color: #4186d1;
     border-bottom: 1px solid;
 }
 

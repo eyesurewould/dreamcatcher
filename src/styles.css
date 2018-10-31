@@ -14,6 +14,9 @@ label {
     /* tweaking the default Bootstrap style */
     background-color: #87bbf0;
 }
+a {
+    color: #4186d1;
+}
 
 
 /* FORMS: validation messages */

@@ -42,7 +42,7 @@
                     </div>
                     <ng-template #readModeEmail>
                         <div class="clientDetail">
-                            <a *ngIf="!isEditable" href="mailto:{{client.fields.email}}">{{client.fields.email}}</a>
+                            <a *ngIf="!isEditable" class="link" href="mailto:{{client.fields.email}}">{{client.fields.email}}</a>
                         </div>
                     </ng-template>
                 </div>
@@ -61,7 +61,7 @@
                     </div>
                     <ng-template #readModePhone>
                         <div class="clientDetail">
-                            <a *ngIf="!isEditable" href="tel:{{client.fields.phone}}">{{client.fields.phone}}</a>
+                            <a *ngIf="!isEditable" class="link" href="tel:{{client.fields.phone}}">{{client.fields.phone}}</a>
                         </div>
                     </ng-template>
                 </div>
