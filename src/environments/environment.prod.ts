@@ -6,6 +6,12 @@ export const environment = {
     contentTypeIds: {
       project: 'ink',
       client: 'client'
+    },
+    personalToken: 'CFPAT-ee9cfad0db04a6ae538573d833a097194557acd560d6835f7694c7d9a4d7ac92',
+    urls: {
+      api: 'https://api.contentful.com',
+      cdn: 'https://cdn.contentful.com',
+      upload: 'https://upload.contentful.com'
     }
   }
 };

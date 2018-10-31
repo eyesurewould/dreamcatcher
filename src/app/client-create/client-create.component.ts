@@ -13,7 +13,7 @@ import { Router } from '@angular/router';
 })
 export class ClientCreateComponent {
 
-  private client: Client;
+  public client: Client;
   
   //TODO: RegEx patterns are from Contentful. They are NOT great
   //Patterns are duplicated here and in the ClientComponent, so

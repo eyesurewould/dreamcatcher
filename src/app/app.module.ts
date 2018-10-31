@@ -23,6 +23,8 @@ import { ProjectCreateComponent } from './project-create/project-create.componen
 //TODO: Remove this after testing
 import { TestComponent } from './test/test.component';
 import { TestUploadComponent } from './test/test-upload/test-upload.component';
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
 
 
 @NgModule({
@@ -48,7 +50,8 @@ import { TestUploadComponent } from './test/test-upload/test-upload.component';
     RouterModule.forRoot(
       appRoutes, 
       {onSameUrlNavigation: 'reload'}
-    )
+    ),
+    ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [ 
     ContentfulService

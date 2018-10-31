@@ -13,7 +13,7 @@ import { environment } from '../../../environments/environment';
 })
 export class TestUploadComponent {
   //private apiBaseUrl = 'http://localhost:3000'; //this is a fake url for a local Node.js server
-  private apiBaseUrl = environment.contentful.urls.upload + '/spaces/' + environment.contentful.space + '/uploads';
+  public apiBaseUrl = environment.contentful.urls.upload + '/spaces/' + environment.contentful.space + '/uploads';
   headers: HttpHeaders = new HttpHeaders();
 
   constructor(private http: HttpClient) { }

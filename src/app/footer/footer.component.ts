@@ -8,8 +8,9 @@ import { environment } from '../../environments/environment';
 })
 export class FooterComponent implements OnInit {
 
-  private email = '';
-  private instagram = '';
+  public email = '';
+  public instagram = '';
+  
   constructor() { 
 
     //TODO: pull this info from a user's profile

@@ -17,7 +17,7 @@ const URL = environment.contentful.urls.upload + '/spaces/' + environment.conten
 })
 export class TestComponent {
 
-  private selectedFiles: FileList;
+  public selectedFiles: FileList;
 
   form = new FormGroup({
     name: new FormControl(""),

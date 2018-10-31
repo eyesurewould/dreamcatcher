@@ -13,8 +13,8 @@ import { Router } from '@angular/router';
 })
 export class ProjectCreateComponent {
 
-  private id: string;
-  private project: Project;
+  public id: string;
+  public project: Project;
 
   projectFormGroup = new FormGroup({
     title: new FormControl('', [Validators.required]),

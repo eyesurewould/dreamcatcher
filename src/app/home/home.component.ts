@@ -11,15 +11,15 @@ import { projectOrder } from '../project/project';
 })
 export class HomeComponent implements OnInit {
 
-  private clients: EntryCollection<any>;
-  private projects: EntryCollection<any>;
+  public clients: EntryCollection<any>;
+  public projects: EntryCollection<any>;
 
   //TODO: Move these to configuration
   private clientLimit = 6;
   private projectLimit = 6;
 
-  private errorMessageClients = '';
-  private errorMessageProjects = '';
+  public errorMessageClients = '';
+  public errorMessageProjects = '';
 
   constructor(private cs: ContentfulService) {
 

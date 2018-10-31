@@ -14,10 +14,10 @@ import { emailValidator, phoneValidator } from '../shared/client-validation';
 })
 export class ClientDetailComponent implements OnInit {
 
-    private id: string;
-    private client: Entry<any>;
-    private projects: EntryCollection<any>;
-    private projectCount = 0;
+    public id: string;
+    public client: Entry<any>;
+    public projects: EntryCollection<any>;
+    public projectCount = 0;
 
     clientDetailFormGroup = new FormGroup({
         name: new FormControl('', [Validators.required]),

@@ -14,17 +14,17 @@ export class ClientsComponent implements OnInit {
 
   //number of entries per page. 
   //TODO: Move to configuration
-  private limit = 10; 
+  public limit = 10; 
 
   //number in the full set we want to start at 
   //(e.g. if skip = 50, we want 50, 51, 52...59 for a total of 10 
   //entries (or whatever limit is set to))
-  private skip = 0;   
-  private total;
-  private query = '';
+  public skip = 0;   
+  public total;
+  public query = '';
   
-  private errorMessage = '';
-  private nowShowing = '';
+  public errorMessage = '';
+  public nowShowing = '';
   
   public clients: EntryCollection<any>;
 

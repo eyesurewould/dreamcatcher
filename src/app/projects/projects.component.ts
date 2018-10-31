@@ -12,14 +12,14 @@ import { projectOrder } from '../project/project';
 })
 export class ProjectsComponent implements OnChanges, OnInit {
 
-    private limit = 10;
-    private skip = 0;
-    private total;
-    private nowShowing = '';
-    private query = '';
-    private errorMessage = '';
+    public limit = 10;
+    public skip = 0;
+    public total;
+    public nowShowing = '';
+    public query = '';
+    public errorMessage = '';
 
-    private projects: EntryCollection<any>;
+    public projects: EntryCollection<any>;
 
     constructor(private cs: ContentfulService, private route: ActivatedRoute, private router: Router) {
         route.params.subscribe(params => {

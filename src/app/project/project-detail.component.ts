@@ -14,8 +14,8 @@ import { Image } from '../shared/image';
 })
 export class ProjectDetailComponent implements OnInit, OnChanges {
 
-    private id: string;
-    private project: Entry<any>;
+    public id: string;
+    public project: Entry<any>;
 
     projectDetailFormGroup = new FormGroup({
         title: new FormControl('', [Validators.required]),
@@ -27,10 +27,10 @@ export class ProjectDetailComponent implements OnInit, OnChanges {
         timeEstimate: new FormControl(''),
     });
 
-    private selectedFiles: FileList;
+    public selectedFiles: FileList;
 
-    private isEditable: boolean = false;
-    private saving = false;
+    public isEditable: boolean = false;
+    public saving = false;
 
     constructor(private cs: ContentfulService, private router: Router, private route: ActivatedRoute) {
         //TODO: Resolve the routing issue!!! 
