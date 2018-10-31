@@ -110,7 +110,7 @@
     <div class="col card-columns">
         <div *ngIf="projectCount > 0; else noProjects">
             <div class="card" *ngFor="let project of projects?.items">
-                <a href="/project/{{project.sys.id}}">
+                <span [routerLink]="['/project/' + project.sys.id]">
                     <!-- three options for image to display:
                                     Based on status and image availability 
                                     1) Final - show final image
@@ -134,7 +134,7 @@
                             <small class="text-muted">{{project.fields.status}}</small>
                         </div>
                     </div>
-                </a>
+                </span>
             </div>
         </div>
 

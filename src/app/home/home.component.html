@@ -24,7 +24,7 @@
         <div *ngFor="let client of clients?.items" class="clients_box">
             <div class="card client-card" >
                 <div class="card-body">
-                    <a class="card-title" href="/client/{{client.sys.id}}">{{ client.fields.name }}</a>
+                    <span class="card-title" [routerLink]="['/client/' + client.sys.id]">{{ client.fields.name }}</span>
                     <a *ngIf="client.fields.email" class="card-text ml-2" href="mailto:{{client.fields.email}}">{{
                         client.fields.email
                         }}
@@ -54,33 +54,33 @@
 <div class="row">
     <div class="col card-columns">
         <div *ngFor="let project of projects?.items">
-            <a class="card project-card" *ngIf="project.fields.finalImage; else inProgressBlock" href="/project/{{project.sys.id}}">
+            <span class="card project-card" *ngIf="project.fields.finalImage; else inProgressBlock" [routerLink]="['/project/' + project.sys.id]">
                 <img class="card-img-top img-responsive" src="{{project.fields.finalImage.fields.file.url}}" alt="{{project.fields.title}}">
                 <div class="card-body">
                     <h5>{{project.fields.title}}</h5>
                     <p class="card-text">{{project.fields.style}} - {{project.fields.description}}</p>
                 </div>
-            </a>
+            </span>
 
             <ng-template #inProgressBlock>
-                <a class="card project-card" *ngIf="project.fields.assets; else noImage" href="/project/{{project.sys.id}}">
+                <span class="card project-card" *ngIf="project.fields.assets; else noImage" [routerLink]="['/project/' + project.sys.id]">
                     <img class="card-img-top img-responsive" src="{{project.fields.assets[0].fields.file.url}}" alt="{{project.fields.title}}">
                     <div class="card-body">
                         <h5>{{project.fields.title}}</h5>
                         <p class="card-text">{{project.fields.style}} - {{project.fields.description}}</p>
                     </div>
-                </a>
+                </span>
             </ng-template>
 
             <ng-template #noImage>
-                <a class="card project-card" href="/project/{{project.sys.id}}">
+                <span class="card project-card" [routerLink]="['/project/' + project.sys.id]">
                     <img class="card-img-top img-responsive" src="https://via.placeholder.com//200x100?text=No+image+yet"
                         alt="{{project.fields.title}}">
                     <div class="card-body">
                         <h5>{{project.fields.title}}</h5>
                         <p class="card-text">{{project.fields.style}} - {{project.fields.description}}</p>
                     </div>
-                </a>
+                </span>
             </ng-template>
         </div>
     </div>
