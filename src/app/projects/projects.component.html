@@ -42,10 +42,10 @@
                         2) In Progress - show first regular image
                         3) No images - show placeholder
                         -->
-                <img *ngIf="project.fields.finalImage; else inProgressBlock" class="card-img-top img-responsive" src="{{project.fields.finalImage.fields.file.url}}"
+                <img *ngIf="project.fields.finalImage; else inProgressBlock" class="card-img-top img-responsive" src="{{project.fields.finalImage.fields.file.url}}?fm=webp"
                     alt="{{project.fields.title}}">
                 <ng-template #inProgressBlock>
-                    <img *ngIf="project.fields.assets; else noImage" class="card-img-top img-responsive" src="{{project.fields.assets[0].fields.file.url}}"
+                    <img *ngIf="project.fields.assets; else noImage" class="card-img-top img-responsive" src="{{project.fields.assets[0].fields.file.url}}?fm=webp"
                         alt="{{project.fields.title}}">
                 </ng-template>
                 <ng-template #noImage>

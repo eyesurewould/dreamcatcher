@@ -16,11 +16,6 @@
     font-size: 0.75rem;
 }
 
-.btn-light {
-    /* tweaking the default Bootstrap style */
-    background-color: #87bbf0;
-}
-
 .card-title {
     font-size: 1.25rem;
     margin-bottom: .5rem;

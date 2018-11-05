@@ -185,7 +185,7 @@
 
     <div class="row">
         <div class="col">
-            <div class="section">
+            <div class="section actions">
                 <button *ngIf="project && !isEditable" routerLink="['/assetNew', project.sys.id]" class="btn btn-light">Add
                     Image
                 </button>
@@ -209,7 +209,7 @@
 <div class="row" *ngIf="project?.fields.finalImage">
     <div class="col">
         <div class="card mb-3">
-            <img class="card-img-top img-responsive" src="{{project?.fields.finalImage.fields.file.url}}" alt="">
+            <img class="card-img-top img-responsive" src="{{project?.fields.finalImage.fields.file.url}}?fm=webp" alt="">
             <div class="card-body">
                 <h5 class="card-title">{{project?.fields.finalImage.fields.title}}</h5>
             </div>
@@ -226,7 +226,7 @@
 <div class="row" *ngIf="project?.fields.assets; else noImage">
     <div class="col">
         <div class="card mb-3" *ngFor="let image of project?.fields.assets">
-            <img class="card-img-top img-responsive" src="{{image.fields.file.url}}" alt="{{image.fields.title}}">
+            <img class="card-img-top img-responsive" src="{{image.fields.file.url}}?fm=webp" alt="{{image.fields.title}}">
             <div class="card-body">
                 <h5 class="card-title">{{image.fields.title}}</h5>
             </div>

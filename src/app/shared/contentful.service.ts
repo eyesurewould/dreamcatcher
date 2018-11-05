@@ -325,6 +325,7 @@ export class ContentfulService {
 
     return this.contentfulClient.getEntries(params)
       .then((response) => {
+        //console.log('getProjects: projects ', response);
         return response;
       })
       .catch((err) => {

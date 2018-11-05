@@ -7,7 +7,7 @@
     <div class="col">
         <div class="section">
             <span style="float: right">
-                <button class="btn btn-light" routerLink="/client-create">+</button>
+                <span class="btn-light py-2 px-2" routerLink="/client-create">Add</span>
             </span>
         </div>
     </div>
@@ -22,7 +22,7 @@
 <div class="row" id="client_row">
     <div class="col card-columns">
         <div *ngFor="let client of clients?.items" class="clients_box">
-            <div class="card client-card" >
+            <div class="card client-card">
                 <div class="card-body">
                     <span class="card-title" [routerLink]="['/client/' + client.sys.id]">{{ client.fields.name }}</span>
                     <a *ngIf="client.fields.email" class="card-text ml-2" href="mailto:{{client.fields.email}}">{{
@@ -55,7 +55,13 @@
     <div class="col card-columns">
         <div *ngFor="let project of projects?.items">
             <span class="card project-card" *ngIf="project.fields.finalImage; else inProgressBlock" [routerLink]="['/project/' + project.sys.id]">
-                <img class="card-img-top img-responsive" src="{{project.fields.finalImage.fields.file.url}}" alt="{{project.fields.title}}">
+                <picture class="card-img-top img-responsive">
+                    <source media="(min-width: 992px)" srcset="https://{{project.fields.finalImage.fields.file.url}}?fm=jpg&w=500&h=500">
+                    <source media="(min-width: 450px)" srcset="https://{{project.fields.finalImage.fields.file.url}}?fm=jpg&w=300&h=300">
+                    <img src="https://{{project.fields.finalImage.fields.file.url}}?fm=jpg&w=200&h=200" srcset="{{project.fields.finalImage.fields.file.url}}?fm=jpg&w=200&h=200"
+                        class="card-img-top img-responsive" alt=" Final image of a tattoo titled
+                        {{project.fields.title}}">
+                </picture>
                 <div class="card-body">
                     <h5>{{project.fields.title}}</h5>
                     <p class="card-text">{{project.fields.style}} - {{project.fields.description}}</p>
@@ -64,7 +70,13 @@
 
             <ng-template #inProgressBlock>
                 <span class="card project-card" *ngIf="project.fields.assets; else noImage" [routerLink]="['/project/' + project.sys.id]">
-                    <img class="card-img-top img-responsive" src="{{project.fields.assets[0].fields.file.url}}" alt="{{project.fields.title}}">
+                    <picture class="card-img-top img-responsive">
+                        <source media="(min-width: 992px)" srcset="https://{{project.fields.assets[0].fields.file.url}}?fm=jpg&w=500&h=500">
+                        <source media="(min-width: 450px)" srcset="https://{{project.fields.assets[0].fields.file.url}}?fm=jpg&w=300&h=300">
+                        <img src="https://{{project.fields.assets[0].fields.file.url}}?fm=jpg&w=200&h=200" srcset="{{project.fields.assets[0].fields.file.url}}?fm=jpg&w=200&h=200"
+                            class="card-img-top img-responsive" alt=" Image of a tattoo
+                            titled {{project.fields.title}}">
+                    </picture>
                     <div class="card-body">
                         <h5>{{project.fields.title}}</h5>
                         <p class="card-text">{{project.fields.style}} - {{project.fields.description}}</p>
