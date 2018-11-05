@@ -61,8 +61,6 @@ export class ProjectCreateComponent {
 
     this.cs.createProject(this.project)
       .then((entry) => {
-        console.log('submit: service call completed');
-
         //introduce a slight pause here so the new project has time to 
         //appear in subsequent query for all projects for this client
         //TODO: Investigate a cleaner way to handle this - reach out

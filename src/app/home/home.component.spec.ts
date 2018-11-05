@@ -37,7 +37,6 @@ describe('HomeComponent', () => {
   //FAILS currently - the DOM elements are still in flux, so this will be resolved once
   //the ClientsComponent is complete
   it('should display more than 0 clients', () => {
-    console.log(native);
     expect( native.querySelectorAll('.client-card').length).toBeGreaterThan(0); 
   });
 

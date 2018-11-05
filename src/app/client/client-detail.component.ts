@@ -55,8 +55,6 @@ export class ClientDetailComponent implements OnInit {
         this.cs.getClient(id)
             .then((responseClient) => {
                 this.client = responseClient;
-                console.log('why no phone? ', responseClient);
-                console.log('why no phone? ', this.client.fields.phone);
 
                 this.clientDetailFormGroup.controls['name'].setValue(this.client.fields.name);
 
@@ -109,10 +107,10 @@ export class ClientDetailComponent implements OnInit {
         client.phone = this.clientDetailFormGroup.controls['phone'].value;
         client.notes = this.clientDetailFormGroup.controls['notes'].value;
 
-        console.log('submit: client data to send ', client);
+        //console.log('submit: client data to send ', client);
         this.cs.saveClient(this.id, client)
             .then((entry) => {
-                console.log('submit: saved ', entry);
+                //console.log('submit: saved ', entry);
             })
             .catch((err) => {
                 console.error;
@@ -130,7 +128,7 @@ export class ClientDetailComponent implements OnInit {
         //console.log('deleteClient: ', id);
         this.cs.deleteClient(id)
             .then(() => {
-                console.log('deleteClient: deleted ', id);
+                //console.log('deleteClient: deleted ', id);
                 this.router.navigate(['/clients']);
             })
             .catch((err) => {

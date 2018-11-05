@@ -42,16 +42,6 @@ export class ProjectDetailComponent implements OnInit, OnChanges {
             this.id = params['id'];
         });
 
-        /* IN PROGRESS
-        this.router.events.subscribe((evt) => {
-            if (evt instanceof NavigationEnd) {
-                console.log(evt);
-                // trick the Router into believing it's last link wasn't previously loaded
-                this.router.navigated = false;
-                // if you need to scroll back to top, here is the right place
-                window.scrollTo(0, 0);
-            }
-        }); */
     }
 
     ngOnInit() {
@@ -161,33 +151,7 @@ export class ProjectDetailComponent implements OnInit, OnChanges {
         if (fields['timeEstimate'].touched && fields['timeEstimate'].value !== '') {
             project.timeEstimate = fields['timeEstimate'].value;
         }
-/*
-        if (this.selectedFiles !== null) {
 
-            // IN PROGRESS
-            //here we are in the component back-end and we want to gather the File objects 
-            //and provide them to the service for uploading. We should keep them as true
-            //File objects versus trying to manipulate them into something else (and
-            //currently we do that since the whole FileList is stuffed into a local var)
-
-            
-            let newAssets: Image[];
-            for(var i = 0; i < this.selectedFiles.length; i++) {
-                let image = new Image();
-                image.fileName = this.selectedFiles[i].name;
-                image.type = this.selectedFiles[i].type;
-                image.title = this.selectedFiles[i].name;
-                image.file = <File>this.selectedFiles[i];
-
-                console.log('a new image ', image);
-                newAssets[i] = image;
-            }; 
-
-            //console.log('all new images ', this.selectedFiles);
-            project.assets = this.selectedFiles;
-        }
-*/
-        //console.log('submit: project data to send ', project);
         this.cs.saveProject(this.project.sys.id, project)
             .then((entry) => {
                 //now navigate so the page is re-loaded
@@ -209,7 +173,7 @@ export class ProjectDetailComponent implements OnInit, OnChanges {
         //console.log('deleteProject: ', id);
         this.cs.deleteProject(id)
             .then(() => {
-                console.log('deleteProject: deleted ', id);
+                //console.log('deleteProject: deleted ', id);
                 this.router.navigate(['/projects']);
             })
             .catch((err) => {

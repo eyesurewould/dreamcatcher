@@ -19,20 +19,6 @@ describe('ContentfulService', () => {
     expect(service).toBeTruthy();
   }));
 
-  //IN PROGRESS - first time creating tests for a service, 
-  //so not sure how to properly mock it
-  /*
-  it('#getClients should return value from observable',
-    (done: DoneFn) => {
-      service.getClients('test', null, 5, 0).subscribe(value => {
-        console.log(value);
-        expect(value).toBe('observable value');
-        done();
-      });
-    });
-  */
-
-
   /**
    * Adding an image (asset)
    */
@@ -42,10 +28,5 @@ describe('ContentfulService', () => {
       image.title = 'test';
       image.fileName = 'example.jpeg';
       
-      //service.createImage(image).subscribe(value => {
-      //  console.log(value);
-      //  expect(value).toBe('non-error');
-      //  done();
-      //});
     });
 });
