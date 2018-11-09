@@ -7,6 +7,13 @@
                 </a>
             </div>
             <div>
+                <!-- these float right (thanks to nav-item class) so list them in Right-To-Left order-->
+                <span class="nav-item" (click)="logout()">Logout</span>
+                <span class="nav-item" >
+                    <div style="font-size: x-small;">{{userDisplayName}}</div>
+                    {{userDisplayName}}
+                    <div (click)="logout()" style="font-size: x-small;">Logout</div>
+                </span>
                 <a class="nav-item" routerLink="/projects">{{projectsTitle}}</a>
                 <a class="nav-item" routerLink="/clients">{{clientsTitle}}</a>
             </div>

@@ -13,5 +13,13 @@ export const environment = {
       cdn: 'https://cdn.contentful.com',
       upload: 'https://upload.contentful.com'
     }
+  },
+  firebase: {
+    apiKey: "AIzaSyBIYRgd8wmlQQnShPN9VpdEAaOsHO34DMU",
+    authDomain: "dreamcatcher-ca042.firebaseapp.com",
+    databaseURL: "https://dreamcatcher-ca042.firebaseio.com",
+    projectId: "dreamcatcher-ca042",
+    storageBucket: "dreamcatcher-ca042.appspot.com",
+    messagingSenderId: "1009291583352"
   }
 };

@@ -5,6 +5,12 @@ import { HttpClientModule } from '@angular/common/http';
 import { AlertModule } from 'ngx-bootstrap';
 import { RouterModule } from '@angular/router';
 
+import { AngularFireModule } from 'angularfire2';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+import { AuthGuard } from './shared/auth.guard';
+import { UserService } from './shared/user.service';
+
 import { AppComponent } from './app.component';
 import { appRoutes } from '../routes';
 import { NavbarComponent } from './navbar/navbar.component';
@@ -20,11 +26,16 @@ import { ProjectsComponent } from './projects/projects.component';
 import { ProjectDetailComponent } from './project/project-detail.component';
 import { ProjectCreateComponent } from './project-create/project-create.component';
 
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
+
 //TODO: Remove this after testing
 import { TestComponent } from './test/test.component';
 import { TestUploadComponent } from './test/test-upload/test-upload.component';
-import { ServiceWorkerModule } from '@angular/service-worker';
-import { environment } from '../environments/environment';
+
+import { RegisterComponent } from './register/register.component';
+import { LoginComponent } from './login/login.component';
+import { UserResolver } from './shared/user.resolver';
 
 
 @NgModule({
@@ -40,24 +51,32 @@ import { environment } from '../environments/environment';
     ProjectCreateComponent,
     TestComponent,
     FooterComponent,
-    TestUploadComponent
+    TestUploadComponent,
+    RegisterComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
     ReactiveFormsModule,
     HttpClientModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFirestoreModule, // imports firebase/firestore, only needed for database features
+    AngularFireAuthModule,
     AlertModule.forRoot(),
     RouterModule.forRoot(
-      appRoutes, 
-      {onSameUrlNavigation: 'reload'}
+      appRoutes,
+      { onSameUrlNavigation: 'reload' }
     ),
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
   ],
-  providers: [ 
-    ContentfulService
+  providers: [
+    ContentfulService,
+    AuthGuard,
+    UserService,
+    UserResolver
   ],
-  bootstrap: [ 
-    AppComponent 
+  bootstrap: [
+    AppComponent
   ]
 })
 export class AppModule { }

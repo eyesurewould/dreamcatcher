@@ -8,16 +8,25 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <style>
-    @font-face {
-      font-family: 'Lato';
-      font-display: swap;
-      src: local('Lato'), url(https://fonts.googleapis.com/css?family=Lato|Open+Sans) format('woff2');
-    }
-  </style>
+  <link rel="stylesheet" type="text/css" url="https://fonts.googleapis.com/css?family=Lato|Open+Sans">
 
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#1976d2">
+
+  <script src="https://www.gstatic.com/firebasejs/5.5.7/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.5.7/firebase-auth.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyBIYRgd8wmlQQnShPN9VpdEAaOsHO34DMU",
+      authDomain: "dreamcatcher-ca042.firebaseapp.com",
+      databaseURL: "https://dreamcatcher-ca042.firebaseio.com",
+      projectId: "dreamcatcher-ca042",
+      storageBucket: "dreamcatcher-ca042.appspot.com",
+      messagingSenderId: "1009291583352"
+    };
+    firebase.initializeApp(config);
+  </script>
 
   <script src="https://cdn.firebase.com/libs/firebaseui/3.4.1/firebaseui.js"></script>
   <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/3.4.1/firebaseui.css" />
