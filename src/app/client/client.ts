@@ -7,6 +7,7 @@ export class Client {
     socialHandle?: string;
     socialType?: string[];
     sys: any;
+
 }
 
 export enum clientOrder {
