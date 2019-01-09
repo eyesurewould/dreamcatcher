@@ -1,0 +1,37 @@
+// This file can be replaced during build by using the `fileReplacements` array.
+// `ng build ---prod` replaces `environment.ts` with `environment.prod.ts`.
+// The list of file replacements can be found in `angular.json`.
+
+export const environment = {
+  production: false,
+  contentful: {
+    space: '[YOUR SPACE ID]',
+    accessToken: '[YOUR ACCESS TOKEN]',
+    contentTypeIds: {
+      project: 'ink',
+      client: 'client'
+    },
+    personalToken: '[YOUR PERSONAL TOKEN]',
+    urls: {
+      api: 'https://api.contentful.com',
+      cdn: 'https://cdn.contentful.com',
+      upload: 'https://upload.contentful.com'
+    }
+  },
+  firebase: {
+    apiKey: "[YOUR APIKEY]",
+    authDomain: "[YOUR DOMAIN]",
+    databaseURL: "[YOUR URL]",
+    projectId: "[YOUR PROJECT ID]",
+    storageBucket: "[YOUR BUCKET]",
+    messagingSenderId: "[YOUR SENDER ID]"
+  }
+};
+
+/*
+ * In development mode, to ignore zone related error stack frames such as
+ * `zone.run`, `zoneDelegate.invokeTask` for easier debugging, you can
+ * import the following file, but please comment it out in production mode
+ * because it will have performance impact when throw error
+ */
+// import 'zone.js/dist/zone-error';  // Included with Angular CLI.

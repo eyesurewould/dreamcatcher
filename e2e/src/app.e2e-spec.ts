@@ -7,8 +7,8 @@ describe('workspace-project App', () => {
     page = new AppPage();
   });
 
-  it('should display welcome message', () => {
+  it('should have alt text for logo', () => {
     page.navigateTo();
-    expect(page.getParagraphText()).toEqual('Welcome to dreamcatcher!');
+    expect(page.getLogoAltText()).toEqual('Dreamcatcher Home');
   });
 });
