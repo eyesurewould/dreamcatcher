@@ -4,6 +4,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { AlertModule } from 'ngx-bootstrap';
 import { RouterModule } from '@angular/router';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireAuthModule } from '@angular/fire/auth';
 
 import { AppComponent } from './app.component';
 import { appRoutes } from '../routes';
@@ -40,6 +42,8 @@ import { environment } from '../environments/environment';
     BrowserModule,
     ReactiveFormsModule,
     HttpClientModule,
+    AngularFireModule.initializeApp(environment.firebase),
+    AngularFireAuthModule,
    AlertModule.forRoot(),
     RouterModule.forRoot(
       appRoutes,

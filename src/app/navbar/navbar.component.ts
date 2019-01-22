@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
+import { AngularFireAuth } from '@angular/fire/auth';
+import { auth } from 'firebase/app';
 
 @Component({
   selector: 'app-navbar',
@@ -13,8 +15,16 @@ export class NavbarComponent {
 
   constructor(
     private location: Location,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    public afAuth: AngularFireAuth
   ) {
+  }
+
+  login() {
+    this.afAuth.auth.signInWithPopup(new auth.GoogleAuthProvider());
+  }
+  logout() {
+    this.afAuth.auth.signOut();
   }
 
   ngOnInit(): void {  }
