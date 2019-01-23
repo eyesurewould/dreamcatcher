@@ -9,12 +9,12 @@
             <div>
                 <!-- these float right (thanks to nav-item class) so list them in Right-To-Left order-->
                 <span class="nav-item" >
-                    <div *ngIf="afAuth.user | async as user; else showLogin">
+                    <div *ngIf="authService.isLoggedIn; else showLogin">
                         <div style="font-size: x-small;">{{ user.displayName }}</div>
-                        <div (click)="logout()" style="font-size: x-small;">Logout</div>
+                        <div (click)="authService.logout()" style="font-size: x-small;">Logout</div>
                       </div>
                       <ng-template #showLogin>
-                        <div (click)="login()" style="font-size: x-small;">Login</div>
+                        <div routerLink="/login" style="font-size: x-small;">Login</div>
                       </ng-template>
                 </span>
                 <a class="nav-item" routerLink="/projects">{{projectsTitle}}</a>

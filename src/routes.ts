@@ -8,6 +8,7 @@ import { ProjectsComponent } from './app/projects/projects.component';
 import { ProjectDetailComponent } from './app/project/project-detail.component';
 import { ProjectCreateComponent } from './app/project-create/project-create.component';
 
+import { LoginComponent } from './app/login/login.component';
 
 export const appRoutes: Routes = [
     { path: "", redirectTo: "home", pathMatch: 'full' },
@@ -29,5 +30,7 @@ export const appRoutes: Routes = [
     { path: "client-create", component: ClientCreateComponent},
     { path: "project-create/:id", 
         component: ProjectCreateComponent,
-        runGuardsAndResolvers: 'paramsChange'}
+        runGuardsAndResolvers: 'paramsChange'},
+    { path: "login",
+        component: LoginComponent }
 ]

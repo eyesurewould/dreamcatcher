@@ -6,13 +6,13 @@ import { AlertModule } from 'ngx-bootstrap';
 import { RouterModule } from '@angular/router';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AuthService } from './auth/auth.service';
+import { ContentfulService } from './shared/contentful.service';
 
 import { AppComponent } from './app.component';
 import { appRoutes } from '../routes';
 import { NavbarComponent } from './navbar/navbar.component';
 import { FooterComponent } from './footer/footer.component';
-
-import { ContentfulService } from './shared/contentful.service';
 
 import { HomeComponent } from './home/home.component';
 import { ClientsComponent } from './clients/clients.component';
@@ -21,6 +21,7 @@ import { ClientCreateComponent } from './client-create/client-create.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { ProjectDetailComponent } from './project/project-detail.component';
 import { ProjectCreateComponent } from './project-create/project-create.component';
+import { LoginComponent } from './login/login.component';
 
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
@@ -29,6 +30,7 @@ import { environment } from '../environments/environment';
   declarations: [
     AppComponent,
     NavbarComponent,
+    FooterComponent,
     ProjectsComponent,
     ProjectDetailComponent,
     ClientsComponent,
@@ -36,7 +38,7 @@ import { environment } from '../environments/environment';
     ClientCreateComponent,
     HomeComponent,
     ProjectCreateComponent,
-    FooterComponent
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -52,7 +54,8 @@ import { environment } from '../environments/environment';
     ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
-    ContentfulService
+    ContentfulService,
+    AuthService
   ],
   bootstrap: [
     AppComponent
