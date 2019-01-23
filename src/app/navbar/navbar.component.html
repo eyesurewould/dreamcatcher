@@ -6,20 +6,20 @@
                     <img alt="Dreamcatcher Home" height="32" width="32" src="../../assets/logo/dreamcatcher.svg">
                 </a>
             </div>
-            <div>
-                <!-- these float right (thanks to nav-item class) so list them in Right-To-Left order-->
-                <span class="nav-item" >
-                    <div *ngIf="authService.isLoggedIn; else showLogin">
-                        <div style="font-size: x-small;">{{ user.displayName }}</div>
-                        <div (click)="authService.logout()" style="font-size: x-small;">Logout</div>
-                      </div>
-                      <ng-template #showLogin>
-                        <div routerLink="/login" style="font-size: x-small;">Login</div>
-                      </ng-template>
+
+            <div *ngIf="!(authService.isAuthenticated() | async); else showLoggedIn">
+                <a class="nav-item" routerLink="/login">Login</a>
+            </div>
+            <ng-template #showLoggedIn>
+                <span class="nav-item">
+                    <div>
+                        <div style="font-size: x-small;">{{currentUser}}</div>
+                        <div (click)="tryLogout()" style="font-size: x-small;">Logout</div>
+                    </div>
                 </span>
                 <a class="nav-item" routerLink="/projects">{{projectsTitle}}</a>
                 <a class="nav-item" routerLink="/clients">{{clientsTitle}}</a>
-            </div>
+            </ng-template>
         </div>
     </nav>
 </div>

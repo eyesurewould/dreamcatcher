@@ -29,11 +29,19 @@ export class LoginComponent implements OnInit {
   }
 
   tryLogin(value){
-    console.log('call authService');
     this.authService.doLogin(value)
     .then(res => {
-      console.log('authService did its thing');
       this.router.navigate(['/home']);
+    }, err => {
+      console.log(err);
+      this.errorMessage = err.message;
+    })
+  }
+
+  tryLogout(){
+    this.authService.doLogout()
+    .then(res => {
+      this.router.navigate(['/login']);
     }, err => {
       console.log(err);
       this.errorMessage = err.message;

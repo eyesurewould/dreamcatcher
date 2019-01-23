@@ -1,24 +1,47 @@
-import { Component, OnInit } from '@angular/core';
-import { Location } from '@angular/common';
-import { ActivatedRoute } from '@angular/router';
-import { AuthService } from  '../auth/auth.service';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthService } from '../auth/auth.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-navbar',
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.css']
 })
-export class NavbarComponent {
+export class NavbarComponent implements OnInit, OnDestroy {
   projectsTitle = 'Projects';
   clientsTitle = 'Clients';
+  //currentUser: string;
+  private sub: Subscription;
 
   constructor(
-    private location: Location,
-    private route: ActivatedRoute,
-    private  authService:  AuthService
+    private router: Router,
+    private authService: AuthService
   ) {
   }
 
-  ngOnInit(): void {  }
+  ngOnInit() {
+    this.sub = this.authService.isAuthenticated().subscribe(authResp => 
+      console.log('isAuthenticated: ', authResp)
+    );
+  }
+
+  ngOnDestroy() {
+    this.sub.unsubscribe();
+  }
+
+  isAuth() {
+    return this.authService.isAuthenticated();
+  }
+
+  tryLogout() {
+    this.authService.doLogout()
+      .then((res) => {
+        //this.currentUser = null;
+        this.router.navigate(['/login']);
+      }, (error) => {
+        console.log("Logout error", error);
+      });
+  }
 
 }
