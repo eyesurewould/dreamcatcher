@@ -6,20 +6,19 @@
                     <img alt="Dreamcatcher Home" height="32" width="32" src="../../assets/logo/dreamcatcher.svg">
                 </a>
             </div>
-
-            <div *ngIf="!(authService.isAuthenticated() | async); else showLoggedIn">
-                <a class="nav-item" routerLink="/login">Login</a>
+            <div>
+                <div *ngIf="!(authService.isAuthenticated()); else showLoggedIn">
+                    <a class="nav-item" routerLink="/login">Login</a>
+                </div>
+                <ng-template #showLoggedIn>
+                    <span class="nav-item">
+                        <div style="font-size: x-small;">{{authService.user.email}}</div>
+                        <a class="nav-item" (click)="tryLogout()" style="font-size: x-small;">Logout</a>
+                    </span>
+                    <a class="nav-item" routerLink="/projects">{{projectsTitle}}</a>
+                    <a class="nav-item" routerLink="/clients">{{clientsTitle}}</a>
+                </ng-template>
             </div>
-            <ng-template #showLoggedIn>
-                <span class="nav-item">
-                    <div>
-                        <div style="font-size: x-small;">{{currentUser}}</div>
-                        <div (click)="tryLogout()" style="font-size: x-small;">Logout</div>
-                    </div>
-                </span>
-                <a class="nav-item" routerLink="/projects">{{projectsTitle}}</a>
-                <a class="nav-item" routerLink="/clients">{{clientsTitle}}</a>
-            </ng-template>
         </div>
     </nav>
 </div>

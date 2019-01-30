@@ -6,19 +6,22 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class AuthService {
-  //user: User;
+  user: User;
+  private loggedIn: Boolean;
 
   constructor(private afAuth: AngularFireAuth, private router: Router) {
-    /*this.afAuth.authState.subscribe(user => {
+    this.afAuth.authState.subscribe(user => {
       if (user) {
         console.log('we have a user: ', user.email)
         this.user = user;
+        this.loggedIn = true;
         localStorage.setItem('user', JSON.stringify(this.user));
       } else {
-        console.log('we dont have a user :( ')
+        console.log('we dont have a user :( ');
         localStorage.setItem('user', null);
+        this.loggedIn = false;
       }
-    })*/
+    })
   }
 
   doLogin(value){
@@ -27,9 +30,6 @@ export class AuthService {
       console.log('email: ', value.email, 'password: ', value.password);
       this.afAuth.auth.app.auth().signInWithEmailAndPassword(value.email, value.password)
       .then(res => {
-        //console.log('got res from firebase', res);
-        //console.log('user: ', this.user);
-        //console.log('user: ', this.user.email);
         resolve(res);
       }, err => reject(err))
     })
@@ -47,12 +47,8 @@ export class AuthService {
     });
   }
 
-//  currentUser() {
-//    return this.afAuth.auth.app.auth().currentUser;
-//  }
-
-  isAuthenticated(): Observable<any> {
-    return this.afAuth.authState;
+  isAuthenticated(){
+    return this.loggedIn;
   }
 
 }
