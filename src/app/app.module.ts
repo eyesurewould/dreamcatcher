@@ -25,6 +25,8 @@ import { LoginComponent } from './login/login.component';
 
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
+import { ArtistComponent } from './artist/artist.component';
+import { RegisterComponent } from './register/register.component';
 
 @NgModule({
   declarations: [
@@ -38,7 +40,9 @@ import { environment } from '../environments/environment';
     ClientCreateComponent,
     HomeComponent,
     ProjectCreateComponent,
-    LoginComponent
+    LoginComponent,
+    ArtistComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,

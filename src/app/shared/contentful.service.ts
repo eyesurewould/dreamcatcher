@@ -19,18 +19,35 @@ import { identifierModuleUrl } from '@angular/compiler';
   providedIn: 'root'
 })
 
+  /**
+   * This service provides a wrapper for two Contenful SDKs so your application
+   * can access just one service and not care about the underlying SDKs.
+   * 
+   * The service has be customized for this specific app and uses nomenclature
+   * related to custom types defined in my Contentful application ("Client", 
+   * "Product", and "Artist"). These should be refactored to reflect your 
+   * custom types in your content model.
+   * 
+   * Note: The Contentful SDKs are refered to as "client" and my custom content
+   * type is also a "client". The former will always have 'contentful' in the
+   * field name.
+   */
+
 export class ContentfulService {
 
+  // Contentful SDK instances
   private contentfulClient: contentfulMgmt.ClientAPI;
   private contentfulMgmtClient: contentfulMgmt.ClientAPI;
 
   constructor(private http: HttpClient) {
 
+    // Create a 'read' SDK client
     this.contentfulClient = contentful.createClient({
       accessToken: environment.contentful.accessToken,
       space: environment.contentful.space
     })
 
+    // Create a 'CRUD' SDK client
     this.contentfulMgmtClient = contentfulMgmt.createClient({
       // This is not actually a PERSONAL token. It's for managing 
       // content in any space owned by the account, so more like
@@ -39,6 +56,11 @@ export class ContentfulService {
     })
 
   }
+
+  /**==================
+   * CLIENT functions
+   * ==================
+   */
 
   /**
    * Use the Content Management SDK to create a new entry of content type "client"
@@ -206,6 +228,10 @@ export class ContentfulService {
 
   }
 
+  /**==================
+   * PROJECT functions
+   * ==================
+   */
 
   /**
    * Use the Content Management SDK to create a new entry of content type "ink"
@@ -438,6 +464,36 @@ export class ContentfulService {
       .catch((err) => {
         console.error;
       });
+  }
+
+
+  /**==================
+   * ARTIST functions
+   * ==================
+   */
+
+  /**
+   * Use the Content SDK to retrieve records
+   * 
+   * @param artistId A Contentful Entry ID for an entry of content_type 'artist'
+   */
+  public getClientsForArtist(artistId: string) {
+
+    const params = {
+      content_type: 'artist',
+      include: 3,
+      order: '-sys.updatedAt',
+      'fields.clientRef.sys.id': artistId
+    };
+
+    return this.contentfulClient.getEntries(params)
+      .then((response) => {
+        return response;
+      })
+      .catch((err) => {
+        console.error;
+      });
+
   }
 
 

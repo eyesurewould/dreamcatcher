@@ -1,6 +1,8 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
-import { HttpModule } from '@angular/http';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+
 import { ContentfulService } from '../shared/contentful.service';
 import { ProjectsComponent } from './projects.component';
 import { By } from '@angular/platform-browser';
@@ -16,7 +18,14 @@ describe('ProjectsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ProjectsComponent]
+      declarations: [
+        ProjectsComponent
+      ],
+      imports: [
+        // no more boilerplate code w/ custom providers needed :-)
+        HttpClientModule,
+        HttpClientTestingModule
+      ]
     })
       .compileComponents();
 
@@ -25,7 +34,7 @@ describe('ProjectsComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ProjectsComponent], 
+      declarations: [ProjectsComponent],
       imports: [HttpModule],
     });
     fixture = TestBed.createComponent(ProjectsComponent);

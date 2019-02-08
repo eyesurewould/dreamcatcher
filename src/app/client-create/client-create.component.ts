@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ContentfulService } from '../shared/contentful.service';
 import { Client } from '../client/client';
-import { emailValidator, phoneValidator } from '../shared/client-validation';
+import { emailValidator, phoneValidator } from '../shared/validation';
 
 import { Router } from '@angular/router';
 

@@ -5,7 +5,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ContentfulService } from '../shared/contentful.service';
 import { Entry, EntryCollection } from 'contentful';
 import { Client } from '../client/client';
-import { emailValidator, phoneValidator } from '../shared/client-validation';
+import { emailValidator, phoneValidator } from '../shared/validation';
 
 @Component({
     selector: 'client-detail',
@@ -67,7 +67,7 @@ export class ClientDetailComponent implements OnInit {
                 if (this.client.fields.notes != undefined) {
                     this.clientDetailFormGroup.controls['notes'].setValue(this.client.fields.notes);
                 }
-            
+
                 this.cs.getProjectsForClient(id)
                     .then((responseProjects) => {
                         this.projects = responseProjects;
