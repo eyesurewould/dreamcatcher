@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
-import { HttpClientModule, HttpClient } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { ContentfulService } from '../shared/contentful.service';
@@ -29,13 +29,13 @@ describe('ProjectsComponent', () => {
     })
       .compileComponents();
 
-    cs = new ContentfulService();
+    //cs = new ContentfulService();
   }));
 
   beforeEach(() => {
     TestBed.configureTestingModule({
       declarations: [ProjectsComponent],
-      imports: [HttpModule],
+      imports: [HttpClientTestingModule],
     });
     fixture = TestBed.createComponent(ProjectsComponent);
     comp = fixture.componentInstance;

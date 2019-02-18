@@ -3,7 +3,7 @@ import { DebugElement }    from '@angular/core';
 import { NavbarComponent } from './navbar.component';
 import { By }              from '@angular/platform-browser';
  
-import { HttpModule }    from '@angular/http';
+import { HttpClientModule }    from '@angular/common/http';
 
 describe('NavbarComponent', () => {
  
@@ -16,7 +16,7 @@ describe('NavbarComponent', () => {
     
     TestBed.configureTestingModule({
         declarations: [ NavbarComponent ],
-        imports: [ HttpModule], 
+        imports: [ HttpClientModule], 
     });
     fixture = TestBed.createComponent(NavbarComponent);
     comp = fixture.componentInstance;
