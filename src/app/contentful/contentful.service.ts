@@ -4,7 +4,7 @@ import { environment } from '../../environments/environment';
 import { Artist, artistOrder } from '../artist/artist';
 import { Client, clientOrder } from '../client/client';
 import { Project, projectOrder } from '../project/project';
-import { Image } from './image';
+import { Image } from '../util/image';
 
 import { Observable, Subject } from 'rxjs';
 import { map } from 'rxjs/operators';

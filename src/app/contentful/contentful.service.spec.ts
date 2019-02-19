@@ -4,7 +4,7 @@ import { ContentfulService } from './contentful.service';
 //import * as contentful from 'contentful';
 //import * as contentfulMgmt from 'contentful-management';
 //import { environment } from '../../environments/environment';
-import { Image } from './image';
+import { Image } from '../util/image';
 
 describe('ContentfulService', () => {
   let service = ContentfulService;
