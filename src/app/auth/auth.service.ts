@@ -17,7 +17,7 @@ export class AuthService {
         this.loggedIn = true;
         localStorage.setItem('user', JSON.stringify(this.user));
       } else {
-        console.log('we dont have a user :( ');
+        console.log('we dont have a user');
         localStorage.setItem('user', null);
         this.loggedIn = false;
       }
