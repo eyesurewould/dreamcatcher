@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 
+import { Artist, artistOrder } from '../artist/artist';
 import { Client, clientOrder } from '../client/client';
 import { Project, projectOrder } from '../project/project';
 import { Image } from './image';
@@ -19,19 +20,19 @@ import { identifierModuleUrl } from '@angular/compiler';
   providedIn: 'root'
 })
 
-  /**
-   * This service provides a wrapper for two Contenful SDKs so your application
-   * can access just one service and not care about the underlying SDKs.
-   * 
-   * The service has be customized for this specific app and uses nomenclature
-   * related to custom types defined in my Contentful application ("Client", 
-   * "Product", and "Artist"). These should be refactored to reflect your 
-   * custom types in your content model.
-   * 
-   * Note: The Contentful SDKs are refered to as "client" and my custom content
-   * type is also a "client". The former will always have 'contentful' in the
-   * field name.
-   */
+/**
+ * This service provides a wrapper for two Contenful SDKs so your application
+ * can access just one service and not care about the underlying SDKs.
+ * 
+ * The service has be customized for this specific app and uses nomenclature
+ * related to custom types defined in my Contentful application ("Client", 
+ * "Product", and "Artist"). These should be refactored to reflect your 
+ * custom types in your content model.
+ * 
+ * Note: The Contentful SDKs are refered to as "client" and my custom content
+ * type is also a "client". The former will always have 'contentful' in the
+ * field name.
+ */
 
 export class ContentfulService {
 
@@ -497,6 +498,66 @@ export class ContentfulService {
   }
 
 
+  /**
+ * Update an artist Entry
+ * 
+ * @param id A Contentful Entry id for an existing entry to update
+ * @param artist An object with details to update the entry
+ */
+  public saveArtist(id: string, artist: Artist) {
+
+    return this.contentfulMgmtClient.getSpace(environment.contentful.space)
+      .then((space) => space.getEnvironment('master'))
+      .then((env) => env.getEntry(id))
+      .then((entry) => {
+        entry.fields.email = { 'en-US': artist.email };
+
+        if (artist.firstName != '') {
+          entry.fields.firstName = { 'en-US': artist.firstName };
+        }
+        if (artist.lastName != '') {
+          entry.fields.lastName = { 'en-US': artist.lastName };
+        }
+
+        return entry.update();
+      })
+      .then((entry) => {
+        return entry.publish();
+      })
+      .then((entry) => {
+        console.log('saveArtist: Entry ', entry.sys.id, ' updated');
+        return entry
+      })
+      .catch((err) => {
+        console.error;
+      });
+
+  }
+
+  /**
+ * Use the Contentful SDK to remove a record
+ * 
+ * @param id A Contentful entry id.
+ */
+  public deleteArtist(id: string) {
+
+    return this.contentfulMgmtClient.getSpace(environment.contentful.space)
+      .then((space) => space.getEnvironment('master'))
+      .then((env) => env.getEntry(id))
+      .then((entry) => entry.unpublish())
+
+      //TODO: Make permanent deletion a system-wide configuration 
+      //and only archive by default (with a manual data cleanup
+      //option for DevOps to control)
+      .then((entry) => entry.delete())
+      .then(() => console.log('deleteArtist: Artist deleted.'))
+      .catch((err) => {
+        console.error;
+      });
+
+  }
+
+
   //IN PROGRESS  
   /**
    * Use the Content Management SDK to create a new asset
@@ -557,7 +618,7 @@ export class ContentfulService {
         return environment.createAsset({
           fields: {
             title: {
-              'en-US' : imageFileName
+              'en-US': imageFileName
             },
             file: {
               'en-US': {
@@ -578,10 +639,10 @@ export class ContentfulService {
       .then((asset) => {
         console.log('createAssetFromUpload: process it ', asset);
         asset.processForLocale('en-US')
-        .then((asset) => {
-          console.log('createAssetFromUpload: returned from the call to process the asset', asset);
-          console.log('createAssetFromUpload: url to the asset', asset.fields.file['en-US'].url);
-        });
+          .then((asset) => {
+            console.log('createAssetFromUpload: returned from the call to process the asset', asset);
+            console.log('createAssetFromUpload: url to the asset', asset.fields.file['en-US'].url);
+          });
       })
       .then((asset) => {
         console.log('createAssetFromUpload: publish it ', asset);
@@ -666,19 +727,19 @@ export class ContentfulService {
         responseType: 'json'
       }).pipe(
         map((res: Response) => {
-        // need to extract an ID value, but we don't have an Class for the response
-        let resultJson = JSON.stringify(res);
-        let result = JSON.parse(resultJson);
-        if (result.sys != null) {
-          sys = result.sys;
-          if (result.sys.id != null) {
-            id = result.sys.id;
+          // need to extract an ID value, but we don't have an Class for the response
+          let resultJson = JSON.stringify(res);
+          let result = JSON.parse(resultJson);
+          if (result.sys != null) {
+            sys = result.sys;
+            if (result.sys.id != null) {
+              id = result.sys.id;
+            }
           }
-        }
 
-        console.log('uploadFile: file uploaded: ', id);
-        return id;
-      })).toPromise()
+          console.log('uploadFile: file uploaded: ', id);
+          return id;
+        })).toPromise()
 
 
     /*

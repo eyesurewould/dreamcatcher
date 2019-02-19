@@ -48,36 +48,88 @@ export class ArtistComponent implements OnInit {
      * 
      * @param id A Contentful Entry id
      */
-    load(id: string) {
+  load(id: string) {
 
-      this.cs.getClient(id)
-          .then((responseClient) => {
-              this.artist = responseClient;
+    this.cs.getClient(id)
+      .then((responseClient) => {
+        this.artist = responseClient;
 
-              this.artistDetailFormGroup.controls['email'].setValue(this.artist.fields.email);
+        this.artistDetailFormGroup.controls['email'].setValue(this.artist.fields.email);
 
-              if (this.artist.fields.firstName != undefined) {
-                  this.artistDetailFormGroup.controls['firstName'].setValue(this.artist.fields.firstName);
-              }
-              if (this.artist.fields.lastName != undefined) {
-                  this.artistDetailFormGroup.controls['lastName'].setValue(this.artist.fields.lastName);
-              }
-              //if (this.artist.fields.firebaseId != undefined) {
-              //    this.artistDetailFormGroup.controls['firebaseId'].setValue(this.artist.fields.firebaseId);
-              //}
+        if (this.artist.fields.firstName != undefined) {
+          this.artistDetailFormGroup.controls['firstName'].setValue(this.artist.fields.firstName);
+        }
+        if (this.artist.fields.lastName != undefined) {
+          this.artistDetailFormGroup.controls['lastName'].setValue(this.artist.fields.lastName);
+        }
+        //if (this.artist.fields.firebaseId != undefined) {
+        //    this.artistDetailFormGroup.controls['firebaseId'].setValue(this.artist.fields.firebaseId);
+        //}
 
-              this.cs.getClientsForArtist(id)
-                  .then((responseClients) => {
-                      this.clients = responseClients;
-                      console.log('load: clients count ', responseClients.items.length);
-                      this.clientCount = responseClients.items.length;
+        this.cs.getClientsForArtist(id)
+          .then((responseClients) => {
+            this.clients = responseClients;
+            console.log('load: clients count ', responseClients.items.length);
+            this.clientCount = responseClients.items.length;
 
-                  })
           })
-          .catch((err) => {
-              console.error;
-          })
+      })
+      .catch((err) => {
+        console.error;
+      })
 
+  }
+
+  enableEditing() {
+    //console.log('enableEditing: start ', this.clientDetailFormGroup);
+    this.isEditable = true;
+  }
+
+  disableEditing() {
+    //console.log('disableEditing: start');
+    this.isEditable = false;
+  }
+
+
+  /**
+   * Save current edits back to Contentful via the service
+   */
+  submit() {
+    //console.log('submit: start');
+    this.isEditable = false;
+
+    var artist = new Artist();
+    artist.email = this.artistDetailFormGroup.controls['email'].value;
+    artist.firstName = this.artistDetailFormGroup.controls['firstName'].value;
+    artist.lastName = this.artistDetailFormGroup.controls['lastName'].value;
+
+    //console.log('submit: artist data to send ', artist);
+    this.cs.saveArtist(this.id, artist)
+      .then((entry) => {
+        //console.log('submit: saved ', entry);
+      })
+      .catch((err) => {
+        console.error;
+      })
+
+  }
+
+
+  /**
+   * Delete a Contentful Entry
+   * 
+   * @param id A Contentful Entry id
+   */
+  deleteArtist(id: string) {
+    //console.log('deleteArtist: ', id);
+    this.cs.deleteArtist(id)
+      .then(() => {
+        //console.log('deleteArtist: deleted ', id);
+        this.router.navigate(['/artists']);
+      })
+      .catch((err) => {
+        console.error;
+      })
   }
 
 

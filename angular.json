@@ -45,7 +45,16 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "serviceWorker": true
+              "serviceWorker": true,
+              "budgets": [
+                {
+                  "type": "bundle",
+                  "name": "main",
+                  "baseline": "900kb",
+                  "warning": "10%",
+                  "error": "20%"
+                }
+              ]
             }
           }
         },
