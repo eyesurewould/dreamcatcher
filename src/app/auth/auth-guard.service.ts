@@ -15,12 +15,10 @@ export class AuthGuardService implements CanActivate {
 
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     if (this.authService.isAuthenticated()) {
-      console.log('authenticated, so allow navigation');
       return true;
     } else {
-      console.log('NOT authenticated, so NO navigation');
+      console.log('NOT authenticated');
       this.router.navigate(['/login']);
-      // you can save redirect url so after authing we can move them back to the page they requested
       return false;
     }
   }

@@ -4,15 +4,14 @@ import { ActivatedRoute, Router } from '@angular/router';
 
 import { ContentfulService } from '../shared/contentful.service';
 import { Entry, EntryCollection } from 'contentful';
-import { Artist } from '../artist/artist';
-import { emailValidator } from '../shared/validation';
+import { Artist } from './artist';
 
 @Component({
-  selector: 'app-artist',
-  templateUrl: './artist.component.html',
-  styleUrls: ['./artist.component.css']
+  selector: 'artist-detail',
+  templateUrl: './artist-detail.component.html',
+  styleUrls: ['./artist-detail.component.css']
 })
-export class ArtistComponent implements OnInit {
+export class ArtistDetailComponent implements OnInit {
 
   public id: string;
   public artist: Entry<any>;
@@ -50,9 +49,9 @@ export class ArtistComponent implements OnInit {
      */
   load(id: string) {
 
-    this.cs.getClient(id)
-      .then((responseClient) => {
-        this.artist = responseClient;
+    this.cs.getArtist(id)
+      .then((responseArtist) => {
+        this.artist = responseArtist;
 
         this.artistDetailFormGroup.controls['email'].setValue(this.artist.fields.email);
 
@@ -62,15 +61,12 @@ export class ArtistComponent implements OnInit {
         if (this.artist.fields.lastName != undefined) {
           this.artistDetailFormGroup.controls['lastName'].setValue(this.artist.fields.lastName);
         }
-        //if (this.artist.fields.firebaseId != undefined) {
-        //    this.artistDetailFormGroup.controls['firebaseId'].setValue(this.artist.fields.firebaseId);
-        //}
 
         this.cs.getClientsForArtist(id)
-          .then((responseClients) => {
-            this.clients = responseClients;
-            console.log('load: clients count ', responseClients.items.length);
-            this.clientCount = responseClients.items.length;
+          .then((responseArtists) => {
+            this.clients = responseArtists;
+            console.log('load: artists count ', responseArtists.items.length);
+            this.clientCount = responseArtists.items.length;
 
           })
       })
@@ -81,12 +77,10 @@ export class ArtistComponent implements OnInit {
   }
 
   enableEditing() {
-    //console.log('enableEditing: start ', this.clientDetailFormGroup);
     this.isEditable = true;
   }
 
   disableEditing() {
-    //console.log('disableEditing: start');
     this.isEditable = false;
   }
 

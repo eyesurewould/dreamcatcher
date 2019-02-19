@@ -21,15 +21,15 @@ import { identifierModuleUrl } from '@angular/compiler';
 })
 
 /**
- * This service provides a wrapper for two Contenful SDKs so your application
+ * This service provides a wrapper for two Contenful SDKs so the application
  * can access just one service and not care about the underlying SDKs.
  * 
- * The service has be customized for this specific app and uses nomenclature
+ * The service has been crafted for this specific app and uses nomenclature
  * related to custom types defined in my Contentful application ("Client", 
- * "Product", and "Artist"). These should be refactored to reflect your 
- * custom types in your content model.
+ * "Product", and "Artist"). These should be refactored to reflect any new 
+ * custom types in the content model.
  * 
- * Note: The Contentful SDKs are refered to as "client" and my custom content
+ * Note: The Contentful SDKs are refered to as "client" and the custom content
  * type is also a "client". The former will always have 'contentful' in the
  * field name.
  */
@@ -57,6 +57,16 @@ export class ContentfulService {
     })
 
   }
+
+  /**
+   * Currently, all functions are grouped by the type of content being
+   * processed. This is a little short-sighted and won't scale. 
+   * 
+   * A better approach would be to have general case functions that
+   * are called by content-type specific functions. This might result
+   * in slightly more code, but less duplication. 
+   */
+
 
   /**==================
    * CLIENT functions
@@ -473,6 +483,58 @@ export class ContentfulService {
    * ==================
    */
 
+     /**
+   * Use the Content Management SDK to create a new entry of content type "artist"
+   * 
+   * @param artist
+   */
+  public createArtist(artist: Artist) {
+
+    return this.contentfulMgmtClient.getSpace(environment.contentful.space)
+      .then((space) => space.getEnvironment('master'))
+      .then((environment) => environment.createEntry('artist', {
+        fields: {
+          email: {
+            'en-US': artist.email
+          },
+          firstName: {
+            'en-US': artist.firstName
+          },
+          lastName: {
+            'en-US': artist.lastName
+          }
+        }
+      }))
+      .then((entry) => entry.publish())
+      .then((entry) => {
+        console.log('createArtist: Entry ', entry.sys.id, 'created');
+        return entry
+      })
+      .catch((err) => {
+        console.error;
+      });
+
+  }
+
+
+  /**
+   * Use the Content SDK to retrieve records
+   * 
+   * @param id A Contentful Entry ID for an entry of content_type 'artist'
+   */
+  public getArtist(id: string) {
+
+    return this.contentfulClient.getEntry(id)
+      .then((response) => {
+        //console.log('getArtist(): ' + response);
+        return response;
+      })
+      .catch((err) => {
+        console.error;
+      });
+
+  }
+
   /**
    * Use the Content SDK to retrieve records
    * 
@@ -741,38 +803,6 @@ export class ContentfulService {
           return id;
         })).toPromise()
 
-
-    /*
-    //call the angular http method
-    this.http
-      //post the form data to the url defined above and map the response. Then subscribe 
-      //to initiate the post. if you don't subscribe, angular wont post.
-      .post(URL, formData, {
-        headers: httpHeaders,
-        responseType: 'json'
-      }).pipe(map((res: Response) => {
-        // need to extract an ID value, but we don't have an Class for the response
-        let resultJson = JSON.stringify(res);
-        let result = JSON.parse(resultJson);
-        if (result.sys != null) {
-          sys = result.sys;
-          if (result.sys.id != null) {
-            id = result.sys.id;
-          }
-        }
-        
-        return id;
-      }
-      )).subscribe(
-        //map the success function and alert the response
-        (success) => {
-          //console.log(success);
-          return success;
-        },
-        (error) => console.log(error));
-
-    console.log('uploadFile: response: ', id);
-    return id;*/
   }
 
 }

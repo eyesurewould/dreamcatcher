@@ -15,33 +15,38 @@ import { NavbarComponent } from './navbar/navbar.component';
 import { FooterComponent } from './footer/footer.component';
 
 import { HomeComponent } from './home/home.component';
+import { ArtistsComponent } from './artists/artists.component';
+import { ArtistDetailComponent } from './artist/artist-detail.component';
+import { ArtistCreateComponent } from './artist-create/artist-create.component';
 import { ClientsComponent } from './clients/clients.component';
 import { ClientDetailComponent } from './client/client-detail.component';
 import { ClientCreateComponent } from './client-create/client-create.component';
 import { ProjectsComponent } from './projects/projects.component';
 import { ProjectDetailComponent } from './project/project-detail.component';
 import { ProjectCreateComponent } from './project-create/project-create.component';
-import { LoginComponent } from './login/login.component';
 
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
-import { ArtistComponent } from './artist/artist.component';
+import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
+
 
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     FooterComponent,
-    ProjectsComponent,
-    ProjectDetailComponent,
+    ArtistsComponent,
+    ArtistDetailComponent,
+    ArtistCreateComponent,
     ClientsComponent,
     ClientDetailComponent,
     ClientCreateComponent,
-    HomeComponent,
+    ProjectsComponent,
+    ProjectDetailComponent,
     ProjectCreateComponent,
+    HomeComponent,
     LoginComponent,
-    ArtistComponent,
     RegisterComponent
   ],
   imports: [
