@@ -8,7 +8,7 @@ This is not a CRM but instead is focused on image capture because artists create
 
 Future features:
 + Link to external images (dropbox, github, social networks, etc)
-+ Firebase authentication (isolate content by artist)
++ Firebase authentication and authorization (isolate content by artist - in progress)
 + Implement a Store (to better handle state for multi-device situations)
 
 # Structure
