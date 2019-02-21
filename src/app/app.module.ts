@@ -7,7 +7,7 @@ import { RouterModule } from '@angular/router';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AuthService } from './auth/auth.service';
-import { ContentfulService } from './shared/contentful.service';
+import { ContentfulService } from './contentful/contentful.service';
 
 import { AppComponent } from './app.component';
 import { appRoutes } from '../routes';

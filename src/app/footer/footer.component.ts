@@ -13,9 +13,9 @@ export class FooterComponent implements OnInit {
   
   constructor() { 
 
-    //TODO: pull this info from a user's profile
-    this.email = 'missyjahntattoos@gmail.com';
-    this.instagram = 'https://www.instagram.com/missyjahntattoos/'
+    //TODO: pull this info from a user's profile or environment
+    this.email = 'test@gmail.com';
+    this.instagram = 'https://www.instagram.com/test/'
   }
 
   ngOnInit() {

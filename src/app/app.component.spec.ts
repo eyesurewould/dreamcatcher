@@ -1,45 +1,79 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { DebugElement } from '@angular/core';
+import { async, TestBed } from '@angular/core/testing';
+import { APP_BASE_HREF } from '@angular/common';
+
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
+import { AlertModule } from 'ngx-bootstrap';
+import { RouterModule } from '@angular/router';
+import { AngularFireModule } from '@angular/fire';
+import { AngularFireAuthModule } from '@angular/fire/auth';
+import { AuthService } from './auth/auth.service';
+import { ContentfulService } from './contentful/contentful.service';
 
 import { AppComponent } from './app.component';
-import { RouterTestingModule } from '@angular/router/testing'
+import { appRoutes } from '../routes';
 import { NavbarComponent } from './navbar/navbar.component';
 import { FooterComponent } from './footer/footer.component';
 
-describe('AppComponent', () => {
+import { HomeComponent } from './home/home.component';
+import { ArtistsComponent } from './artists/artists.component';
+import { ArtistDetailComponent } from './artist/artist-detail.component';
+import { ArtistCreateComponent } from './artist-create/artist-create.component';
+import { ClientsComponent } from './clients/clients.component';
+import { ClientDetailComponent } from './client/client-detail.component';
+import { ClientCreateComponent } from './client-create/client-create.component';
+import { ProjectsComponent } from './projects/projects.component';
+import { ProjectDetailComponent } from './project/project-detail.component';
+import { ProjectCreateComponent } from './project-create/project-create.component';
 
-  let app: AppComponent;
-  let fixture: ComponentFixture<AppComponent>;
-  let de: DebugElement;
-  let element: HTMLElement;
+import { ServiceWorkerModule } from '@angular/service-worker';
+import { environment } from '../environments/environment';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
+
+describe('AppComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [
         AppComponent,
         NavbarComponent,
-        FooterComponent
+        FooterComponent,
+        ArtistsComponent,
+        ArtistDetailComponent,
+        ArtistCreateComponent,
+        ClientsComponent,
+        ClientDetailComponent,
+        ClientCreateComponent,
+        ProjectsComponent,
+        ProjectDetailComponent,
+        ProjectCreateComponent,
+        HomeComponent,
+        LoginComponent,
+        RegisterComponent
       ],
-      imports: [ 
-        RouterTestingModule 
+      imports: [
+        BrowserModule,
+        ReactiveFormsModule,
+        HttpClientModule,
+        AngularFireModule.initializeApp(environment.firebase),
+        AngularFireAuthModule,
+       AlertModule.forRoot(),
+        RouterModule.forRoot(
+          appRoutes,
+          { onSameUrlNavigation: 'reload' }
+        ),
+        ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
+      ],
+      providers: [
+        {provide: APP_BASE_HREF, useValue: '/'}
       ]
     })
       .compileComponents();
 
   }));
-
-  beforeEach(() => {
-    TestBed.configureTestingModule({
-      declarations: [
-        AppComponent
-      ],
-      imports: [ 
-        RouterTestingModule 
-      ]
-    })
-      .compileComponents();
-
-  });
 
   it('should create the app', async(() => {
     let fixture = TestBed.createComponent(AppComponent);

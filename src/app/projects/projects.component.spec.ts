@@ -1,9 +1,12 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DebugElement } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
-import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { ActivatedRoute, Router } from '@angular/router';
+//import { EntryCollection } from 'contentful';
+import { ContentfulService } from '../contentful/contentful.service';
+import { projectOrder } from '../project/project';
 
-import { ContentfulService } from '../shared/contentful.service';
 import { ProjectsComponent } from './projects.component';
 import { By } from '@angular/platform-browser';
 
@@ -22,9 +25,12 @@ describe('ProjectsComponent', () => {
         ProjectsComponent
       ],
       imports: [
-        // no more boilerplate code w/ custom providers needed :-)
         HttpClientModule,
-        HttpClientTestingModule
+        HttpClientTestingModule,
+        ActivatedRoute,
+        Router,
+        ContentfulService,
+        projectOrder
       ]
     })
       .compileComponents();
@@ -34,8 +40,17 @@ describe('ProjectsComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ProjectsComponent],
-      imports: [HttpClientTestingModule],
+      declarations: [
+        ProjectsComponent
+      ],
+      imports: [
+        HttpClientModule,
+        HttpClientTestingModule,
+        ActivatedRoute,
+        Router,
+        ContentfulService,
+        projectOrder
+      ],
     });
     fixture = TestBed.createComponent(ProjectsComponent);
     comp = fixture.componentInstance;

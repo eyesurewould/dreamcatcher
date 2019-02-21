@@ -4,6 +4,8 @@ import { of } from 'rxjs';
 
 import { ProjectDetailComponent } from './project-detail.component';
 import { Router } from '@angular/router';
+import { HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { ActivatedRouteStub } from '../../testing/activated-route-stub';
 
@@ -20,7 +22,9 @@ describe('ProjectDetailComponent', () => {
 
     TestBed.configureTestingModule({
       imports: [
-        ReactiveFormsModule
+        ReactiveFormsModule,
+        HttpClientTestingModule, 
+        HttpClientModule
       ],
       declarations: [ 
         ProjectDetailComponent 

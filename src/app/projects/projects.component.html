@@ -35,7 +35,7 @@
 <div class="row">
     <div class="col card-columns" id="projects-container">
         <div class="card" *ngFor="let project of projects?.items">
-            <span [routerLink]="['/project/' + project.sys.id ]" class="project-card-link">
+            <span routerLink="['/project/' + project.sys.id ]" class="project-card-link">
                 <!-- three options for image to display:
                         Based on status and image availability 
                         1) Final - show final image

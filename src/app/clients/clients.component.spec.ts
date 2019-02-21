@@ -1,4 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { ClientsComponent } from './clients.component';
 
@@ -8,6 +10,7 @@ describe('ClientsComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports:[ HttpClientTestingModule, HttpClientModule ],
       declarations: [ ClientsComponent ]
     })
     .compileComponents();

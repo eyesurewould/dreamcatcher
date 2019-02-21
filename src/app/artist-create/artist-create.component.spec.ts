@@ -1,5 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ArtistCreateComponent } from './artist-create.component';
 
 describe('ArtistCreateComponent', () => {
@@ -8,6 +9,10 @@ describe('ArtistCreateComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule, 
+        HttpClientModule
+      ],
       declarations: [ ArtistCreateComponent ]
     })
     .compileComponents();

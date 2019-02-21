@@ -2,10 +2,10 @@ import { Component, OnChanges, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { ContentfulService } from '../shared/contentful.service';
+import { ContentfulService } from '../contentful/contentful.service';
 import { Entry } from 'contentful';
 import { Project } from '../project/project';
-import { Image } from '../shared/image';
+import { Image } from '../util/image';
 
 @Component({
     selector: 'project-detail',

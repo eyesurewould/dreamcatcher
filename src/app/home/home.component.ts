@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { EntryCollection } from 'contentful';
-import { ContentfulService } from '../shared/contentful.service';
+import { ContentfulService } from '../contentful/contentful.service';
 import { clientOrder } from '../client/client';
 import { projectOrder } from '../project/project';
 

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
-import { ContentfulService } from '../shared/contentful.service';
+import { ContentfulService } from '../contentful/contentful.service';
 import { Project } from '../project/project';
 
 import { Router } from '@angular/router';

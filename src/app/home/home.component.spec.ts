@@ -1,22 +1,30 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ContentfulService } from '../shared/contentful.service';
-
+import { ContentfulService } from '../contentful/contentful.service';
+import { HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { HomeComponent } from './home.component';
 
 describe('HomeComponent', () => {
   let component: HomeComponent;
   let fixture: ComponentFixture<HomeComponent>;
   let native;
-
-  let cs: ContentfulService;
+  
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [HomeComponent]
+      declarations: [
+        HomeComponent
+      ],
+      imports: [
+        HttpClientTestingModule, 
+        HttpClientModule
+      ],
+      providers: [
+        ContentfulService
+      ]
     })
       .compileComponents();
 
-    cs = new ContentfulService();
   }));
 
   beforeEach(() => {
@@ -30,19 +38,11 @@ describe('HomeComponent', () => {
     expect(component).toBeTruthy();
   });
 
-  it('should contain multiple divs', () => {
-    expect( native.querySelectorAll("div.clients_box > div").length).toBeGreaterThan(0); 
-  });
-
-  //FAILS currently - the DOM elements are still in flux, so this will be resolved once
-  //the ClientsComponent is complete
-  it('should display more than 0 clients', () => {
+  it('should display more than 0 client-card elements', () => {
     expect( native.querySelectorAll('.client-card').length).toBeGreaterThan(0); 
   });
 
-  //FAILS currently - the DOM elements are still in flux, so this will be resolved once
-  //the ProjectsComponent is complete
-  it('should display more than 0 projects', () => {
+  it('should display more than 0 project-card elements', () => {
     expect( native.querySelectorAll('.project-card').length).toBeGreaterThan(0); 
   });
   

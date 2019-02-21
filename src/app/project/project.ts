@@ -1,4 +1,4 @@
-import { Image } from '../shared/image'
+import { Image } from '../util/image'
 
 export class Project {
     title: string;

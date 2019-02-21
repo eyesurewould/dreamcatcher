@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
 import { EntryCollection } from 'contentful';
-import { ContentfulService } from '../shared/contentful.service';
+import { ContentfulService } from '../contentful/contentful.service';
 import { clientOrder } from '../client/client';
 
 @Component({

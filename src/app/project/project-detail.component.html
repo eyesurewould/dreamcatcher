@@ -61,14 +61,14 @@
                     </div>
                     <ng-template #readModeStyle>
                         <div class="projectDetail">
-                            <span *ngFor="let style of project.fields.style" [routerLink]="['/projects', style]" class="link">{{project.fields.style}}</span>
+                            <span *ngFor="let style of project.fields.style" routerLink="['/projects', style]" class="link">{{project.fields.style}}</span>
                         </div>
                     </ng-template>
                 </div>
 
                 <!-- client name is not editable here - read only -->
                 <div class="projectDetail" *ngIf="!isEditable">
-                    <span class="link" [routerLink]="['/client/' + project.fields.clientRef.sys.id ]">
+                    <span class="link" routerLink="['/client/' + project.fields.clientRef.sys.id ]">
                         {{project.fields.clientRef.fields.name}}
                     </span>
                 </div>

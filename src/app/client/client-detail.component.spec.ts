@@ -4,7 +4,9 @@ import { of } from 'rxjs';
 
 import { ClientDetailComponent } from './client-detail.component';
 import { Router } from '@angular/router';
-import { ContentfulService } from '../shared/contentful.service';
+import { ContentfulService } from '../contentful/contentful.service';
+import { HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 
 import { ActivatedRoute } from '@angular/router';
 
@@ -20,6 +22,10 @@ describe('ClientDetailComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
+      imports: [
+        HttpClientTestingModule, 
+        HttpClientModule
+      ],
       declarations: [ ClientDetailComponent ],
       providers: [
         { provide: Router, useValue: routerSpy },

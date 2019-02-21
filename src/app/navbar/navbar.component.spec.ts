@@ -4,6 +4,15 @@ import { NavbarComponent } from './navbar.component';
 import { By }              from '@angular/platform-browser';
  
 import { HttpClientModule }    from '@angular/common/http';
+//import { AuthService } from '../auth/auth.service';
+
+class MockAuthService {
+  authenticated = false;
+
+  isAuthenticated() {
+    return this.authenticated;
+  }
+}
 
 describe('NavbarComponent', () => {
  
@@ -11,12 +20,14 @@ describe('NavbarComponent', () => {
   let fixture: ComponentFixture<NavbarComponent>;
   let de: DebugElement;
   let element: HTMLElement;
+
+  let authService: MockAuthService;
    
   beforeEach(()=> {
-    
+    authService = new MockAuthService();
     TestBed.configureTestingModule({
         declarations: [ NavbarComponent ],
-        imports: [ HttpClientModule], 
+        imports: [ HttpClientModule ], 
     });
     fixture = TestBed.createComponent(NavbarComponent);
     comp = fixture.componentInstance;

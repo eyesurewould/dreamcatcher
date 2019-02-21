@@ -2,10 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { ContentfulService } from '../shared/contentful.service';
+import { ContentfulService } from '../contentful/contentful.service';
 import { Entry, EntryCollection } from 'contentful';
 import { Client } from '../client/client';
-import { emailValidator, phoneValidator } from '../shared/validation';
+import { emailValidator, phoneValidator } from '../util/validation';
 
 @Component({
     selector: 'client-detail',

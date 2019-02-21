@@ -1,9 +1,7 @@
 import { TestBed, inject } from '@angular/core/testing';
-
+import { HttpClientModule } from '@angular/common/http';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ContentfulService } from './contentful.service';
-//import * as contentful from 'contentful';
-//import * as contentfulMgmt from 'contentful-management';
-//import { environment } from '../../environments/environment';
 import { Image } from '../util/image';
 
 describe('ContentfulService', () => {
@@ -11,17 +9,18 @@ describe('ContentfulService', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
+      imports:[ HttpClientTestingModule, HttpClientModule ],
       providers: [ContentfulService]
     });
   });
 
-  it('should be created', inject([ContentfulService], (service: ContentfulService) => {
+  it('should be created', inject([HttpClientTestingModule, ContentfulService], (service: ContentfulService) => {
     expect(service).toBeTruthy();
   }));
 
   /**
    * Adding an image (asset)
-   */
+   
   it('createImage should return non-error',
     (done: DoneFn) => {
       let image = new Image();
@@ -29,4 +28,5 @@ describe('ContentfulService', () => {
       image.fileName = 'example.jpeg';
       
     });
+    */
 });

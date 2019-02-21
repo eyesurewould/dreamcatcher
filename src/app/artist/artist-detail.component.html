@@ -1,4 +1,4 @@
-<form class="form-group" [formGroup]="artistDetailFormGroup" (ngSubmit)="submit()">
+<form class="form-group" formGroup="artistDetailFormGroup" (ngSubmit)="submit()">
   <div class="row artist-row">
       <div class="col col-lg-6 col-md-8 col-sm-10 col-xs-10">
 
@@ -98,7 +98,7 @@
   <div class="col card-columns">
       <div *ngIf="clientCount > 0; else noClients">
           <div class="card" *ngFor="let client of clients?.items">
-              <span [routerLink]="['/client/' + client.sys.id]">
+              <span routerLink="['/client/' + client.sys.id]">
                   <div class="card-body">
                       <div class="card-title">{{client.fields.name}}</div>
                       <div class="card-text">{{client.fields.phone}}</div>
