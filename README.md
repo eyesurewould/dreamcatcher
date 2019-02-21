@@ -7,13 +7,15 @@ Dreamcatcher is a simple tool for artists to track images about works they are c
 This is not a CRM but instead is focused on image capture because artists create and receive images from many channels (camera, sms, email, social networks) and need to collect them for easy retrieval. 
 
 Future features:
-Link to external images (dropbox, github, social networks, etc)
-Firebase authentication (isolate content by artist)
-Implement a Store (to better handle state for multi-device situations)
++Link to external images (dropbox, github, social networks, etc)
++Firebase authentication (isolate content by artist)
++Implement a Store (to better handle state for multi-device situations)
 
 # Structure
 
-The view began as a simple Angular 7 web app (not a PWA or single page). The controller is also in Angular 7. The model is in Contentful (a headless CMSaaS). Currently, the Contentful SDKs are leveraged in a Service, but need to be refactored to Express (or GraphQL) so the details are in the back-end for security purposes.
+The view began as a simple Angular 7 web app (not a PWA or single page). The controller is also in Angular 7. The model is in Contentful (a headless CMSaaS). 
+
+Currently, the Contentful SDKs are leveraged in a Service, but need to be refactored to Express (or GraphQL) so the details are in the back-end for security purposes.
 
 ## Running unit tests
 
