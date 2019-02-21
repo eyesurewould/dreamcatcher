@@ -7,9 +7,9 @@ Dreamcatcher is a simple tool for artists to track images about works they are c
 This is not a CRM but instead is focused on image capture because artists create and receive images from many channels (camera, sms, email, social networks) and need to collect them for easy retrieval. 
 
 Future features:
-+Link to external images (dropbox, github, social networks, etc)
-+Firebase authentication (isolate content by artist)
-+Implement a Store (to better handle state for multi-device situations)
++ Link to external images (dropbox, github, social networks, etc)
++ Firebase authentication (isolate content by artist)
++ Implement a Store (to better handle state for multi-device situations)
 
 # Structure
 
