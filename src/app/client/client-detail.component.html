@@ -83,7 +83,7 @@
         <div class="col-md-6 col-sm-12">
             <div class="section actions">
                 <span >
-                    <a *ngIf="client && !isEditable" href="/project-create/{{client.sys.id}}" class="btn btn-light">Add Project
+                    <a *ngIf="client && !isEditable" [routerLink]="['/project-create/' + client.sys.id]" class="btn btn-light">Add Project
                     </a>
                     <button *ngIf="client && !isEditable" (click)="enableEditing();" class="btn btn-light">Edit</button>
                     <button *ngIf="client && !isEditable" (click)="deleteClient(client.sys.id);" class="btn btn-light">Delete</button>

@@ -17,7 +17,7 @@ export class AuthGuardService implements CanActivate {
   canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean> | Promise<boolean> | boolean {
     if (this.authService.isAuthenticated()) {
       //make sure they aren't on the login page - if so, redirect to home
-      if ( state.url == '/login' ) {
+      if ( state.url === '/login' ) {
         this.router.navigate(['/']);
         return false;
       } 
