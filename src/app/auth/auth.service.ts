@@ -1,33 +1,33 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnDestroy } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { User } from 'firebase';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 
 @Injectable()
-export class AuthService {
+export class AuthService implements OnDestroy {
   user: User;
   private loggedIn: Boolean;
 
   constructor(private afAuth: AngularFireAuth, private router: Router) {
     this.afAuth.authState.subscribe(user => {
       if (user) {
-        console.log('we have a user: ', user.email)
         this.user = user;
         this.loggedIn = true;
         localStorage.setItem('user', JSON.stringify(this.user));
       } else {
-        console.log('we dont have a user');
         localStorage.setItem('user', null);
         this.loggedIn = false;
       }
     })
   }
 
+  ngOnDestroy() {
+    this.afAuth.auth.signOut();
+  }
+
   doLogin(value){
-    console.log('make a Promise and call Firebase');
     return new Promise<any>((resolve, reject) => {
-      console.log('email: ', value.email, 'password: ', value.password);
       this.afAuth.auth.app.auth().signInWithEmailAndPassword(value.email, value.password)
       .then(res => {
         resolve(res);

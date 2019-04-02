@@ -7,7 +7,7 @@
                 </a>
             </div>
             <div>
-                <div *ngIf="!(isAuth()); else showLoggedIn">
+                <div *ngIf="!(isAuth()) || router.url === '/login'; else showLoggedIn">
                     <a class="nav-item" routerLink="/login">Login</a>
                 </div>
                 <ng-template #showLoggedIn>

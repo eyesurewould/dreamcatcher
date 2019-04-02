@@ -19,7 +19,7 @@
             <span class="searchResults">
                 <input type="search" class="input" (keydown)="onSearchKeydown($event)" placeholder="search here">
                 {{nowShowing}}
-                <a *ngIf="query != ''" href="/clients">
+                <a *ngIf="query != ''" routerLink="/clients">
                     <svg class="icon ml-1" width="1em" height="1em">
                         <use xlink:href="/assets/symbol-defs.svg#icon-cancel-circle"></use>
                     </svg>
@@ -40,7 +40,7 @@
         <div *ngFor="let client of clients?.items">
             <div class="card">
                 <div class="card-body">
-                    <span class="card-title" routerLink="['/client/' + client.sys.id]">{{ client.fields.name }}</span>
+                    <span class="card-title" [routerLink]="['/client/' + client.sys.id]">{{ client.fields.name }}</span>
                     <a *ngIf="client.fields.email" class="card-text ml-2" href="mailto:{{client.fields.email}}">{{
                         client.fields.email
                         }}

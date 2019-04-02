@@ -311,7 +311,7 @@ export class ContentfulService {
   public getProject(id: string) {
     return this.contentfulClient.getEntry(id)
       .then((response) => {
-        console.log(response);
+        //console.log(response);
         return response;
       })
       .catch((err) => {
