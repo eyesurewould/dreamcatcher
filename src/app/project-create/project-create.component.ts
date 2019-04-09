@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { ContentfulService } from '../contentful/contentful.service';
 import { Project } from '../project/project';
@@ -15,6 +15,7 @@ export class ProjectCreateComponent {
 
   public id: string;
   public project: Project;
+  public submitted = false;
 
   projectFormGroup = new FormGroup({
     title: new FormControl('', [Validators.required]),
@@ -37,6 +38,8 @@ export class ProjectCreateComponent {
   }
 
   submit() {
+    this.submitted = true;
+
     this.project.title = this.projectFormGroup.controls['title'].value;
 
     if (this.projectFormGroup.controls['status'].value !== '') {
@@ -61,14 +64,7 @@ export class ProjectCreateComponent {
 
     this.cs.createProject(this.project)
       .then((entry) => {
-        //introduce a slight pause here so the new project has time to 
-        //appear in subsequent query for all projects for this client
-        //TODO: Investigate a cleaner way to handle this - reach out
-        //to Contenful dev team and see if they have a webhook or something
-        setTimeout(() => {
-          this.router.navigate(['/client', this.id]);
-        },
-          400);
+        this.router.navigate(['/project', entry.sys.id]);
         
       });
 

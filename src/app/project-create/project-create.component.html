@@ -116,8 +116,9 @@
           -->
           
         <div class="section actions">
-          <button type="submit" class="btn btn-primary" [disabled]="!projectFormGroup.valid">Save Project</button>
+          <button type="submit" class="btn btn-primary" [disabled]="!projectFormGroup.valid || submitted">Save Project</button>
           <a class="btn btn-light" href="/projects">Cancel</a>
+          <span *ngIf="submitted"> Saving... </span> 
         </div>
       </div>
 
