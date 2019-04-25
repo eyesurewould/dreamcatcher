@@ -15,7 +15,6 @@ import * as contentfulMgmt from 'contentful-management';
 import { HttpClient, HttpEventType, HttpResponse, HttpHeaders, HttpParams, HttpRequest } from '@angular/common/http';
 import { identifierModuleUrl } from '@angular/compiler';
 
-
 @Injectable({
   providedIn: 'root'
 })

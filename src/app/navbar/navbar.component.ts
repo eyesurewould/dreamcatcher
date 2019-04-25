@@ -12,11 +12,13 @@ export class NavbarComponent {
   projectsTitle = 'Projects';
   clientsTitle = 'Clients';
   private sub: Subscription;
+  url: string;
 
   constructor(
     private router: Router,
     private authService: AuthService
   ) {
+    this.url = router.url;
   }
 
   isAuth() {

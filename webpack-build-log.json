@@ -1,0 +1,21 @@
+{
+  "errors": [
+    "Entry module not found: Error: Can't resolve './src' in '/Users/isherwood/Documents/dev/playground/dreamcatcher'\nresolve './src' in '/Users/isherwood/Documents/dev/playground/dreamcatcher'\n  using description file: /Users/isherwood/Documents/dev/playground/dreamcatcher/package.json (relative path: .)\n    Field 'browser' doesn't contain a valid alias configuration\n    using description file: /Users/isherwood/Documents/dev/playground/dreamcatcher/package.json (relative path: ./src)\n      no extension\n        Field 'browser' doesn't contain a valid alias configuration\n        /Users/isherwood/Documents/dev/playground/dreamcatcher/src is not a file\n      .wasm\n        Field 'browser' doesn't contain a valid alias configuration\n        /Users/isherwood/Documents/dev/playground/dreamcatcher/src.wasm doesn't exist\n      .mjs\n        Field 'browser' doesn't contain a valid alias configuration\n        /Users/isherwood/Documents/dev/playground/dreamcatcher/src.mjs doesn't exist\n      .js\n        Field 'browser' doesn't contain a valid alias configuration\n        /Users/isherwood/Documents/dev/playground/dreamcatcher/src.js doesn't exist\n      .json\n        Field 'browser' doesn't contain a valid alias configuration\n        /Users/isherwood/Documents/dev/playground/dreamcatcher/src.json doesn't exist\n      as directory\n        existing directory\n          using path: /Users/isherwood/Documents/dev/playground/dreamcatcher/src/index\n            using description file: /Users/isherwood/Documents/dev/playground/dreamcatcher/package.json (relative path: ./src/index)\n              no extension\n                Field 'browser' doesn't contain a valid alias configuration\n                /Users/isherwood/Documents/dev/playground/dreamcatcher/src/index doesn't exist\n              .wasm\n                Field 'browser' doesn't contain a valid alias configuration\n                /Users/isherwood/Documents/dev/playground/dreamcatcher/src/index.wasm doesn't exist\n              .mjs\n                Field 'browser' doesn't contain a valid alias configuration\n                /Users/isherwood/Documents/dev/playground/dreamcatcher/src/index.mjs doesn't exist\n              .js\n                Field 'browser' doesn't contain a valid alias configuration\n                /Users/isherwood/Documents/dev/playground/dreamcatcher/src/index.js doesn't exist\n              .json\n                Field 'browser' doesn't contain a valid alias configuration\n                /Users/isherwood/Documents/dev/playground/dreamcatcher/src/index.json doesn't exist"
+  ],
+  "warnings": [],
+  "version": "4.30.0",
+  "hash": "22af182f01c82c33bde1",
+  "time": 87,
+  "builtAt": 1556141440159,
+  "publicPath": "",
+  "outputPath": "/Users/isherwood/Documents/dev/playground/dreamcatcher/dist",
+  "assetsByChunkName": {},
+  "assets": [],
+  "filteredAssets": 0,
+  "entrypoints": {},
+  "namedChunkGroups": {},
+  "chunks": [],
+  "modules": [],
+  "filteredModules": 0,
+  "children": []
+}

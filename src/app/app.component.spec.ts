@@ -28,7 +28,7 @@ import { ProjectsComponent } from './projects/projects.component';
 import { ProjectDetailComponent } from './project/project-detail.component';
 import { ProjectCreateComponent } from './project-create/project-create.component';
 
-import { ServiceWorkerModule } from '@angular/service-worker';
+//import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
@@ -65,7 +65,7 @@ describe('AppComponent', () => {
           appRoutes,
           { onSameUrlNavigation: 'reload' }
         ),
-        ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
+        //ServiceWorkerModule.register('/ngsw-worker.js', { enabled: environment.production })
       ],
       providers: [
         {provide: APP_BASE_HREF, useValue: '/'}

@@ -39,22 +39,13 @@
               ],
               "optimization": true,
               "outputHashing": "all",
-              "sourceMap": false,
+              "sourceMap": true,
               "extractCss": true,
               "namedChunks": false,
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "serviceWorker": true,
-              "budgets": [
-                {
-                  "type": "bundle",
-                  "name": "main",
-                  "baseline": "900kb",
-                  "warning": "10%",
-                  "error": "20%"
-                }
-              ]
+              "serviceWorker": false
             }
           }
         },
