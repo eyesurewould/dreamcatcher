@@ -73,5 +73,6 @@ export const appRoutes: Routes = [
     { path: "project-create/:id", 
         component: ProjectCreateComponent,
         canActivate: [AuthGuardService],
-        runGuardsAndResolvers: 'paramsChange'}
+        runGuardsAndResolvers: 'paramsChange'},
+        
 ]

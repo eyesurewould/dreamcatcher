@@ -1,19 +1,19 @@
 import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 
-import { Artist, artistOrder } from '../artist/artist';
+import { Artist } from '../artist/artist';
 import { Client, clientOrder } from '../client/client';
 import { Project, projectOrder } from '../project/project';
 import { Image } from '../util/image';
 
-import { Observable, Subject } from 'rxjs';
+import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import * as contentful from 'contentful';
 import * as contentfulMgmt from 'contentful-management';
 
-import { HttpClient, HttpEventType, HttpResponse, HttpHeaders, HttpParams, HttpRequest } from '@angular/common/http';
-import { identifierModuleUrl } from '@angular/compiler';
+import { HttpClient, HttpEvent, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+//import { identifierModuleUrl } from '@angular/compiler';
 
 @Injectable({
   providedIn: 'root'
@@ -56,6 +56,7 @@ export class ContentfulService {
     })
 
   }
+  
 
   /**
    * Currently, all functions are grouped by the type of content being
@@ -624,7 +625,7 @@ export class ContentfulService {
    * Use the Content Management SDK to create a new asset
    * 
    * @param image
-   */
+   * /
   public createImage(image: Image) {  //project: Project) {
 
     return this.contentfulMgmtClient.getSpace(environment.contentful.space)
@@ -641,7 +642,7 @@ export class ContentfulService {
               'en-US': {
                 contentType: 'image/jpeg',
                 fileName: image.fileName,
-                upload: 'https://example.com/example.jpg'
+                upload: 'https://i.imgur.com/upKkt76.jpg'
               }
             }
           }
@@ -663,7 +664,7 @@ export class ContentfulService {
         console.error;
       });
 
-  }
+  } */
 
 
   /**

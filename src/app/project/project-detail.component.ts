@@ -180,5 +180,6 @@ export class ProjectDetailComponent implements OnInit, OnChanges {
                 console.error;
             })
     }
+    
 
 }
